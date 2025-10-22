@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experimental Lesson: Othello's Renaissance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #333;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .header .lesson-title {
+            font-style: italic;
+        }
+
+        .name-field {
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .instructions {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #333;
+        }
+
+        .instructions h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .instructions p {
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .quote-section {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .author-column {
+            text-align: center;
+        }
+
+        .author-image {
+            width: 150px;
+            height: 200px;
+            object-fit: cover;
+            border: 2px solid #333;
+            margin-bottom: 15px;
+        }
+
+        .author-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .work-title {
+            font-style: italic;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .quote-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .quote-text {
+            line-height: 1.8;
+            font-size: 15px;
+            color: #222;
+            margin-bottom: 15px;
+        }
+
+        .quote-text strong {
+            font-weight: 700;
+        }
+
+        .response-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fafafa;
+            border: 1px solid #ddd;
+        }
+
+        .response-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .response-box {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 15px;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        .response-box:focus {
+            outline: 2px solid #4a90e2;
+            border-color: #4a90e2;
+        }
+
+        .footnote {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .quote-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Experimental Lesson: <span class="lesson-title">Othello's</span> Renaissance</h1>
+        </div>
+
+        <div class="name-field">
+            Name: _______________________
+        </div>
+
+        <div class="instructions">
+            <h2>Part I - Quotable Connections - "I sit with Shakespeare and he winces not." —W.E.B. DuBois</h2>
+            <p><strong>Directions:</strong> State the following quotes. State the main idea of each one in your own words using the chart below.</p>
+        </div>
+
+        <!-- First Quote Section -->
+        <div class="quote-section">
+            <div class="author-column">
+                <img src="https://via.placeholder.com/150x200?text=W.E.B.+DuBois" alt="W.E.B. DuBois" class="author-image">
+                <div class="author-name">W.E.B. DuBois</div>
+                <div class="work-title">The Souls of Black Folk</div>
+            </div>
+            <div class="quote-column">
+                <div class="quote-text">
+                    "...the Negro is a sort of seventh son, born with a veil, and gifted with second-sight in this American world,—a world which yields him no true self-consciousness, but only lets him see himself through the revelation of the other world. It is a peculiar sensation, this <strong>double-consciousness</strong>, this sense of always <strong>looking at one's self through the eyes of others, of measuring one's soul by the tape of a world that looks on in amused contempt and pity</strong>."
+                </div>
+            </div>
+        </div>
+        
+        <div class="response-section">
+            <h3>Main Idea</h3>
+            <textarea class="response-box" placeholder="Write your interpretation of the main idea here..."></textarea>
+        </div>
+
+        <!-- Second Quote Section -->
+        <div class="quote-section">
+            <div class="author-column">
+                <img src="https://via.placeholder.com/150x200?text=Ralph+Ellison" alt="Ralph Ellison" class="author-image">
+                <div class="author-name">Ralph Ellison</div>
+                <div class="work-title">Invisible Man</div>
+            </div>
+            <div class="quote-column">
+                <div class="quote-text">
+                    "I am an invisible man... <strong>I am invisible</strong>, understand, simply because people refuse to see me. Like the bodiless heads you see sometimes in circus sideshows, it is as though I have been surrounded by mirrors of hard, distorting glass. When they approach me <strong>they see only my surroundings, themselves or figments of their imagination, indeed, everything and anything except me</strong>."
+                </div>
+            </div>
+        </div>
+
+        <div class="response-section">
+            <h3>Main Idea</h3>
+            <textarea class="response-box" placeholder="Write your interpretation of the main idea here..."></textarea>
+        </div>
+
+        <!-- Third Quote Section -->
+        <div class="quote-section">
+            <div class="author-column">
+                <img src="https://via.placeholder.com/150x200?text=Shakespeare" alt="William Shakespeare" class="author-image">
+                <div class="author-name">William Shakespeare</div>
+                <div class="work-title">Othello</div>
+            </div>
+            <div class="quote-column">
+                <div class="quote-text">
+                    "...I pray you, in your letters, / When you shall these unlucky deeds relate, / <strong>Speak of me as I am. Nothing extenuate, / Nor set down aught in malice</strong>. Then must you speak / Of one that loved not wisely, but too well. / Of one not easily jealous, but being wrought, / Perplexed in the extreme. Of one whose hand, / Like the base Indian, threw a pearl away / Richer than all his tribe. Of one whose subdued eyes, / Albeit unused to the melting mood, / Drop tears as fast as the Arabian trees / Their medicinal gum..."
+                </div>
+            </div>
+        </div>
+
+        <div class="response-section">
+            <h3>Main Idea</h3>
+            <textarea class="response-box" placeholder="Write your interpretation of the main idea here..."></textarea>
+        </div>
+
+    </div>
+</body>
+</html>
