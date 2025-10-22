@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Othello's Renaissance - Part I</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: #2d3748;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        /* Task Header - Outside the card */
+        .task-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .part-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 24px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+        
+        .task-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+        
+        .part-title {
+            font-size: 22px;
+            font-style: italic;
+            color: #718096;
+        }
+        
+        /* Single Part Card */
+        .part-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* Section within the part */
+        .part-section {
+            margin-bottom: 60px;
+        }
+        
+        .part-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-header {
+            margin-bottom: 30px;
+        }
+        
+        .section-quote {
+            font-style: italic;
+            color: #718096;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .section-directions {
+            background: #edf2f7;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #4299e1;
+            margin-bottom: 40px;
+        }
+        
+        .section-directions p {
+            font-size: 15px;
+            color: #2d3748;
+        }
+        
+        /* Author Quote Item */
+        .quote-item {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .quote-item:last-of-type {
+            border-bottom: none;
+        }
+        
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .author-portrait {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #edf2f7;
+        }
+        
+        .author-details h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 4px;
+        }
+        
+        .author-details .work-title {
+            font-size: 15px;
+            font-style: italic;
+            color: #718096;
+        }
+        
+        .quote-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .quote-text {
+            font-family: 'Merriweather', serif;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        
+        .response-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .response-area {
+            width: 100%;
+            min-height: 140px;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        .response-area:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #fafbfc;
+        }
+        
+        .word-count {
+            text-align: right;
+            font-size: 13px;
+            color: #718096;
+            margin-top: 6px;
+        }
+        
+        /* Connections Section */
+        .connections-section {
+            padding-top: 40px;
+            border-top: 3px solid #e2e8f0;
+        }
+        
+        .connections-section h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 16px;
+        }
+        
+        .connections-section .prompt {
+            font-size: 16px;
+            color: #4a5568;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .connections-section .response-area {
+            min-height: 250px;
+        }
+        
+        /* Completion Notice */
+        .completion-notice {
+            margin-top: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            color: white;
+        }
+        
+        .completion-notice .icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+        
+        .completion-notice h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .completion-notice p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 12px;
+            }
+            
+            .task-title {
+                font-size: 32px;
+            }
+            
+            .part-title {
+                font-size: 18px;
+            }
+            
+            .part-card {
+                padding: 30px 24px;
+            }
+            
+            .author-info {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Task Header -->
+        <div class="task-header">
+            <div class="part-badge">PART I OF III</div>
+            <h1 class="task-title">Othello's Renaissance</h1>
+            <div class="part-title">Part I - Quotable Connections</div>
+        </div>
+
+        <!-- Single Card for Entire Part I -->
+        <div class="part-card">
+            
+            <!-- Quote Analysis Section -->
+            <div class="part-section">
+                <div class="section-header">
+                    <div class="section-quote">"I sit with Shakespeare and he winces not." —W.E.B. DuBois</div>
+                    <div class="section-directions">
+                        <p><strong>Directions:</strong> Read each quote carefully. State the main idea of each one in your own words using the response area provided.</p>
+                    </div>
+                </div>
+
+                <!-- W.E.B. DuBois -->
+                <div class="quote-item">
+                    <div class="author-info">
+                        <img src="./image1.png" alt="W.E.B. DuBois" class="author-portrait">
+                        <div class="author-details">
+                            <h3>W.E.B. DuBois</h3>
+                            <div class="work-title">The Souls of Black Folk</div>
+                        </div>
+                    </div>
+                    
+                    <div class="quote-box">
+                        <p class="quote-text">...the Negro is a sort of seventh son, born with a veil, and gifted with second-sight in this American world,—a world which yields him no true self-consciousness, but only lets him see himself through the revelation of the other world. It is a peculiar sensation, this <strong>double-consciousness</strong>, this sense of always <strong>looking at one's self through the eyes of others, of measuring one's soul by the tape of a world that looks on in amused contempt and pity.</strong></p>
+                    </div>
+                    
+                    <label class="response-label">Main Idea in Your Own Words</label>
+                    <textarea class="response-area" data-index="0" placeholder="Explain what DuBois is saying here..."></textarea>
+                    <div class="word-count">0 words (aim for 150-200)</div>
+                </div>
+
+                <!-- Ralph Ellison -->
+                <div class="quote-item">
+                    <div class="author-info">
+                        <img src="./image2.png" alt="Ralph Ellison" class="author-portrait">
+                        <div class="author-details">
+                            <h3>Ralph Ellison</h3>
+                            <div class="work-title">Invisible Man</div>
+                        </div>
+                    </div>
+                    
+                    <div class="quote-box">
+                        <p class="quote-text">I am an invisible man. . . <strong>I am invisible</strong>, understand, simply because people refuse to see me. Like the bodiless heads you see sometimes in circus sideshows, it is as though I have been surrounded by mirrors of hard, distorting glass. When they approach me <strong>they see only my surroundings, themselves or figments of their imagination, indeed, everything and anything except me.</strong></p>
+                    </div>
+                    
+                    <label class="response-label">Main Idea in Your Own Words</label>
+                    <textarea class="response-area" data-index="1" placeholder="What does Ellison mean by being 'invisible'?"></textarea>
+                    <div class="word-count">0 words (aim for 150-200)</div>
+                </div>
+
+                <!-- William Shakespeare -->
+                <div class="quote-item">
+                    <div class="author-info">
+                        <img src="./image3.png" alt="William Shakespeare" class="author-portrait">
+                        <div class="author-details">
+                            <h3>William Shakespeare</h3>
+                            <div class="work-title">Othello</div>
+                        </div>
+                    </div>
+                    
+                    <div class="quote-box">
+                        <p class="quote-text">. . .I pray you, in your letters, / When you shall these unlucky deeds relate, / <strong>Speak of me as I am. Nothing extenuate, / Nor set down aught in malice.</strong> Then must you speak / Of one that loved not wisely, but too well. / Of one not easily jealous, but being wrought, / Perplexed in the extreme. Of one whose hand, / Like the base Indian, threw a pearl away / Richer than all his tribe. Of one whose subdued eyes, / Albeit unused to the melting mood, / Drop tears as fast as the Arabian trees / Their medicinal gum. . .</p>
+                    </div>
+                    
+                    <label class="response-label">Main Idea in Your Own Words</label>
+                    <textarea class="response-area" data-index="2" placeholder="What is Othello asking for in this speech?"></textarea>
+                    <div class="word-count">0 words (aim for 150-200)</div>
+                </div>
+            </div>
+
+            <!-- Connections Section -->
+            <div class="connections-section">
+                <h2>Connections:</h2>
+                <p class="prompt">Think about the themes of identity, perception, and visibility across all three quotes. How does DuBois's "double-consciousness" relate to Ellison's "invisibility"? How does Othello's plea to be seen "as I am" connect to both? What common threads run through these different time periods and perspectives?</p>
+                
+                <textarea class="response-area" data-index="3" placeholder="Write your connections here..."></textarea>
+                <div class="word-count">0 words (aim for 200-300)</div>
+            </div>
+
+        </div>
+
+        <!-- Part I Complete Notice -->
+        <div class="completion-notice">
+            <div class="icon">✓</div>
+            <h3>Part I Complete</h3>
+            <p>Next up: Part II - American Reception for Othello in the 19th and 20th Century</p>
+        </div>
+    </div>
+
+    <script>
+        // Word count functionality
+        const textareas = document.querySelectorAll('.response-area');
+        
+        textareas.forEach(textarea => {
+            const wordCountDiv = textarea.nextElementSibling;
+            const index = textarea.dataset.index;
+            const isConnections = index === '3';
+            const minWords = isConnections ? 200 : 150;
+            const maxWords = isConnections ? 300 : 200;
+            
+            textarea.addEventListener('input', function() {
+                const words = this.value.trim().split(/\s+/).filter(word => word.length > 0).length;
+                
+                if (words === 0) {
+                    wordCountDiv.textContent = `0 words (aim for ${minWords}-${maxWords})`;
+                    wordCountDiv.style.color = '#718096';
+                } else if (words < minWords) {
+                    wordCountDiv.textContent = `${words} words (aim for ${minWords}-${maxWords})`;
+                    wordCountDiv.style.color = '#ed8936';
+                } else if (words >= minWords && words <= maxWords) {
+                    wordCountDiv.textContent = `${words} words ✓`;
+                    wordCountDiv.style.color = '#48bb78';
+                } else {
+                    wordCountDiv.textContent = `${words} words`;
+                    wordCountDiv.style.color = '#718096';
+                }
+                
+                // Auto-save
+                localStorage.setItem(`part1-response-${index}`, this.value);
+            });
+            
+            // Load saved content
+            const saved = localStorage.getItem(`part1-response-${index}`);
+            if (saved) {
+                textarea.value = saved;
+                textarea.dispatchEvent(new Event('input'));
+            }
+        });
+    </script>
+</body>
+</html>
