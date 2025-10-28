@@ -10,9 +10,36 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:ital,wght@0,400;1,400&display=swap"
       rel="stylesheet" />
     <script>
-      function startTask() {
-        // Enable all textareas except those in help section
-        document.querySelectorAll('.response-area:not(.help-textarea)').forEach(textarea => {
+      function startTask(button) {
+        // Find the closest parent section
+        const section = button.closest('.part-section');
+        
+        // Get the step number from the section
+        const stepNumberDiv = section.querySelector('div[style*="font-size: 15px; font-weight: 600; color: #1e293b;"]');
+        let stepNumber = null;
+        
+        if (stepNumberDiv) {
+          // Try to extract step number from the text content
+          const stepText = stepNumberDiv.textContent.trim();
+          const match = stepText.match(/Step (\d+)/i);
+          if (match && match[1]) {
+            stepNumber = match[1];
+          }
+        }
+        
+        // If we couldn't find step number, try to determine it from the section position
+        if (!stepNumber) {
+          const sections = document.querySelectorAll('.part-section');
+          for (let i = 0; i < sections.length; i++) {
+            if (sections[i] === section) {
+              stepNumber = i + 1;
+              break;
+            }
+          }
+        }
+        
+        // Enable only textareas within this section (except help textareas)
+        section.querySelectorAll('.response-area:not(.help-textarea)').forEach(textarea => {
           textarea.disabled = false;
           textarea.placeholder = textarea.getAttribute('data-original-placeholder') || '';
           textarea.style.cursor = 'text';
@@ -20,16 +47,69 @@
           textarea.style.borderStyle = 'solid';
         });
         
-        // Update button states
-        document.querySelector('.begin-btn').style.display = 'none';
-        document.querySelector('.status-btn').textContent = 'In Progress';
-        document.querySelector('.status-btn').style.backgroundColor = '#eab308';
-        document.querySelector('.status-btn').style.color = '#000';
-        document.querySelector('.status-btn').style.borderColor = '#eab308';
+        // Update button states within this section
+        const beginBtn = section.querySelector('.begin-btn');
+        const statusBtn = section.querySelector('.status-btn');
+        
+        if (beginBtn) beginBtn.style.display = 'none';
+        if (statusBtn) {
+          statusBtn.textContent = 'In Progress';
+          statusBtn.style.backgroundColor = '#eab308';
+          statusBtn.style.color = '#000';
+          statusBtn.style.borderColor = '#eab308';
+        }
+        
+        // Update status indicator if it exists in this section
+        const statusIndicator = section.querySelector('.status-indicator');
+        if (statusIndicator) {
+          statusIndicator.textContent = 'In Progress';
+          statusIndicator.style.color = '#000';
+          statusIndicator.style.fontWeight = '600';
+          statusIndicator.style.backgroundColor = '#eab308';
+          statusIndicator.style.padding = '2px 8px';
+          statusIndicator.style.borderRadius = '4px';
+          statusIndicator.style.display = 'inline-block';
+        }
+        
+        // Update the status in the header overview section
+        if (stepNumber) {
+          const headerStatus = document.getElementById(`step${stepNumber}Status`);
+          if (headerStatus) {
+            headerStatus.textContent = 'In Progress';
+            headerStatus.style.color = '#000';
+            headerStatus.style.fontWeight = '600';
+            headerStatus.style.backgroundColor = '#eab308';
+            headerStatus.style.padding = '2px 8px';
+            headerStatus.style.borderRadius = '4px';
+            headerStatus.style.display = 'inline-block';
+          }
+          
+        }
+      }
+      
+      function updateProgressBar() {
+        const totalSteps = 3;
+        let completedSteps = 0;
+        
+        // Count completed steps
+        for (let i = 1; i <= totalSteps; i++) {
+          const status = document.getElementById(`step${i}Status`);
+          if (status && status.textContent === 'In Progress') {
+            completedSteps++;
+          }
+        }
         
         // Update progress bar
-        document.querySelector('.progress-bar-fill').style.width = '33%';
-        document.querySelector('.progress-percent').textContent = '33%';
+        const progressPercent = (completedSteps / totalSteps) * 100;
+        const progressBar = document.querySelector('.progress-bar-fill');
+        const progressPercentText = document.querySelector('.progress-percent');
+        
+        if (progressBar) {
+          progressBar.style.width = `${progressPercent}%`;
+        }
+        if (progressPercentText) {
+          progressPercentText.textContent = `${Math.round(progressPercent)}%`;
+        }
       }
       
       // Initialize the page
@@ -506,7 +586,7 @@
             style="
               position: absolute;
               left: 15px;
-              top: 30px;
+              top: 20px;
               bottom: 48px;
               width: 2px;
               background: #e2e8f0;
@@ -550,7 +630,7 @@
                 Quotable Connections - "I sit with Shakespeare and he winces
                 not." —W.E.B. DuBois
               </div>
-              <div style="font-size: 13px; color: #94a3b8; font-weight: 500">
+              <div style="font-size: 13px; color: #94a3b8; font-weight: 500" id="step1Status">
                 Not Started
               </div>
             </div>
@@ -592,7 +672,7 @@
                 ">
                 American Reception for Othello in the 19th and 20th Century
               </div>
-              <div style="font-size: 13px; color: #94a3b8; font-weight: 500">
+              <div style="font-size: 13px; color: #94a3b8; font-weight: 500" id="step2Status">
                 Not Started
               </div>
             </div>
@@ -633,7 +713,7 @@
                 ">
                 Primary Source Analysis
               </div>
-              <div style="font-size: 13px; color: #94a3b8; font-weight: 500">
+              <div style="font-size: 13px; color: #94a3b8; font-weight: 500" id="step3Status">
                 Not Started
               </div>
             </div>
@@ -665,7 +745,7 @@
                 Step 1 of 3
               </div>
               <div style="display: flex; gap: 8px">
-                <button class="begin-btn" onclick="startTask()" style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Begin</button>
+                <button class="begin-btn" onclick="startTask(this)" style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Begin</button>
                 <button class="status-btn" style="padding: 8px 16px; background: white; color: #94a3b8; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: default; transition: all 0.2s;">Not Started</button>
               </div>
             </div>
@@ -817,7 +897,136 @@
                 <button style="width: 20%; margin-top: 12px; padding: 8px 16px; background-color: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; align-self: flex-end;">Request Help</button>
         </div>
       </div>
-    </div>
+
+      <!-- Part 2 Card -->
+      <div class="part-card" style="margin-top: 32px;">
+        <div class="part-section">
+          <div class="section-header">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <div style="font-size: 15px; font-weight: 600; color: #1e293b;">
+                Step 2 of 3
+              </div>
+              <div style="display: flex; gap: 8px">
+                <button class="begin-btn" onclick="startTask(this)" style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Begin</button>
+                <button class="status-btn" style="padding: 8px 16px; background: white; color: #94a3b8; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: default; transition: all 0.2s;">Not Started</button>
+              </div>
+            </div>
+            <div class="section-quote">
+              American Reception for Othello in the 19th and 20th Century
+            </div>
+            <div class="section-directions">
+              <p>
+                <strong>Directions:</strong> Use the timeline to track the evolution of Othello productions and how they connect to the time period they were in.
+              </p>
+            </div>
+          </div>
+          
+          <!-- Timeline Image -->
+          <div style="margin: 32px 0; text-align: center;">
+            <img src="./image4.png" alt="Timeline of Othello Productions in America" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);" />
+          </div>
+          
+          <!-- Historical Note -->
+          <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin: 32px 0;">
+            <p style="font-size: 15px; color: #78350f; line-height: 1.7; margin: 0;">
+              <strong>*Note:</strong> For the first 200 years of Othello productions, Othello was played by a white actor in dark make up. Lighter make up versions of Othello existed as a response to white audiences and critics wanting to distance Othello and Shakespeare from black identity.
+            </p>
+            <p style="font-size: 14px; color: #92400e; margin-top: 12px; margin-bottom: 0; font-style: italic;">
+              Source: "Not Just Black and White: Othello in America" by Andrew Carlson, American Theatre
+            </p>
+          </div>
+          
+          <!-- Question 1 -->
+          <div style="margin-top: 40px;">
+            <label class="response-label">Othello was often put on as a morality play, and white audience members and critics mimicked John Quincy Adams' sentiment–that it was a cautionary tale about miscegenation (interracial marriage). Based on your analysis of the play, is this idea supported by the text or existing analysis of the text? Explain.</label>
+            <textarea
+              class="response-area"
+              data-index="4"
+              placeholder="Analyze whether the play supports this interpretation..."></textarea>
+          </div>
+          
+          <!-- Question 2 -->
+          <div style="margin-top: 32px;">
+            <label class="response-label">Records prior to the 19th century don't show any controversy around theatrical performances of Othello in America. What historical events coincide with the timeline above that might have made audiences more sensitive to viewing this play with a racial lens? Explain.</label>
+            <textarea
+              class="response-area"
+              data-index="5"
+              placeholder="Identify and explain relevant historical events..."></textarea>
+          </div>
+          
+          <!-- Question 3 -->
+          <div style="margin-top: 32px;">
+            <label class="response-label">James Hewlett and William A. Brown started The African Troupe, as shown on the previous page, but it was raided by police at the prompting of the Park Theatre. The actors were beaten and forced to swear before a judge that they would never perform Shakespeare in public again. Why would this performance be seen as threatening or unlawful at the time?</label>
+            <textarea
+              class="response-area"
+              data-index="6"
+              placeholder="Explain why this performance was considered threatening..."></textarea>
+          </div>
+          
+          <!-- Question 4 -->
+          <div style="margin-top: 32px;">
+            <label class="response-label">What does the popularity of Paul Robeson's portrayal of Othello say about the audience and time period in which he performed?</label>
+            <textarea
+              class="response-area"
+              data-index="7"
+              placeholder="Analyze what Robeson's popularity reveals about the era..."></textarea>
+          </div>
+          
+          <!-- Submit Button -->
+          <div style="text-align: center; margin-top: 32px;">
+            <button style="padding: 16px 44px; background-color: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: 600;">Submit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Help and Discussion Box for Part 2 -->
+      <div style="background: #f8f9fa; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; border-top: 1px solid #e2e8f0; overflow: hidden;">
+        <div style="padding: 50px; border-bottom: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 12px;">
+            <h3 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 600; color: #1e293b; line-height: 1.2; font-family: 'Inter', sans-serif;">Help & Discussion</h3>
+            <p style="margin: 0 0 16px 0; font-size: 14px; color: #64748b; line-height: 1.5; font-family: 'Inter', sans-serif;">
+                This discussion is for Step 2 of 3 (American Reception for Othello). Use the box below to ask your teacher for help or clarification. Your teacher will see exactly where you are in the task and provide targeted assistance.
+            </p>
+            <textarea style="margin: 0px; width: 100%;" class="response-area help-textarea" placeholder="Ask your teacher for help or clarification"></textarea>
+            <button style="width: 20%; margin-top: 12px; padding: 8px 16px; background-color: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; align-self: flex-end;">Request Help</button>
+        </div>
+      </div>
+
+      <!-- Part 3 Card -->
+      <div class="part-card" style="margin-top: 32px;">
+        <div class="part-section">
+          <div class="section-header">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <div style="font-size: 15px; font-weight: 600; color: #1e293b;">
+                Step 3 of 3
+              </div>
+              <div style="display: flex; gap: 8px">
+                <button class="begin-btn" onclick="startTask(this)" style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Begin</button>
+                <button class="status-btn" style="padding: 8px 16px; background: white; color: #94a3b8; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: default; transition: all 0.2s;">Not Started</button>
+              </div>
+            </div>
+            <div class="section-quote">
+              Primary Source Analysis
+            </div>
+            <div class="section-directions">
+              <p>
+                <strong>Directions:</strong> Content for part 3 will appear here after beginning the task.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Help and Discussion Box for Part 3 -->
+      <div style="background: #f8f9fa; border-radius: 0 0 20px 20px; border-top: 1px solid #e2e8f0; overflow: hidden;">
+        <div style="padding: 50px; border-bottom: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 12px;">
+            <h3 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 600; color: #1e293b; line-height: 1.2; font-family: 'Inter', sans-serif;">Help & Discussion</h3>
+            <p style="margin: 0 0 16px 0; font-size: 14px; color: #64748b; line-height: 1.5; font-family: 'Inter', sans-serif;">
+                This discussion is for Step 3 of 3 (Primary Source Analysis). Use the box below to ask your teacher for help or clarification. Your teacher will see exactly where you are in the task and provide targeted assistance.
+            </p>
+            <textarea style="margin: 0px; width: 100%;" class="response-area help-textarea" placeholder="Ask your teacher for help or clarification"></textarea>
+            <button style="width: 20%; margin-top: 12px; padding: 8px 16px; background-color: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; align-self: flex-end;">Request Help</button>
+        </div>
+      </div>
     </div>
   </body>
 </html>
