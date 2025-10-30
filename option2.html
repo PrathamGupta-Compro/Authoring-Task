@@ -14,8 +14,12 @@
         // Find the closest parent section
         const section = button.closest(".part-section");
         // Update status to in-progress when starting a section
-        const sectionId = section.closest('.part-card').querySelector('[id^="statusMessage"]')?.id.replace('statusMessage', '') || '1';
-        updateStatusMessage(sectionId, 'in-progress');
+        const sectionId =
+          section
+            .closest(".part-card")
+            .querySelector('[id^="statusMessage"]')
+            ?.id.replace("statusMessage", "") || "1";
+        updateStatusMessage(sectionId, "in-progress");
 
         // Get the step number from the section
         const stepNumberDiv = section.querySelector(
@@ -132,31 +136,38 @@
       // Initialize the page
       // Status messages for different states
       const statusMessages = {
-        'not-started': {
-          text: "Click Begin to start working on this lesson",
-          description: "You haven't started this lesson yet. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          class: ''
+        "not-started": {
+          text: "You haven't started this activity yet. Click Begin to start working",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
+          class: "",
         },
-        'in-progress': {
+        "in-progress": {
           text: "You're working on this lesson.",
-          description: "Your progress is being saved. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          class: 'in-progress'
+          description:
+            "Your progress is being saved. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+          class: "in-progress",
         },
-        'completed': {
+        completed: {
           text: "You've completed this lesson.",
-          description: "Your responses have been submitted. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          class: 'completed'
-        }
+          description:
+            "Your responses have been submitted. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+          class: "completed",
+        },
       };
 
       // Function to update status message
       function updateStatusMessage(sectionId, status) {
-        const messageElement = document.getElementById(`statusMessage${sectionId}`);
+        const messageElement = document.getElementById(
+          `statusMessage${sectionId}`
+        );
         if (!messageElement) return;
-        
-        const statusData = statusMessages[status] || statusMessages['not-started'];
-        
-        messageElement.className = 'status-message' + (statusData.class ? ` ${statusData.class}` : '');
+
+        const statusData =
+          statusMessages[status] || statusMessages["not-started"];
+
+        messageElement.className =
+          "status-message" + (statusData.class ? ` ${statusData.class}` : "");
         messageElement.innerHTML = `
           <p class="status-text">${statusData.text}</p>
           <p class="status-description">${statusData.description}</p>
@@ -166,10 +177,10 @@
       // Initialize status messages
       document.addEventListener("DOMContentLoaded", function () {
         // Set initial status for all sections
-        updateStatusMessage(1, 'not-started');
-        updateStatusMessage(2, 'not-started');
-        updateStatusMessage(3, 'not-started');
-        
+        updateStatusMessage(1, "not-started");
+        updateStatusMessage(2, "not-started");
+        updateStatusMessage(3, "not-started");
+
         // Set initial disabled state for all textareas except help textareas
         document.querySelectorAll("textarea").forEach((textarea) => {
           if (!textarea.classList.contains("help-textarea")) {
@@ -396,42 +407,42 @@
         margin-bottom: 16px;
       }
 
-  .connections-section .prompt {
-    font-size: 16px;
-    color: #4a5568;
-    line-height: 1.7;
-    margin-bottom: 20px;
-  }
+      .connections-section .prompt {
+        font-size: 16px;
+        color: #4a5568;
+        line-height: 1.7;
+        margin-bottom: 20px;
+      }
 
-  .connections-section .response-area {
-    min-height: 250px;
-  }
+      .connections-section .response-area {
+        min-height: 250px;
+      }
 
-  .section-directions {
-    color: #4b5563;
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
-      
+      .section-directions {
+        color: #4b5563;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
       .status-message {
         background-color: #f8f9fa;
         border-radius: 8px;
       }
-      
+
       .status-message.in-progress {
         border-left-color: #3b82f6;
       }
-      
+
       .status-message.completed {
         border-left-color: #10b981;
       }
-      
+
       .status-text {
         font-weight: 600;
         margin-bottom: 8px;
         color: #1f2937;
       }
-      
+
       .status-description {
         color: #4b5563;
         font-size: 0.9em;
@@ -845,9 +856,7 @@
                 align-items: center;
                 margin-bottom: 24px;
               ">
-              <p style="font-size: 15px; font-weight: 600; color: #4a5568">
-                Step 1 of 3
-              </p>
+              <p style="font-size: 15px; color: #4a5568">Step 1 of 3</p>
               <div>
                 <button
                   class="status-btn"
@@ -857,8 +866,6 @@
                     color: #4b5563;
                     border: 1px solid #e2e8f0;
                     border-radius: 20px;
-                    font-size: 14px;
-                    font-weight: 600;
                     cursor: default;
                     transition: all 0.2s;
                   ">
@@ -870,11 +877,31 @@
               Quotable Connections - "I sit with Shakespeare and he winces not."
               —W.E.B. DuBois
             </h2>
-            
-            <div class="status-container" style="display: flex; align-items: center; gap: 24px; margin: 24px 0; background-color: #f8f9fa; border-radius: 8px; padding: 16px;">
-              <div class="status-message" id="statusMessage1" style="flex: 1;">
-                <p style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0;">Click Begin to start working on it.</p>
-                <p style="color: #4b5563; margin: 0; font-size: 14px;">You haven't started this lesson yet. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+
+            <div
+              class="status-container"
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+                margin: 24px 0;
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                padding: 16px;
+              ">
+              <div class="status-message" id="statusMessage1" style="flex: 1">
+                <p style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0">
+                  Click Begin to start working.
+                </p>
+                <p style="color: #4b5563; margin: 0; font-size: 14px">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Eligendi, maiores totam dicta libero illo nostrum odit nam
+                  atque temporibus fugit quisquam voluptatem officiis incidunt
+                  ipsam distinctio consequatur. Quam accusantium illum aut,
+                  iusto quibusdam necessitatibus animi qui ipsa officiis
+                  voluptates similique.
+                </p>
               </div>
               <button
                 class="begin-btn"
@@ -896,7 +923,16 @@
                 Begin
               </button>
             </div>
-            
+
+            <p
+              style="
+                font-size: 15px;
+                color: #4a5568;
+                margin: 0 0 8px 0;
+                font-weight: 500;
+              ">
+              Block 1
+            </p>
             <p class="section-directions">
               <strong>Directions:</strong> Read each quote carefully. State the
               main idea of each one in your own words using the response area
@@ -1110,7 +1146,7 @@
                 align-items: center;
                 margin-bottom: 24px;
               ">
-              <p style="font-size: 15px; font-weight: 600; color: #4a5568; margin: 0;">
+              <p style="font-size: 15px; color: #4a5568; margin: 0">
                 Step 2 of 3
               </p>
               <div>
@@ -1123,7 +1159,6 @@
                     border: 1px solid #e2e8f0;
                     border-radius: 20px;
                     font-size: 14px;
-                    font-weight: 600;
                     cursor: default;
                     transition: all 0.2s;
                   ">
@@ -1134,11 +1169,27 @@
             <h2 class="section-quote">
               American Reception for Othello in the 19th and 20th Century
             </h2>
-            
-            <div class="status-container" style="display: flex; align-items: center; gap: 24px; margin: 24px 0; background-color: #f8f9fa; border-radius: 8px; padding: 16px;">
-              <div class="status-message" id="statusMessage2" style="flex: 1;">
-                <p style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0;">Click Begin to start working on it.</p>
-                <p style="color: #4b5563; margin: 0; font-size: 14px;">You haven't started this lesson yet. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+
+            <div
+              class="status-container"
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+                margin: 24px 0;
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                padding: 16px;
+              ">
+              <div class="status-message" id="statusMessage2" style="flex: 1">
+                <p style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0">
+                  Click Begin to start working on it.
+                </p>
+                <p style="color: #4b5563; margin: 0; font-size: 14px">
+                  You haven't started this lesson yet. Lorem ipsum dolor sit
+                  amet, consectetur adipiscing elit.
+                </p>
               </div>
               <button
                 class="begin-btn"
@@ -1160,7 +1211,16 @@
                 Begin
               </button>
             </div>
-            
+
+            <p
+              style="
+                font-size: 15px;
+                color: #4a5568;
+                margin: 0 0 8px 0;
+                font-weight: 500;
+              ">
+              Block 1
+            </p>
             <div class="section-directions">
               <p>
                 <strong>Directions:</strong> Use the timeline to track the
@@ -1168,7 +1228,7 @@
                 time period they were in.
               </p>
             </div>
-          </div>
+          </header>
 
           <!-- Timeline Image -->
           <div style="margin: 32px 0; text-align: center">
@@ -1184,11 +1244,7 @@
           </div>
 
           <!-- Historical Note -->
-          <div
-            style="
-              margin: 24px 0;
-              padding: 0 0 0 16px;
-            ">
+          <div style="margin: 24px 0; padding: 0 0 0 16px">
             <p
               style="
                 font-size: 15px;
@@ -1364,7 +1420,7 @@
                 align-items: center;
                 margin-bottom: 24px;
               ">
-              <p style="font-size: 15px; font-weight: 600; color: #4a5568; margin: 0;">
+              <p style="font-size: 15px; color: #4a5568; margin: 0">
                 Step 3 of 3
               </p>
               <div>
@@ -1377,7 +1433,6 @@
                     border: 1px solid #e2e8f0;
                     border-radius: 20px;
                     font-size: 14px;
-                    font-weight: 600;
                     cursor: default;
                     transition: all 0.2s;
                   ">
@@ -1385,14 +1440,28 @@
                 </button>
               </div>
             </div>
-            <h2 class="section-quote">
-              Primary Source Analysis
-            </h2>
-            
-            <div class="status-container" style="display: flex; align-items: center; gap: 24px; margin: 24px 0; background-color: #f8f9fa; border-radius: 8px; padding: 16px;">
-              <div class="status-message" id="statusMessage3" style="flex: 1;">
-                <p style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0;">Click Begin to start working on it.</p>
-                <p style="color: #4b5563; margin: 0; font-size: 14px;">You haven't started this lesson yet. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <h2 class="section-quote">Primary Source Analysis</h2>
+
+            <div
+              class="status-container"
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+                margin: 24px 0;
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                padding: 16px;
+              ">
+              <div class="status-message" id="statusMessage3" style="flex: 1">
+                <p style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0">
+                  You haven't started this activity yet. Click Begin to start
+                  working on it.
+                </p>
+                <p style="color: #4b5563; margin: 0; font-size: 14px">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                </p>
               </div>
               <button
                 class="begin-btn"
@@ -1414,8 +1483,6 @@
                 Begin
               </button>
             </div>
-            </div>
-            <div class="section-quote">Primary Source Analysis</div>
             <div style="margin-bottom: 16px">
               <p
                 style="
@@ -1423,171 +1490,178 @@
                   color: #334155;
                   line-height: 1.6;
                   font-size: 15px;
+                "></p>
+              <p
+                style="
+                  font-size: 15px;
+                  color: #4a5568;
+                  margin: 0 0 8px 0;
+                  font-weight: 500;
                 ">
+                Block 1
+              </p>
+              <p class="section-directions">
                 <strong>Directions:</strong> Examine the primary source below
                 and answer the following questions.
               </p>
             </div>
-          </div>
 
-          <!-- Prior Knowledge Context -->
-          <div
-            style="
-              margin: 24px 0;
-              padding: 0 0 0 16px;
-            ">
-            <h4
+            <!-- Prior Knowledge Context -->
+            <div style="margin: 24px 0; padding: 0 0 0 16px">
+              <h4
+                style="
+                  font-size: 15px;
+                  font-weight: 600;
+                  color: #1e293b;
+                  margin: 0 0 8px 0;
+                ">
+                Prior Knowledge
+              </h4>
+              <p
+                style="
+                  font-size: 15px;
+                  color: #475569;
+                  line-height: 1.6;
+                  margin: 0;
+                ">
+                In 1931, actor Paul Robeson was taking London by storm with his
+                portrayal of Othello and his roles in popular musicals like Show
+                Boat. He would later (1943) bring his Othello back to his
+                stomping grounds in New York, on Broadway no less. This would be
+                the first time a Black American actor would portray Othello in
+                America since James Hewlett in 1821 and the first ever to play
+                the character on Broadway. Below is a letter from W.E.B. DuBois
+                to Robeson.
+              </p>
+            </div>
+
+            <!-- Primary Source Image -->
+            <div style="margin: 32px 0; text-align: center">
+              <img
+                src="./image5.png"
+                alt="Letter from W.E.B. DuBois to Paul Robeson"
+                style="
+                  max-width: 100%;
+                  height: auto;
+                  border-radius: 8px;
+                  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                  border: 1px solid #e2e8f0;
+                " />
+            </div>
+
+            <!-- Question 1 -->
+            <div style="margin-top: 40px">
+              <label class="response-label"
+                >What is DuBois' purpose in writing Robeson and what is his
+                tone?</label
+              >
+              <textarea
+                class="response-area"
+                data-index="8"
+                placeholder="Identify DuBois' purpose and describe his tone in the letter..."></textarea>
+            </div>
+
+            <!-- Question 2 -->
+            <div style="margin-top: 32px">
+              <label class="response-label"
+                >How do we know what DuBois feels about Robeson and his work?
+                Explain.</label
+              >
+              <textarea
+                class="response-area"
+                data-index="9"
+                placeholder="Explain what evidence reveals DuBois' feelings..."></textarea>
+            </div>
+
+            <!-- Question 3 -->
+            <div style="margin-top: 32px">
+              <label class="response-label"
+                >What makes Robeson's work during this time period significant
+                to DuBois? Explain.</label
+              >
+              <textarea
+                class="response-area"
+                data-index="10"
+                placeholder="Analyze the significance of Robeson's work to DuBois..."></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div style="text-align: center; margin-top: 32px">
+              <button
+                style="
+                  padding: 16px 44px;
+                  background-color: #3b82f6;
+                  color: white;
+                  border: none;
+                  border-radius: 6px;
+                  cursor: pointer;
+                  font-size: 15px;
+                  font-weight: 600;
+                ">
+                Submit
+              </button>
+            </div>
+            <!-- Help and Discussion Box for Part 3 -->
+            <section
               style="
-                font-size: 15px;
-                font-weight: 600;
-                color: #1e293b;
-                margin: 0 0 8px 0;
+                background: #f8f9fa;
+                border-radius: 0 0 20px 20px;
+                border-top: 1px solid #e2e8f0;
+                overflow: hidden;
               ">
-              Prior Knowledge
-            </h4>
-            <p
-              style="
-                font-size: 15px;
-                color: #475569;
-                line-height: 1.6;
-                margin: 0;
-              ">
-              In 1931, actor Paul Robeson was taking London by storm with his
-              portrayal of Othello and his roles in popular musicals like Show
-              Boat. He would later (1943) bring his Othello back to his stomping
-              grounds in New York, on Broadway no less. This would be the first
-              time a Black American actor would portray Othello in America since
-              James Hewlett in 1821 and the first ever to play the character on
-              Broadway. Below is a letter from W.E.B. DuBois to Robeson.
-            </p>
-          </div>
-
-          <!-- Primary Source Image -->
-          <div style="margin: 32px 0; text-align: center">
-            <img
-              src="./image5.png"
-              alt="Letter from W.E.B. DuBois to Paul Robeson"
-              style="
-                max-width: 100%;
-                height: auto;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                border: 1px solid #e2e8f0;
-              " />
-          </div>
-
-          <!-- Question 1 -->
-          <div style="margin-top: 40px">
-            <label class="response-label"
-              >What is DuBois' purpose in writing Robeson and what is his
-              tone?</label
-            >
-            <textarea
-              class="response-area"
-              data-index="8"
-              placeholder="Identify DuBois' purpose and describe his tone in the letter..."></textarea>
-          </div>
-
-          <!-- Question 2 -->
-          <div style="margin-top: 32px">
-            <label class="response-label"
-              >How do we know what DuBois feels about Robeson and his work?
-              Explain.</label
-            >
-            <textarea
-              class="response-area"
-              data-index="9"
-              placeholder="Explain what evidence reveals DuBois' feelings..."></textarea>
-          </div>
-
-          <!-- Question 3 -->
-          <div style="margin-top: 32px">
-            <label class="response-label"
-              >What makes Robeson's work during this time period significant to
-              DuBois? Explain.</label
-            >
-            <textarea
-              class="response-area"
-              data-index="10"
-              placeholder="Analyze the significance of Robeson's work to DuBois..."></textarea>
-          </div>
-
-          <!-- Submit Button -->
-          <div style="text-align: center; margin-top: 32px">
-            <button
-              style="
-                padding: 16px 44px;
-                background-color: #3b82f6;
-                color: white;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 15px;
-                font-weight: 600;
-              ">
-              Submit
-            </button>
-          </div>
-        </div>
-      </section>
-      <!-- Help and Discussion Box for Part 3 -->
-      <section
-        style="
-          background: #f8f9fa;
-          border-radius: 0 0 20px 20px;
-          border-top: 1px solid #e2e8f0;
-          overflow: hidden;
-        ">
-        <div
-          style="
-            padding: 50px;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-          ">
-          <h3
-            style="
-              margin: 0 0 12px 0;
-              font-size: 20px;
-              font-weight: 600;
-              color: #1e293b;
-              line-height: 1.2;
-              font-family: 'Inter', sans-serif;
-            ">
-            Help & Discussion
-          </h3>
-          <p
-            style="
-              margin: 0 0 16px 0;
-              font-size: 14px;
-              color: #64748b;
-              line-height: 1.5;
-              font-family: 'Inter', sans-serif;
-            ">
-            This discussion is for Step 3 of 3 (Primary Source Analysis). Use
-            the box below to ask your teacher for help or clarification. Your
-            teacher will see exactly where you are in the task and provide
-            targeted assistance.
-          </p>
-          <textarea
-            style="margin: 0px; width: 100%"
-            class="response-area help-textarea"
-            placeholder="Ask your teacher for help or clarification"></textarea>
-          <button
-            style="
-              width: 20%;
-              margin-top: 12px;
-              padding: 8px 16px;
-              background-color: #3b82f6;
-              color: white;
-              border: none;
-              border-radius: 6px;
-              cursor: pointer;
-              align-self: flex-end;
-            ">
-            Request Help
-          </button>
+              <div
+                style="
+                  padding: 50px;
+                  border-bottom: 1px solid #e2e8f0;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 12px;
+                ">
+                <h3
+                  style="
+                    margin: 0 0 12px 0;
+                    font-size: 20px;
+                    font-weight: 600;
+                    color: #1e293b;
+                    line-height: 1.2;
+                    font-family: 'Inter', sans-serif;
+                  ">
+                  Help & Discussion
+                </h3>
+                <p
+                  style="
+                    margin: 0 0 16px 0;
+                    font-size: 14px;
+                    color: #64748b;
+                    line-height: 1.5;
+                    font-family: 'Inter', sans-serif;
+                  ">
+                  This discussion is for Step 3 of 3 (Primary Source Analysis).
+                  Use the box below to ask your teacher for help or
+                  clarification. Your teacher will see exactly where you are in
+                  the task and provide targeted assistance.
+                </p>
+                <textarea
+                  style="margin: 0px; width: 100%"
+                  class="response-area help-textarea"
+                  placeholder="Ask your teacher for help or clarification"></textarea>
+                <button
+                  style="
+                    width: 20%;
+                    margin-top: 12px;
+                    padding: 8px 16px;
+                    background-color: #3b82f6;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    align-self: flex-end;
+                  ">
+                  Request Help
+                </button>
+              </div>
+            </section>
+          </header>
         </div>
       </section>
     </main>
