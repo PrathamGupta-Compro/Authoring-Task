@@ -79,6 +79,15 @@
           statusBtn.style.borderColor = "#eab308";
         }
 
+        // Show the submit button for this step
+        const cardContainer = section.closest('.part-card');
+        if (cardContainer) {
+          const submitButton = cardContainer.querySelector('.submit-button-container');
+          if (submitButton) {
+            submitButton.style.display = 'block';
+          }
+        }
+
         // Update status indicator if it exists in this section
         const statusIndicator = section.querySelector(".status-indicator");
         if (statusIndicator) {
@@ -99,10 +108,9 @@
           if (headerStatus) {
             headerStatus.textContent = "In Progress";
             headerStatus.style.color = "#000";
-            headerStatus.style.fontWeight = "600";
             headerStatus.style.backgroundColor = "#eab308";
-            headerStatus.style.padding = "2px 8px";
-            headerStatus.style.borderRadius = "4px";
+            headerStatus.style.padding = "2px 12px";
+            headerStatus.style.borderRadius = "20px";
             headerStatus.style.display = "inline-block";
           }
         }
@@ -416,7 +424,7 @@
       }
 
       .connections-section .response-area {
-        min-height: 250px;
+        min-height: 140px;
       }
 
       .section-directions {
@@ -747,11 +755,20 @@
                 Quotable Connections - "I sit with Shakespeare and he winces
                 not." —W.E.B. DuBois
               </h2>
-              <p
-                style="font-size: 13px; color: #94a3b8; font-weight: 500"
-                id="step1Status">
+              <div 
+                id="step1Status"
+                style="
+                  display: inline-block;
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: #94a3b8;
+                  background-color: #f1f5f9;
+                  padding: 2px 12px;
+                  border-radius: 9999px;
+                  border: 1px solid #e2e8f0;
+                ">
                 Not Started
-              </p>
+              </div>
             </div>
           </div>
 
@@ -791,11 +808,20 @@
                 ">
                 American Reception for Othello in the 19th and 20th Century
               </h2>
-              <p
-                style="font-size: 13px; color: #94a3b8; font-weight: 500"
-                id="step2Status">
+              <div 
+                id="step2Status"
+                style="
+                  display: inline-block;
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: #94a3b8;
+                  background-color: #f1f5f9;
+                  padding: 2px 12px;
+                  border-radius: 9999px;
+                  border: 1px solid #e2e8f0;
+                ">
                 Not Started
-              </p>
+              </div>
             </div>
           </div>
 
@@ -803,7 +829,7 @@
           <div
             style="
               display: flex;
-              align-items: flex-start;
+              align-items: center;
               gap: 16px;
               position: relative;
             ">
@@ -834,12 +860,37 @@
                 ">
                 Primary Source Analysis
               </h2>
-              <p
-                style="font-size: 13px; color: #94a3b8; font-weight: 500"
-                id="step3Status">
+              <div 
+                id="step3Status"
+                style="
+                  display: inline-block;
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: #94a3b8;
+                  background-color: #f1f5f9;
+                  padding: 2px 12px;
+                  border-radius: 9999px;
+                  border: 1px solid #e2e8f0;
+                ">
                 Not Started
-              </p>
+              </div>
             </div>
+          </div>
+          <!-- Submit Button (initially hidden) -->
+          <div class="submit-button-container" style="display: none; text-align: center; margin: 32px 0;">
+            <button
+              style="
+                padding: 16px 44px;
+                background-color: #3b82f6;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 15px;
+                font-weight: 600;
+              ">
+              Submit
+            </button>
           </div>
         </div>
       </section>
@@ -1068,19 +1119,22 @@
             class="response-area"
             data-index="3"
             placeholder="Write your connections here..."></textarea>
-            <div style="text-align: center; margin-top: 16px">
-              <button
-                style="
-                  padding: 16px 44px;
-                  background-color: #3b82f6;
-                  color: white;
-                  border: none;
-                  border-radius: 6px;
-                  cursor: pointer;
-                ">
-                Submit
-              </button>
-            </div>
+          <!-- Submit Button (initially hidden) -->
+          <div class="submit-button-container" style="display: none; text-align: center; margin: 32px 0 0 0;">
+            <button
+              style="
+                padding: 16px 44px;
+                background-color: #3b82f6;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 15px;
+                font-weight: 600;
+              ">
+              Submit
+            </button>
+          </div>
         </div>
       </section>
       <!-- Help and Discussion Box -->
@@ -1339,8 +1393,8 @@
               data-index="7"
               placeholder="Analyze what Robeson's popularity reveals about the era..."></textarea>
           </div>
-          <!-- Submit Button -->
-          <div style="text-align: center; margin-top: 32px">
+          <!-- Submit Button (initially hidden) -->
+          <div class="submit-button-container" style="display: none; text-align: center; margin: 32px 0;">
             <button
               style="
                 padding: 16px 44px;
@@ -1594,8 +1648,8 @@
                 data-index="10"
                 placeholder="Analyze the significance of Robeson's work to DuBois..."></textarea>
             </div>
-            <!-- Submit Button -->
-            <div style="text-align: center; margin-top: 32px">
+            <!-- Submit Button (initially hidden) -->
+            <div class="submit-button-container" style="display: none; text-align: center; margin: 32px 0;">
               <button
                 style="
                   padding: 16px 44px;
