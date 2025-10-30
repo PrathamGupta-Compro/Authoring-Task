@@ -169,62 +169,10 @@
         messageElement.className =
           "status-message" + (statusData.class ? ` ${statusData.class}` : "");
 
-        // Create the main container
-        const container = document.createElement("div");
-        container.style.display = "flex";
-        container.style.flexDirection = "column";
-        container.style.width = "100%";
-
-        // Add status text
-        const statusText = document.createElement("p");
-        statusText.className = "status-text";
-        statusText.textContent = statusData.text;
-        container.appendChild(statusText);
-
-        // Add description
-        const description = document.createElement("p");
-        description.className = "status-description";
-        description.textContent = statusData.description;
-        container.appendChild(description);
-
-        // Add Submit button if in progress
-        if (status === "in-progress") {
-          const buttonContainer = document.createElement("div");
-          buttonContainer.style.textAlign = "center";
-          buttonContainer.style.marginTop = "16px";
-
-          const submitButton = document.createElement("button");
-          submitButton.className = "submit-btn";
-          submitButton.textContent = "Submit";
-          submitButton.style.padding = "10px 24px";
-          submitButton.style.background = "#3b82f6";
-          submitButton.style.color = "white";
-          submitButton.style.border = "none";
-          submitButton.style.borderRadius = "6px";
-          submitButton.style.fontSize = "15px";
-          submitButton.style.fontWeight = "600";
-          submitButton.style.cursor = "pointer";
-          submitButton.style.transition = "all 0.2s";
-          submitButton.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
-          submitButton.style.whiteSpace = "nowrap";
-          submitButton.style.height = "fit-content";
-          submitButton.style.alignSelf = "center";
-
-          // Remove click handler - button does nothing when clicked
-          submitButton.onclick = function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-          };
-          submitButton.style.cursor = "default";
-
-          buttonContainer.appendChild(submitButton);
-          container.appendChild(buttonContainer);
-        }
-
-        // Clear and append new content
-        messageElement.innerHTML = "";
-        messageElement.appendChild(container);
+          messageElement.innerHTML = `
+          <p class="status-text">${statusData.text}</p>
+          <p class="status-description">${statusData.description}</p>
+        `;
       }
 
       // Initialize status messages
@@ -1120,6 +1068,19 @@
             class="response-area"
             data-index="3"
             placeholder="Write your connections here..."></textarea>
+            <div style="text-align: center; margin-top: 16px">
+              <button
+                style="
+                  padding: 16px 44px;
+                  background-color: #3b82f6;
+                  color: white;
+                  border: none;
+                  border-radius: 6px;
+                  cursor: pointer;
+                ">
+                Submit
+              </button>
+            </div>
         </div>
       </section>
       <!-- Help and Discussion Box -->
@@ -1378,6 +1339,22 @@
               data-index="7"
               placeholder="Analyze what Robeson's popularity reveals about the era..."></textarea>
           </div>
+          <!-- Submit Button -->
+          <div style="text-align: center; margin-top: 32px">
+            <button
+              style="
+                padding: 16px 44px;
+                background-color: #3b82f6;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 15px;
+                font-weight: 600;
+              ">
+              Submit
+            </button>
+          </div>
         </div>
       </section>
       <!-- Help and Discussion Box for Part 2 -->
@@ -1616,6 +1593,22 @@
                 class="response-area"
                 data-index="10"
                 placeholder="Analyze the significance of Robeson's work to DuBois..."></textarea>
+            </div>
+            <!-- Submit Button -->
+            <div style="text-align: center; margin-top: 32px">
+              <button
+                style="
+                  padding: 16px 44px;
+                  background-color: #3b82f6;
+                  color: white;
+                  border: none;
+                  border-radius: 6px;
+                  cursor: pointer;
+                  font-size: 15px;
+                  font-weight: 600;
+                ">
+                Submit
+              </button>
             </div>
           </header>
         </div>
