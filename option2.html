@@ -143,9 +143,9 @@
           class: "",
         },
         "in-progress": {
-          text: "You're working on this lesson.",
+          text: "Continue working. Your responses are saved automatically.",
           description:
-            "Your progress is being saved. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            "After completing, click 'Submit' to finalize your submission. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
           class: "in-progress",
         },
         completed: {
@@ -168,10 +168,62 @@
 
         messageElement.className =
           "status-message" + (statusData.class ? ` ${statusData.class}` : "");
-        messageElement.innerHTML = `
-          <p class="status-text">${statusData.text}</p>
-          <p class="status-description">${statusData.description}</p>
-        `;
+        
+        // Create the main container
+        const container = document.createElement('div');
+        container.style.display = 'flex';
+        container.style.flexDirection = 'column';
+        container.style.width = '100%';
+        
+        // Add status text
+        const statusText = document.createElement('p');
+        statusText.className = 'status-text';
+        statusText.textContent = statusData.text;
+        container.appendChild(statusText);
+        
+        // Add description
+        const description = document.createElement('p');
+        description.className = 'status-description';
+        description.textContent = statusData.description;
+        container.appendChild(description);
+        
+        // Add Submit button if in progress
+        if (status === 'in-progress') {
+          const buttonContainer = document.createElement('div');
+          buttonContainer.style.textAlign = 'center';
+          buttonContainer.style.marginTop = '16px';
+          
+          const submitButton = document.createElement('button');
+          submitButton.className = 'submit-btn';
+          submitButton.textContent = 'Submit';
+          submitButton.style.padding = '10px 24px';
+          submitButton.style.background = '#3b82f6';
+          submitButton.style.color = 'white';
+          submitButton.style.border = 'none';
+          submitButton.style.borderRadius = '6px';
+          submitButton.style.fontSize = '15px';
+          submitButton.style.fontWeight = '600';
+          submitButton.style.cursor = 'pointer';
+          submitButton.style.transition = 'all 0.2s';
+          submitButton.style.boxShadow = '0 1px 2px rgba(0, 0, 0, 0.05)';
+          submitButton.style.whiteSpace = 'nowrap';
+          submitButton.style.height = 'fit-content';
+          submitButton.style.alignSelf = 'center';
+          
+          // Add click handler for submit
+          submitButton.onclick = function() {
+            // Update status to completed
+            const sectionId = messageElement.id.replace('statusMessage', '');
+            updateStatusMessage(sectionId, 'completed');
+          };
+          
+          buttonContainer.appendChild(submitButton);
+          container.appendChild(buttonContainer);
+        }
+        
+        // Clear and append new content
+        messageElement.innerHTML = '';
+        messageElement.appendChild(container);
       }
 
       // Initialize status messages
@@ -1048,6 +1100,15 @@
 
         <!-- Connections Section -->
         <div class="connections-section">
+          <p
+            style="
+              font-size: 15px;
+              color: #4a5568;
+              margin: 0 0 8px 0;
+              font-weight: 500;
+            ">
+            Block 2
+          </p>
           <div class="section-directions">
             <p>
               <strong>Directions:</strong> Connect the main ideas stated by the
@@ -1058,19 +1119,6 @@
             class="response-area"
             data-index="3"
             placeholder="Write your connections here..."></textarea>
-          <div style="text-align: center; margin-top: 16px">
-            <button
-              style="
-                padding: 16px 44px;
-                background-color: #3b82f6;
-                color: white;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-              ">
-              Submit
-            </button>
-          </div>
         </div>
       </section>
       <!-- Help and Discussion Box -->
@@ -1328,23 +1376,6 @@
               data-index="7"
               placeholder="Analyze what Robeson's popularity reveals about the era..."></textarea>
           </div>
-
-          <!-- Submit Button -->
-          <div style="text-align: center; margin-top: 32px">
-            <button
-              style="
-                padding: 16px 44px;
-                background-color: #3b82f6;
-                color: white;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 15px;
-                font-weight: 600;
-              ">
-              Submit
-            </button>
-          </div>
         </div>
       </section>
       <!-- Help and Discussion Box for Part 2 -->
@@ -1412,7 +1443,7 @@
       <!-- Part 3 Card -->
       <section class="part-card" style="margin-top: 32px" id="step3">
         <div class="part-section">
-          <header class="section-header">
+          <header class="section-header" style="margin-bottom: 0px;">
             <div
               style="
                 display: flex;
@@ -1584,84 +1615,67 @@
                 data-index="10"
                 placeholder="Analyze the significance of Robeson's work to DuBois..."></textarea>
             </div>
-
-            <!-- Submit Button -->
-            <div style="text-align: center; margin-top: 32px">
-              <button
-                style="
-                  padding: 16px 44px;
-                  background-color: #3b82f6;
-                  color: white;
-                  border: none;
-                  border-radius: 6px;
-                  cursor: pointer;
-                  font-size: 15px;
-                  font-weight: 600;
-                ">
-                Submit
-              </button>
-            </div>
-            <!-- Help and Discussion Box for Part 3 -->
-            <section
-              style="
-                background: #f8f9fa;
-                border-radius: 0 0 20px 20px;
-                border-top: 1px solid #e2e8f0;
-                overflow: hidden;
-              ">
-              <div
-                style="
-                  padding: 50px;
-                  border-bottom: 1px solid #e2e8f0;
-                  display: flex;
-                  flex-direction: column;
-                  gap: 12px;
-                ">
-                <h3
-                  style="
-                    margin: 0 0 12px 0;
-                    font-size: 20px;
-                    font-weight: 600;
-                    color: #1e293b;
-                    line-height: 1.2;
-                    font-family: 'Inter', sans-serif;
-                  ">
-                  Help & Discussion
-                </h3>
-                <p
-                  style="
-                    margin: 0 0 16px 0;
-                    font-size: 14px;
-                    color: #64748b;
-                    line-height: 1.5;
-                    font-family: 'Inter', sans-serif;
-                  ">
-                  This discussion is for Step 3 of 3 (Primary Source Analysis).
-                  Use the box below to ask your teacher for help or
-                  clarification. Your teacher will see exactly where you are in
-                  the task and provide targeted assistance.
-                </p>
-                <textarea
-                  style="margin: 0px; width: 100%"
-                  class="response-area help-textarea"
-                  placeholder="Ask your teacher for help or clarification"></textarea>
-                <button
-                  style="
-                    width: 20%;
-                    margin-top: 12px;
-                    padding: 8px 16px;
-                    background-color: #3b82f6;
-                    color: white;
-                    border: none;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    align-self: flex-end;
-                  ">
-                  Request Help
-                </button>
-              </div>
-            </section>
           </header>
+        </div>
+      </section>
+      <!-- Help and Discussion Box for Part 2 -->
+      <section
+        style="
+          background: #f8f9fa;
+          border-radius: 0 0 20px 20px;
+          border-top: 1px solid #e2e8f0;
+          overflow: hidden;
+        ">
+        <div
+          style="
+            padding: 50px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+          ">
+          <h3
+            style="
+              margin: 0 0 12px 0;
+              font-size: 20px;
+              font-weight: 600;
+              color: #1e293b;
+              line-height: 1.2;
+              font-family: 'Inter', sans-serif;
+            ">
+            Help & Discussion
+          </h3>
+          <p
+            style="
+              margin: 0 0 16px 0;
+              font-size: 14px;
+              color: #64748b;
+              line-height: 1.5;
+              font-family: 'Inter', sans-serif;
+            ">
+            This discussion is for Step 3 of 3 (Primary Source Analysis). Use
+            the box below to ask your teacher for help or clarification. Your
+            teacher will see exactly where you are in the task and provide
+            targeted assistance.
+          </p>
+          <textarea
+            style="margin: 0px; width: 100%"
+            class="response-area help-textarea"
+            placeholder="Ask your teacher for help or clarification"></textarea>
+          <button
+            style="
+              width: 20%;
+              margin-top: 12px;
+              padding: 8px 16px;
+              background-color: #3b82f6;
+              color: white;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+              align-self: flex-end;
+            ">
+            Request Help
+          </button>
         </div>
       </section>
     </main>
