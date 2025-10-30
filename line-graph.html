@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Review of Linear Graphs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:ital,wght@0,400;1,400&display=swap"
+      rel="stylesheet" />
+    <script>
+      // Track hint usage
+      const hintUsage = {};
+
+      function startTask(button) {
+        const section = button.closest(".part-section");
+        const stepNumberDiv = section.querySelector(
+          'div[style*="font-size: 15px; font-weight: 600; color: #1e293b;"]'
+        );
+        let stepNumber = null;
+
+        if (stepNumberDiv) {
+          const stepText = stepNumberDiv.textContent.trim();
+          const match = stepText.match(/Step (\d+)/i);
+          if (match && match[1]) {
+            stepNumber = match[1];
+          }
+        }
+
+        if (!stepNumber) {
+          const sections = document.querySelectorAll(".part-section");
+          for (let i = 0; i < sections.length; i++) {
+            if (sections[i] === section) {
+              stepNumber = i + 1;
+              break;
+            }
+          }
+        }
+
+        const partCard = section.closest(".part-card");
+        if (partCard) {
+          const allInputs = partCard.querySelectorAll("input, textarea");
+          allInputs.forEach((input) => {
+            if (!input.classList.contains("help-textarea")) {
+              input.disabled = false;
+              input.placeholder =
+                input.getAttribute("data-original-placeholder") || "";
+              input.style.cursor = "text";
+              input.style.backgroundColor = "white";
+              input.style.border = "2px solid #e2e8f0";
+              input.style.borderRadius = "8px";
+            }
+          });
+        }
+
+        const beginBtn = section.querySelector(".begin-btn");
+        const statusBtn = section.querySelector(".status-btn");
+
+        if (beginBtn) beginBtn.style.display = "none";
+        if (statusBtn) {
+          statusBtn.textContent = "In Progress";
+          statusBtn.style.backgroundColor = "#eab308";
+          statusBtn.style.color = "#000";
+          statusBtn.style.borderColor = "#eab308";
+        }
+
+        if (stepNumber) {
+          const headerStatus = document.getElementById(
+            `step${stepNumber}Status`
+          );
+          if (headerStatus) {
+            headerStatus.textContent = "In Progress";
+            headerStatus.style.color = "#000";
+            headerStatus.style.fontWeight = "600";
+            headerStatus.style.backgroundColor = "#eab308";
+            headerStatus.style.padding = "2px 8px";
+            headerStatus.style.borderRadius = "4px";
+            headerStatus.style.display = "inline-block";
+          }
+        }
+
+        updateProgressBar();
+      }
+
+      function updateProgressBar() {
+        const totalSteps = 3;
+        let completedSteps = 0;
+
+        for (let i = 1; i <= totalSteps; i++) {
+          const status = document.getElementById(`step${i}Status`);
+          if (status && status.textContent === "In Progress") {
+            completedSteps++;
+          }
+        }
+
+        const progressPercent = (completedSteps / totalSteps) * 100;
+        const progressBar = document.querySelector(".progress-bar-fill");
+        const progressPercentText = document.querySelector(".progress-percent");
+
+        if (progressBar) {
+          progressBar.style.width = `${progressPercent}%`;
+        }
+        if (progressPercentText) {
+          progressPercentText.textContent = `${Math.round(progressPercent)}%`;
+        }
+      }
+
+      function readAloud() {
+        const text = "The steeper the line, the higher the rate of change. The lines below show this.";
+        
+        const steeperSpan = document.getElementById('steeper');
+        const rateSpan = document.getElementById('ratechange');
+        
+        setTimeout(() => {
+          if (steeperSpan) {
+            steeperSpan.style.background = "#fcd34d";
+            steeperSpan.style.fontWeight = "600";
+          }
+        }, 1500);
+        
+        setTimeout(() => {
+          if (steeperSpan) {
+            steeperSpan.style.background = "#fff3cd";
+            steeperSpan.style.fontWeight = "normal";
+          }
+          if (rateSpan) {
+            rateSpan.style.background = "#fcd34d";
+            rateSpan.style.fontWeight = "600";
+          }
+        }, 3500);
+        
+        setTimeout(() => {
+          if (rateSpan) {
+            rateSpan.style.background = "#fff3cd";
+            rateSpan.style.fontWeight = "normal";
+          }
+        }, 6000);
+        
+        if ('speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.rate = 0.9;
+          speechSynthesis.speak(utterance);
+        }
+      }
+
+      function showHint(hintId, questionId) {
+        const hintBox = document.getElementById(hintId + '-hint');
+        const button = event.target;
+        
+        if (hintBox) {
+          hintBox.classList.toggle('show');
+          button.classList.add('used');
+          
+          if (!hintUsage[questionId]) {
+            hintUsage[questionId] = [];
+          }
+          if (!hintUsage[questionId].includes(hintId)) {
+            hintUsage[questionId].push(hintId);
+            updateHintTracker(questionId);
+          }
+        }
+      }
+
+      function updateHintTracker(questionId) {
+        const trackerId = 'q' + questionId + '-hints-used';
+        const countId = 'q' + questionId + '-hint-count';
+        const tracker = document.getElementById(trackerId);
+        const count = document.getElementById(countId);
+        
+        if (tracker && count) {
+          tracker.style.display = 'block';
+          count.textContent = hintUsage[questionId].length;
+        }
+      }
+
+      function sendHelpAlert(questionId) {
+        const alert = document.getElementById(questionId + '-alert');
+        if (alert) {
+          alert.style.display = 'block';
+          console.log('Help requested for question:', questionId);
+          
+          setTimeout(() => {
+            alert.style.display = 'none';
+          }, 5000);
+        }
+      }
+
+      function highlightPreviousAnswer(inputId, variable) {
+        const input = document.getElementById(inputId);
+        if (input) {
+          input.style.animation = 'flashEffect 0.6s ease';
+          input.focus();
+          
+          setTimeout(() => {
+            input.style.animation = '';
+          }, 600);
+        }
+      }
+
+      function checkForUnits(questionId) {
+        const input = document.getElementById(questionId + '-answer');
+        const unitPrompt = document.getElementById(questionId + '-unit-prompt');
+        const value = input.value.trim();
+        
+        if (value && /\d/.test(value)) {
+          const hasUnits = /inch|minute|dollar|goat/i.test(value);
+          if (!hasUnits) {
+            unitPrompt.style.display = 'block';
+          } else {
+            unitPrompt.style.display = 'none';
+          }
+        }
+      }
+
+      function addUnit(questionId, unit) {
+        const input = document.getElementById(questionId + '-answer');
+        const currentValue = input.value.trim();
+        
+        if (currentValue && !/inch|minute|dollar|goat/i.test(currentValue)) {
+          input.value = currentValue + ' ' + unit;
+        }
+        
+        const unitPrompt = document.getElementById(questionId + '-unit-prompt');
+        unitPrompt.style.display = 'none';
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("input, textarea").forEach((input) => {
+          if (!input.classList.contains("help-textarea")) {
+            input.setAttribute(
+              "data-original-placeholder",
+              input.placeholder
+            );
+            input.placeholder =
+              'Click "Begin" to start adding your response';
+            input.disabled = true;
+            input.style.cursor = "not-allowed";
+            input.style.backgroundColor = "#f8fafc";
+            input.style.border = "2px dashed #cbd5e0";
+            input.style.borderRadius = "8px";
+          }
+        });
+
+        const helpInputs = document.querySelectorAll(".help-textarea");
+        helpInputs.forEach(input => {
+          input.disabled = false;
+          input.style.cursor = "text";
+          input.style.backgroundColor = "white";
+          input.style.borderStyle = "solid";
+        });
+      });
+    </script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+        line-height: 1.6;
+        color: #2d3748;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        margin-top: 24px;
+        margin-bottom: 24px;
+      }
+
+      .part-card {
+        background: white;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        padding: 40px 50px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      }
+
+      .part-section:last-child {
+        margin-bottom: 0;
+      }
+
+      .section-header {
+        margin-bottom: 30px;
+      }
+
+      .section-title {
+        color: #1a202c;
+        font-size: 24px;
+        margin-bottom: 16px;
+        font-weight: 600;
+      }
+
+      .section-directions {
+        padding: 20px;
+        margin-bottom: 24px;
+      }
+
+      .section-directions p {
+        font-size: 15px;
+        color: #2d3748;
+      }
+
+      .instruction-box {
+        background: #f6f8fa;
+        padding: 20px;
+        border-radius: 6px;
+        margin-bottom: 24px;
+        line-height: 1.6;
+        color: #24292e;
+      }
+
+      .instruction-box p {
+        margin-bottom: 12px;
+      }
+
+      .read-aloud-btn {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+        margin-top: 12px;
+      }
+
+      .read-aloud-btn:hover {
+        background: #218838;
+      }
+
+      .highlight {
+        background: #fff3cd;
+        padding: 2px 4px;
+        border-radius: 3px;
+        transition: all 0.3s;
+      }
+
+      .graph-container {
+        margin: 24px 0;
+        padding: 24px;
+        background: white;
+        text-align: center;
+      }
+
+      .graph-placeholder {
+        background: #f6f8fa;
+        border: 2px dashed #cbd5e0;
+        border-radius: 6px;
+        padding: 60px 20px;
+        text-align: center;
+        color: #6c757d;
+        font-size: 14px;
+      }
+
+      .question-block {
+        margin-bottom: 32px;
+        padding: 24px;
+        background: white;
+        border: 1px solid #e1e4e8;
+        border-radius: 6px;
+      }
+
+      .question-label {
+        font-weight: 600;
+        font-size: 14px;
+        color: #4a5568;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      .answer-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 15px;
+        font-family: "Inter", sans-serif;
+        line-height: 1.6;
+        transition: all 0.2s;
+      }
+
+      .answer-input:focus {
+        outline: none;
+        border-color: #4A90E2;
+        background: #fafbfc;
+      }
+
+      .answer-input:disabled {
+        background-color: #f8fafc;
+        border: 2px dashed #cbd5e1;
+        color: #94a3b8;
+        cursor: not-allowed;
+      }
+
+      .stylus-hint {
+        font-size: 13px;
+        color: #718096;
+        margin-top: 8px;
+      }
+
+      .hint-btn {
+        padding: 8px 16px;
+        border: 1px solid #fbbf24;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        color: #d97706;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-right: 8px;
+        margin-top: 12px;
+      }
+
+      .hint-btn:hover {
+        background: #fef3c7;
+      }
+
+      .hint-btn.used {
+        background: #fef3c7;
+        border-color: #f59e0b;
+      }
+
+      .help-btn {
+        padding: 8px 16px;
+        border: 1px solid #ef4444;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        color: #dc2626;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 12px;
+      }
+
+      .help-btn:hover {
+        background: #fee2e2;
+      }
+
+      .hint-box {
+        background: #fffbeb;
+        padding: 16px;
+        border-radius: 6px;
+        margin-top: 16px;
+        border-left: 3px solid #f59e0b;
+        display: none;
+      }
+
+      .hint-box.show {
+        display: block;
+        animation: slideDown 0.3s ease;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes flashEffect {
+        0%, 100% { background: white; }
+        50% { background: #fcd34d; }
+      }
+
+      .alert-message {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 16px;
+        border-radius: 6px;
+        margin-top: 16px;
+        border-left: 3px solid #dc2626;
+        font-weight: 500;
+        display: none;
+      }
+
+      .formula-box {
+        background: #eff6ff;
+        padding: 16px;
+        border-radius: 6px;
+        margin: 16px 0;
+        text-align: center;
+        border: 1px solid #bfdbfe;
+      }
+
+      .formula-box .formula {
+        font-family: 'Courier New', monospace;
+        font-size: 18px;
+        color: #1e40af;
+        font-weight: 600;
+      }
+
+      .clickable-var {
+        color: #4A90E2;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: all 0.2s;
+        display: inline-block;
+      }
+
+      .clickable-var:hover {
+        background: #dbeafe;
+        transform: scale(1.05);
+      }
+
+      .hint-tracker {
+        background: #f3f4f6;
+        padding: 12px;
+        border-radius: 6px;
+        margin-top: 12px;
+        font-size: 13px;
+        color: #6b7280;
+        display: none;
+      }
+
+      .hint-tracker span {
+        color: #f59e0b;
+        font-weight: 600;
+      }
+
+      .unit-prompt {
+        background: #dbeafe;
+        padding: 16px;
+        border-radius: 6px;
+        margin-top: 16px;
+        border-left: 3px solid #3b82f6;
+        font-size: 14px;
+        color: #1e40af;
+        display: none;
+      }
+
+      .unit-buttons {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+
+      .unit-btn {
+        padding: 6px 14px;
+        background: white;
+        border: 1px solid #3b82f6;
+        border-radius: 4px;
+        cursor: pointer;
+        color: #1e40af;
+        font-size: 13px;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+
+      .unit-btn:hover {
+        background: #3b82f6;
+        color: white;
+      }
+
+      @media (max-width: 768px) {
+        .part-card {
+          padding: 30px 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header
+      style="
+        border-bottom: 2px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        background-color: white;
+        width: 100%;
+        padding: 40px 80px;
+      ">
+      <!--TITLE-->
+      <section style="width: 50%">
+        <p
+          style="
+            font-size: 13px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+          ">
+          UNIT: LINEAR GRAPHS & FUNCTIONS
+        </p>
+        <h1
+          style="
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 12px;
+          ">
+          Review of Linear Graphs
+        </h1>
+        <ul style="display: flex; gap: 12px; margin-bottom: 20px">
+          <li
+            style="
+              padding: 6px 16px;
+              border: 1.5px solid #cbd5e0;
+              border-radius: 20px;
+              font-size: 14px;
+              color: #4a5568;
+              list-style: none;
+            ">
+            Analyze
+          </li>
+          <li
+            style="
+              padding: 6px 16px;
+              border: 1.5px solid #cbd5e0;
+              border-radius: 20px;
+              font-size: 14px;
+              color: #4a5568;
+              list-style: none;
+            ">
+            Connect
+          </li>
+          <li
+            style="
+              padding: 6px 16px;
+              border: 1.5px solid #cbd5e0;
+              border-radius: 20px;
+              font-size: 14px;
+              color: #4a5568;
+              list-style: none;
+            ">
+            Interpret
+          </li>
+        </ul>
+        <div style="margin-top: 24px">
+          <h3
+            style="
+              font-size: 16px;
+              font-weight: 600;
+              color: #1a202c;
+              margin: 20px 0 12px 0;
+            ">
+            Objectives
+          </h3>
+          <ul
+            style="
+              margin-left: 20px;
+              color: #4a5568;
+              font-size: 14px;
+              line-height: 1.8;
+              margin-bottom: 20px;
+            ">
+            <li>
+              In this task you will use your prior knowledge of linear relationships and graphing to interpret real-world scenarios, calculate slope and y-intercepts, and write equations in y = mx + b format.
+            </li>
+          </ul>
+
+          <h3
+            style="
+              font-size: 16px;
+              font-weight: 600;
+              color: #1a202c;
+              margin: 20px 0 12px 0;
+            ">
+            Essential Questions
+          </h3>
+          <ul
+            style="
+              margin-left: 20px;
+              color: #4a5568;
+              font-size: 14px;
+              line-height: 1.8;
+              margin-bottom: 20px;
+            ">
+            <li>What does the steepness of a line tell us about rate of change?</li>
+            <li>How can we interpret the meaning of slope and y-intercept in real-world contexts?</li>
+            <li>What do intersection points represent in graphs comparing two linear relationships?</li>
+            <li>How can we use mathematical models to make informed decisions?</li>
+          </ul>
+        </div>
+      </section>
+
+      <!--PROGRESS AND STEPS-->
+      <section
+        style="
+          width: 40%;
+          min-width: 300px;
+          background: white;
+          padding: 24px;
+          border-radius: 8px;
+          border: 1px solid #e2e8f0;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        ">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+          ">
+          <p
+            style="
+              font-size: 12px;
+              font-weight: 600;
+              color: #64748b;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            ">
+            Steps (3)
+          </p>
+          <div style="display: flex; align-items: center; gap: 8px; width: 80%">
+            <div
+              style="
+                width: 80%;
+                height: 6px;
+                background: #e2e8f0;
+                border-radius: 3px;
+                overflow: hidden;
+              ">
+              <div
+                class="progress-bar-fill"
+                style="
+                  width: 0%;
+                  height: 100%;
+                  background: #3b82f6;
+                  transition: width 0.3s ease;
+                "></div>
+            </div>
+            <span
+              class="progress-percent"
+              style="font-size: 12px; color: #64748b; font-weight: 500"
+              >0%</span
+            >
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; position: relative">
+          <div
+            style="
+              position: absolute;
+              left: 15px;
+              top: 20px;
+              bottom: 48px;
+              width: 2px;
+              background: #e2e8f0;
+              z-index: 1;
+              height: 80%;
+            "></div>
+
+          <!-- Step 1 -->
+          <div
+            style="
+              display: flex;
+              align-items: flex-start;
+              gap: 16px;
+              position: relative;
+            ">
+            <div style="position: relative; z-index: 2">
+              <div
+                style="
+                  width: 32px;
+                  height: 32px;
+                  border-radius: 50%;
+                  background: #e2e8f0;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 14px;
+                  font-weight: 600;
+                  color: #94a3b8;
+                ">
+                1
+              </div>
+            </div>
+            <div style="flex: 1">
+              <h2
+                style="
+                  font-size: 15px;
+                  font-weight: 600;
+                  color: #1e293b;
+                  margin-bottom: 4px;
+                ">
+                Review of Linear Graphs Concepts
+              </h2>
+              <p
+                style="font-size: 13px; color: #94a3b8; font-weight: 500"
+                id="step1Status">
+                Not Started
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div
+            style="
+              display: flex;
+              align-items: flex-start;
+              gap: 16px;
+              position: relative;
+              padding: 24px 0;
+            ">
+            <div style="position: relative; z-index: 2">
+              <div
+                style="
+                  width: 32px;
+                  height: 32px;
+                  border-radius: 50%;
+                  background: #e2e8f0;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 14px;
+                  font-weight: 600;
+                  color: #94a3b8;
+                ">
+                2
+              </div>
+            </div>
+            <div style="flex: 1">
+              <h2
+                style="
+                  font-size: 15px;
+                  font-weight: 600;
+                  color: #1e293b;
+                  margin-bottom: 4px;
+                ">
+                Positive Slope Example
+              </h2>
+              <p
+                style="font-size: 13px; color: #94a3b8; font-weight: 500"
+                id="step2Status">
+                Not Started
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div
+            style="
+              display: flex;
+              align-items: flex-start;
+              gap: 16px;
+              position: relative;
+            ">
+            <div style="position: relative; z-index: 2">
+              <div
+                style="
+                  width: 32px;
+                  height: 32px;
+                  border-radius: 50%;
+                  background: #e2e8f0;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 14px;
+                  font-weight: 600;
+                  color: #94a3b8;
+                ">
+                3
+              </div>
+            </div>
+            <div style="flex: 1">
+              <h2
+                style="
+                  font-size: 15px;
+                  font-weight: 600;
+                  color: #1e293b;
+                  margin-bottom: 4px;
+                ">
+                Negative Slope Example
+              </h2>
+              <p
+                style="font-size: 13px; color: #94a3b8; font-weight: 500"
+                id="step3Status">
+                Not Started
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main class="container">
+      <!-- Step 1 Card -->
+      <section class="part-card">
+        <div class="part-section">
+          <header class="section-header">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 24px;
+              ">
+              <p style="font-size: 15px; font-weight: 600; color: #1e293b">
+                Step 1 of 3
+              </p>
+              <div style="display: flex; gap: 8px">
+                <button
+                  class="begin-btn"
+                  onclick="startTask(this)"
+                  style="
+                    padding: 8px 16px;
+                    background: #3b82f6;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  ">
+                  Begin
+                </button>
+                <button
+                  class="status-btn"
+                  style="
+                    padding: 8px 16px;
+                    background: white;
+                    color: #94a3b8;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: default;
+                    transition: all 0.2s;
+                  ">
+                  Not Started
+                </button>
+              </div>
+            </div>
+            <h2 class="section-title">
+              Review of Linear Graphs - what do they really tell you?
+            </h2>
+            <p class="section-directions">
+              <strong>Directions:</strong> Read the info and then answer the questions.
+            </p>
+          </header>
+
+          <div class="instruction-box">
+            <button class="read-aloud-btn" onclick="readAloud()">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-.708.707A7.476 7.476 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"/>
+                <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.483 5.483 0 0 1 11.025 8a5.483 5.483 0 0 1-1.61 3.89l.706.706z"/>
+                <path d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
+              </svg>
+              Read Aloud
+            </button>
+          </div>
+
+          <div class="instruction-box">
+            <p>The <span class="highlight" id="steeper">steeper</span> the line, the <span class="highlight" id="ratechange">higher the rate of change</span>. The lines below show this.</p>
+          </div>
+
+          <div class="graph-container">
+            <img src="./image6.png" alt="Graph showing two lines with different slopes" style="max-width: 100%; height: auto; border: 1px solid #e2e8f0; border-radius: 8px; margin: 0 auto; display: block;">
+          </div>
+
+          <div class="instruction-box">
+            <p>At the point where two lines cross, they will have the SAME x and y values.</p>
+          </div>
+
+          <div class="question-block">
+            <label class="question-label">In the graph below, at what x-value do the lines cross?</label>
+            <div class="graph-container">
+              <img src="./image7.png" alt="Graph showing two intersecting lines" style="max-width: 100%; height: auto; border: 1px solid #e2e8f0; border-radius: 8px; margin: 0 auto; display: block;">
+            </div>
+            <input type="text" class="answer-input" id="q1-answer" placeholder="Type your answer here...">
+            <div class="stylus-hint">You can use a stylus to write on this assignment</div>
+            <button class="help-btn" onclick="sendHelpAlert('q1')">
+              I need help
+            </button>
+            <div class="alert-message" id="q1-alert">
+              Teacher has been notified! Help is on the way.
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 32px">
+            <button
+              style="
+                padding: 16px 44px;
+                background-color: #3b82f6;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 15px;
+                font-weight: 600;
+              ">
+              Submit
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Help and Discussion Box for Step 1 -->
+      <section
+        style="
+          background: #f8f9fa;
+          border-bottom-left-radius: 20px;
+          border-bottom-right-radius: 20px;
+          border-top: 1px solid #e2e8f0;
+          overflow: hidden;
+        ">
+        <div
+          style="
+            padding: 50px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+          ">
+          <h3
+            style="
+              margin: 0 0 12px 0;
+              font-size: 20px;
+              font-weight: 600;
+              color: #1e293b;
+              line-height: 1.2;
+              font-family: 'Inter', sans-serif;
+            ">
+            Help & Discussion
+          </h3>
+          <p
+            style="
+              margin: 0 0 16px 0;
+              font-size: 14px;
+              color: #64748b;
+              line-height: 1.5;
+              font-family: 'Inter', sans-serif;
+            ">
+            This discussion is for Step 1 of 3 (Review of Linear Graphs Concepts). Use the box below to ask your teacher for help or clarification. Your teacher will see exactly where you are in the task and provide targeted assistance.
+          </p>
+          <textarea
+            style="margin: 0px; width: 100%; min-height: 100px; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 15px; font-family: 'Inter', sans-serif;"
+            class="help-textarea"
+            placeholder="Ask your teacher for help or clarification"></textarea>
+          <button
+            style="
+              width: 20%;
+              margin-top: 12px;
+              padding: 8px 16px;
+              background-color: #3b82f6;
+              color: white;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+              align-self: flex-end;
+            ">
+            Request Help
+          </button>
+        </div>
+      </section>
+
+      <!-- Step 2 Card -->
+      <!-- <section class="part-card" style="margin-top: 32px">
+        <div class="part-section">
+          <header class="section-header">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 24px;
+              ">
+              <p style="font-size: 15px; font-weight: 600; color: #1e293b">
+                Step 2 of 3
+              </p>
+              <div style="display: flex; gap: 8px">
+                <button
+                  class="begin-btn"
+                  onclick="startTask(this)"
+                  style="
+                    padding: 8px 16px;
+                    background: #3b82f6;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  ">
+                  Begin
+                </button>
+                <button
+                  class="status-btn"
+                  style="
+                    padding: 8px 16px;
+                    background: white;
+                    color: #94a3b8;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: default;
+                    transition: all 0.2s;
+                  ">
+                  Not Started
+                </button>
+              </div>
+            </div>
+            <h2 class="section-title">Positive Slope Example</h2>
+            <p class="section-directions">
+              <strong>Directions:</strong> This is an example of a line with positive slope. The cost goes up at a steady rate as the weight increases.
+            </p>
+          </header>
+
+          <div class="graph-container">
+            <img src="./image8.png" alt="Graph showing positive slope line" style="max-width: 100%; height: auto; border: 1px solid #e2e8f0; border-radius: 8px; margin: 0 auto; display: block;">
+          </div>
+
+          <div class="question-block">
+            <label class="question-label">What is the approximate y-intercept of this line?</label>
+            <input type="text" class="answer-input" id="q2-answer" placeholder="Type your answer here...">
+            <div class="stylus-hint">You can use a stylus to write on this assignment</div>
+            <button class="hint-btn" onclick="showHint('q2-1', 2)">
+              Give me a hint
+            </button>
+            <div class="hint-box" id="q2-1-hint">
+              <strong>Hint:</strong>
+              <p>An intercept is where a line hits the axis.</p>
+            </div>
+            <div class="hint-tracker" id="q2-hints-used">
+              Hints used: <span id="q2-hint-count">0</span>
+            </div>
+          </div>
+
+          <div class="question-block">
+            <label class="question-label">What is the approximate slope?</label>
+            <div class="formula-box">
+              <div class="formula">Remember: m = rise/run</div>
+            </div>
+            <input type="text" class="answer-input" id="q3-answer" placeholder="Type your answer here...">
+            <div class="stylus-hint">You can use a stylus to write on this assignment</div>
+            <button class="hint-btn" onclick="showHint('q3-1', 3)">
+              Hint 1
+            </button>
+            <button class="hint-btn" onclick="showHint('q3-2', 3)">
+              Hint 2
+            </button>
+            <button class="hint-btn" onclick="showHint('q3-3', 3)">
+              Hint 3
+            </button>
+            <div class="hint-box" id="q3-1-hint">
+              <strong>Hint 1:</strong>
+              <p>Add two points to the graph before determining the rise and run.</p>
+            </div>
+            <div class="hint-box" id="q3-2-hint">
+              <strong>Hint 2:</strong>
+              <p>Count how many units up (rise) and how many units across (run) between your two points.</p>
+            </div>
+            <div class="hint-box" id="q3-3-hint">
+              <strong>Hint 3:</strong>
+              <p>[Visual example would show two points on the graph with rise and run clearly marked]</p>
+            </div>
+            <div class="hint-tracker" id="q3-hints-used">
+              Hints used: <span id="q3-hint-count">0</span>
+            </div>
+          </div>
+
+          <div class="question-block">
+            <label class="question-label">Write the equation of the line in y = mx + b format.</label>
+            <div style="text-align: center; margin: 20px 0; font-size: 20px;">
+              y = <span class="clickable-var" onclick="highlightPreviousAnswer('q3-answer', 'm')" title="Click to see your slope answer">m</span>x + <span class="clickable-var" onclick="highlightPreviousAnswer('q2-answer', 'b')" title="Click to see your y-intercept answer">b</span>
+            </div>
+            <p style="font-size: 13px; color: #6c757d; text-align: center; margin-bottom: 16px;">
+              (Click on 'm' to see your slope answer, or 'b' to see your y-intercept answer)
+            </p>
+            <input type="text" class="answer-input" id="q4-answer" placeholder="y = ">
+            <div class="stylus-hint">You can use a stylus to write on this assignment</div>
+          </div>
+
+          <div style="text-align: center; margin-top: 32px">
+            <button
+              style="
+                padding: 16px 44px;
+                background-color: #3b82f6;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 15px;
+                font-weight: 600;
+              ">
+              Submit
+            </button>
+          </div>
+        </div>
+      </section> -->
+
+      <!-- Help and Discussion Box for Step 2 -->
+      <!-- <section
+        style="
+          background: #f8f9fa;
+          border-bottom-left-radius: 20px;
+          border-bottom-right-radius: 20px;
+          border-top: 1px solid #e2e8f0;
+          overflow: hidden;
+        ">
+        <div
+          style="
+            padding: 50px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+          ">
+          <h3
+            style="
+              margin: 0 0 12px 0;
+              font-size: 20px;
+              font-weight: 600;
+              color: #1e293b;
+              line-height: 1.2;
+              font-family: 'Inter', sans-serif;
+            ">
+            Help & Discussion
+          </h3>
+          <p
+            style="
+              margin: 0 0 16px 0;
+              font-size: 14px;
+              color: #64748b;
+              line-height: 1.5;
+              font-family: 'Inter', sans-serif;
+            ">
+            This discussion is for Step 2 of 3 (Positive Slope Example). Use the box below to ask your teacher for help or clarification. Your teacher will see exactly where you are in the task and provide targeted assistance.
+          </p>
+          <textarea
+            style="margin: 0px; width: 100%; min-height: 100px; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 15px; font-family: 'Inter', sans-serif;"
+            class="help-textarea"
+            placeholder="Ask your teacher for help or clarification"></textarea>
+          <button
+            style="
+              width: 20%;
+              margin-top: 12px;
+              padding: 8px 16px;
+              background-color: #3b82f6;
+              color: white;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+              align-self: flex-end;
+            ">
+            Request Help
+          </button>
+        </div>
+      </section> -->
+
+      <!-- Step 3 Card -->
+      <!-- <section class="part-card" style="margin-top: 32px">
+        <div class="part-section">
+          <header class="section-header">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 24px;
+              ">
+              <p style="font-size: 15px; font-weight: 600; color: #1e293b">
+                Step 3 of 3
+              </p>
+              <div style="display: flex; gap: 8px">
+                <button
+                  class="begin-btn"
+                  onclick="startTask(this)"
+                  style="
+                    padding: 8px 16px;
+                    background: #3b82f6;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  ">
+                  Begin
+                </button>
+                <button
+                  class="status-btn"
+                  style="
+                    padding: 8px 16px;
+                    background: white;
+                    color: #94a3b8;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: default;
+                    transition: all 0.2s;
+                  ">
+                  Not Started
+                </button>
+              </div>
+            </div>
+            <h2 class="section-title">Negative Slope Example</h2>
+            <p class="section-directions">
+              <strong>Directions:</strong> This is an example of a line with negative slope. The candle length gets smaller as time goes by.
+            </p>
+          </header>
+
+          <div class="graph-container">
+            <img src="./image9.png" alt="Graph showing line with negative slope" style="max-width: 100%; height: auto; border: 1px solid #e2e8f0; border-radius: 8px; margin: 0 auto; display: block;">
+          </div>
+
+          <div class="question-block">
+            <label class="question-label">What is the y-intercept of the line?</label>
+            <input type="text" class="answer-input" id="q5-answer" placeholder="Type your answer here..." oninput="checkForUnits('q5')">
+            <div class="stylus-hint">You can use a stylus to write on this assignment</div>
+            <div class="unit-prompt" id="q5-unit-prompt">
+              <strong>Don't forget to include units!</strong> What are you measuring?
+              <div class="unit-buttons">
+                <button class="unit-btn" onclick="addUnit('q5', 'inches')">inches</button>
+                <button class="unit-btn" onclick="addUnit('q5', 'minutes')">minutes</button>
+                <button class="unit-btn" onclick="addUnit('q5', 'dollars')">dollars</button>
+                <button class="unit-btn" onclick="addUnit('q5', 'goats')">goats</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="question-block">
+            <label class="question-label">What is the slope of this line?</label>
+            <div class="formula-box">
+              <div class="formula">Remember: m = rise/run</div>
+            </div>
+            <input type="text" class="answer-input" id="q6-answer" placeholder="Type your answer here...">
+            <div class="stylus-hint">You can use a stylus to write on this assignment</div>
+          </div>
+
+          <div class="question-block">
+            <label class="question-label">Write the equation of the line in y = mx + b format.</label>
+            <input type="text" class="answer-input" id="q7-answer" placeholder="y = ">
+            <div class="stylus-hint">💡 You can use a stylus to write on this assignment</div>
+          </div>
+
+          <div style="text-align: center; margin-top: 32px">
+            <button
+              style="
+                padding: 16px 44px;
+                background-color: #3b82f6;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 15px;
+                font-weight: 600;
+              ">
+              Submit
+            </button>
+          </div>
+        </div>
+      </section> -->
+
+      <!-- Help and Discussion Box for Step 3 -->
+      <!-- <section
+        style="
+          background: #f8f9fa;
+          border-bottom-left-radius: 20px;
+          border-bottom-right-radius: 20px;
+          border-top: 1px solid #e2e8f0;
+          overflow: hidden;
+        ">
+        <div
+          style="
+            padding: 50px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+          ">
+          <h3
+            style="
+              margin: 0 0 12px 0;
+              font-size: 20px;
+              font-weight: 600;
+              color: #1e293b;
+              line-height: 1.2;
+              font-family: 'Inter', sans-serif;
+            ">
+            Help & Discussion
+          </h3>
+          <p
+            style="
+              margin: 0 0 16px 0;
+              font-size: 14px;
+              color: #64748b;
+              line-height: 1.5;
+              font-family: 'Inter', sans-serif;
+            ">
+            This discussion is for Step 3 of 3 (Negative Slope Example). Use the box below to ask your teacher for help or clarification. Your teacher will see exactly where you are in the task and provide targeted assistance.
+          </p>
+          <textarea
+            style="margin: 0px; width: 100%; min-height: 100px; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 15px; font-family: 'Inter', sans-serif;"
+            class="help-textarea"
+            placeholder="Ask your teacher for help or clarification"></textarea>
+          <button
+            style="
+              width: 20%;
+              margin-top: 12px;
+              padding: 8px 16px;
+              background-color: #3b82f6;
+              color: white;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+              align-self: flex-end;
+            ">
+            Request Help
+          </button>
+        </div>
+      </section> -->
+    </main>
+  </body>
+</html>

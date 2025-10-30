@@ -13,6 +13,9 @@
       function startTask(button) {
         // Find the closest parent section
         const section = button.closest(".part-section");
+        // Update status to in-progress when starting a section
+        const sectionId = section.closest('.part-card').querySelector('[id^="statusMessage"]')?.id.replace('statusMessage', '') || '1';
+        updateStatusMessage(sectionId, 'in-progress');
 
         // Get the step number from the section
         const stepNumberDiv = section.querySelector(
@@ -127,7 +130,46 @@
       }
 
       // Initialize the page
+      // Status messages for different states
+      const statusMessages = {
+        'not-started': {
+          text: "Click Begin to start working on this lesson",
+          description: "You haven't started this lesson yet. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+          class: ''
+        },
+        'in-progress': {
+          text: "You're working on this lesson.",
+          description: "Your progress is being saved. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+          class: 'in-progress'
+        },
+        'completed': {
+          text: "You've completed this lesson.",
+          description: "Your responses have been submitted. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+          class: 'completed'
+        }
+      };
+
+      // Function to update status message
+      function updateStatusMessage(sectionId, status) {
+        const messageElement = document.getElementById(`statusMessage${sectionId}`);
+        if (!messageElement) return;
+        
+        const statusData = statusMessages[status] || statusMessages['not-started'];
+        
+        messageElement.className = 'status-message' + (statusData.class ? ` ${statusData.class}` : '');
+        messageElement.innerHTML = `
+          <p class="status-text">${statusData.text}</p>
+          <p class="status-description">${statusData.description}</p>
+        `;
+      }
+
+      // Initialize status messages
       document.addEventListener("DOMContentLoaded", function () {
+        // Set initial status for all sections
+        updateStatusMessage(1, 'not-started');
+        updateStatusMessage(2, 'not-started');
+        updateStatusMessage(3, 'not-started');
+        
         // Set initial disabled state for all textareas except help textareas
         document.querySelectorAll("textarea").forEach((textarea) => {
           if (!textarea.classList.contains("help-textarea")) {
@@ -354,17 +396,47 @@
         margin-bottom: 16px;
       }
 
-      .connections-section .prompt {
-        font-size: 16px;
-        color: #4a5568;
-        line-height: 1.7;
-        margin-bottom: 20px;
-      }
+  .connections-section .prompt {
+    font-size: 16px;
+    color: #4a5568;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
 
-      .connections-section .response-area {
-        min-height: 250px;
-      }
+  .connections-section .response-area {
+    min-height: 250px;
+  }
 
+  .section-directions {
+    color: #4b5563;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+      
+      .status-message {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+      }
+      
+      .status-message.in-progress {
+        border-left-color: #3b82f6;
+      }
+      
+      .status-message.completed {
+        border-left-color: #10b981;
+      }
+      
+      .status-text {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #1f2937;
+      }
+      
+      .status-description {
+        color: #4b5563;
+        font-size: 0.9em;
+        line-height: 1.5;
+      }
       /* Completion Notice */
       .completion-notice {
         margin-top: 40px;
@@ -773,34 +845,18 @@
                 align-items: center;
                 margin-bottom: 24px;
               ">
-              <p style="font-size: 15px; font-weight: 600; color: #1e293b">
+              <p style="font-size: 15px; font-weight: 600; color: #4a5568">
                 Step 1 of 3
               </p>
-              <div style="display: flex; gap: 8px">
-                <button
-                  class="begin-btn"
-                  onclick="startTask(this)"
-                  style="
-                    padding: 8px 16px;
-                    background: #3b82f6;
-                    color: white;
-                    border: none;
-                    border-radius: 6px;
-                    font-size: 14px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                  ">
-                  Begin
-                </button>
+              <div>
                 <button
                   class="status-btn"
                   style="
                     padding: 8px 16px;
-                    background: white;
-                    color: #94a3b8;
+                    background: #f1f5f9;
+                    color: #4b5563;
                     border: 1px solid #e2e8f0;
-                    border-radius: 6px;
+                    border-radius: 20px;
                     font-size: 14px;
                     font-weight: 600;
                     cursor: default;
@@ -814,6 +870,33 @@
               Quotable Connections - "I sit with Shakespeare and he winces not."
               —W.E.B. DuBois
             </h2>
+            
+            <div class="status-container" style="display: flex; align-items: center; gap: 24px; margin: 24px 0; background-color: #f8f9fa; border-radius: 8px; padding: 16px;">
+              <div class="status-message" id="statusMessage1" style="flex: 1;">
+                <p style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0;">Click Begin to start working on it.</p>
+                <p style="color: #4b5563; margin: 0; font-size: 14px;">You haven't started this lesson yet. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
+              <button
+                class="begin-btn"
+                onclick="startTask(this)"
+                style="
+                  padding: 10px 24px;
+                  background: #3b82f6;
+                  color: white;
+                  border: none;
+                  border-radius: 6px;
+                  font-size: 15px;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.2s;
+                  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+                  white-space: nowrap;
+                  height: fit-content;
+                ">
+                Begin
+              </button>
+            </div>
+            
             <p class="section-directions">
               <strong>Directions:</strong> Read each quote carefully. State the
               main idea of each one in your own words using the response area
@@ -1019,7 +1102,7 @@
       <!-- Part 2 Card -->
       <section class="part-card" style="margin-top: 32px">
         <div class="part-section">
-          <div class="section-header">
+          <header class="section-header">
             <div
               style="
                 display: flex;
@@ -1027,34 +1110,18 @@
                 align-items: center;
                 margin-bottom: 24px;
               ">
-              <div style="font-size: 15px; font-weight: 600; color: #1e293b">
+              <p style="font-size: 15px; font-weight: 600; color: #4a5568; margin: 0;">
                 Step 2 of 3
-              </div>
-              <div style="display: flex; gap: 8px">
-                <button
-                  class="begin-btn"
-                  onclick="startTask(this)"
-                  style="
-                    padding: 8px 16px;
-                    background: #3b82f6;
-                    color: white;
-                    border: none;
-                    border-radius: 6px;
-                    font-size: 14px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                  ">
-                  Begin
-                </button>
+              </p>
+              <div>
                 <button
                   class="status-btn"
                   style="
                     padding: 8px 16px;
-                    background: white;
-                    color: #94a3b8;
+                    background: #f1f5f9;
+                    color: #4b5563;
                     border: 1px solid #e2e8f0;
-                    border-radius: 6px;
+                    border-radius: 20px;
                     font-size: 14px;
                     font-weight: 600;
                     cursor: default;
@@ -1064,9 +1131,36 @@
                 </button>
               </div>
             </div>
-            <div class="section-quote">
+            <h2 class="section-quote">
               American Reception for Othello in the 19th and 20th Century
+            </h2>
+            
+            <div class="status-container" style="display: flex; align-items: center; gap: 24px; margin: 24px 0; background-color: #f8f9fa; border-radius: 8px; padding: 16px;">
+              <div class="status-message" id="statusMessage2" style="flex: 1;">
+                <p style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0;">Click Begin to start working on it.</p>
+                <p style="color: #4b5563; margin: 0; font-size: 14px;">You haven't started this lesson yet. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
+              <button
+                class="begin-btn"
+                onclick="startTask(this)"
+                style="
+                  padding: 10px 24px;
+                  background: #3b82f6;
+                  color: white;
+                  border: none;
+                  border-radius: 6px;
+                  font-size: 15px;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.2s;
+                  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+                  white-space: nowrap;
+                  height: fit-content;
+                ">
+                Begin
+              </button>
             </div>
+            
             <div class="section-directions">
               <p>
                 <strong>Directions:</strong> Use the timeline to track the
@@ -1262,7 +1356,7 @@
       <!-- Part 3 Card -->
       <section class="part-card" style="margin-top: 32px" id="step3">
         <div class="part-section">
-          <div class="section-header">
+          <header class="section-header">
             <div
               style="
                 display: flex;
@@ -1270,34 +1364,18 @@
                 align-items: center;
                 margin-bottom: 24px;
               ">
-              <div style="font-size: 15px; font-weight: 600; color: #1e293b">
+              <p style="font-size: 15px; font-weight: 600; color: #4a5568; margin: 0;">
                 Step 3 of 3
-              </div>
-              <div style="display: flex; gap: 8px">
-                <button
-                  class="begin-btn"
-                  onclick="startTask(this)"
-                  style="
-                    padding: 8px 16px;
-                    background: #3b82f6;
-                    color: white;
-                    border: none;
-                    border-radius: 6px;
-                    font-size: 14px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                  ">
-                  Begin
-                </button>
+              </p>
+              <div>
                 <button
                   class="status-btn"
                   style="
                     padding: 8px 16px;
-                    background: white;
-                    color: #94a3b8;
+                    background: #f1f5f9;
+                    color: #4b5563;
                     border: 1px solid #e2e8f0;
-                    border-radius: 6px;
+                    border-radius: 20px;
                     font-size: 14px;
                     font-weight: 600;
                     cursor: default;
@@ -1306,6 +1384,36 @@
                   Not Started
                 </button>
               </div>
+            </div>
+            <h2 class="section-quote">
+              Primary Source Analysis
+            </h2>
+            
+            <div class="status-container" style="display: flex; align-items: center; gap: 24px; margin: 24px 0; background-color: #f8f9fa; border-radius: 8px; padding: 16px;">
+              <div class="status-message" id="statusMessage3" style="flex: 1;">
+                <p style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0;">Click Begin to start working on it.</p>
+                <p style="color: #4b5563; margin: 0; font-size: 14px;">You haven't started this lesson yet. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              </div>
+              <button
+                class="begin-btn"
+                onclick="startTask(this)"
+                style="
+                  padding: 10px 24px;
+                  background: #3b82f6;
+                  color: white;
+                  border: none;
+                  border-radius: 6px;
+                  font-size: 15px;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.2s;
+                  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+                  white-space: nowrap;
+                  height: fit-content;
+                ">
+                Begin
+              </button>
+            </div>
             </div>
             <div class="section-quote">Primary Source Analysis</div>
             <div style="margin-bottom: 16px">
