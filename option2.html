@@ -210,12 +210,13 @@
           submitButton.style.height = 'fit-content';
           submitButton.style.alignSelf = 'center';
           
-          // Add click handler for submit
-          submitButton.onclick = function() {
-            // Update status to completed
-            const sectionId = messageElement.id.replace('statusMessage', '');
-            updateStatusMessage(sectionId, 'completed');
+          // Remove click handler - button does nothing when clicked
+          submitButton.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
           };
+          submitButton.style.cursor = 'default';
           
           buttonContainer.appendChild(submitButton);
           container.appendChild(buttonContainer);
