@@ -18,6 +18,15 @@
         const stepNumberDiv = section.querySelector(
           'div[style*="font-size: 15px; font-weight: 600; color: #1e293b;"]'
         );
+
+          // Update status to in-progress when starting a section
+          const sectionId =
+          section
+            .closest(".part-card")
+            .querySelector('[id^="statusMessage"]')
+            ?.id.replace("statusMessage", "") || "1";
+        updateStatusMessage(sectionId, "in-progress");
+
         let stepNumber = null;
 
         if (stepNumberDiv) {
@@ -65,6 +74,15 @@
           statusBtn.style.borderColor = "#eab308";
         }
 
+        // Show the submit button for this step
+        const cardContainer = section.closest('.part-card');
+        if (cardContainer) {
+          const submitButton = cardContainer.querySelector('.submit-button-container');
+          if (submitButton) {
+            submitButton.style.display = 'block';
+          }
+        }
+
         if (stepNumber) {
           const headerStatus = document.getElementById(
             `step${stepNumber}Status`
@@ -74,36 +92,52 @@
             headerStatus.style.color = "#000";
             headerStatus.style.fontWeight = "600";
             headerStatus.style.backgroundColor = "#eab308";
-            headerStatus.style.padding = "2px 8px";
-            headerStatus.style.borderRadius = "4px";
+            headerStatus.style.padding = "2px 12px";
+            headerStatus.style.borderRadius = "20px";
             headerStatus.style.display = "inline-block";
           }
         }
-
-        updateProgressBar();
       }
 
-      function updateProgressBar() {
-        const totalSteps = 3;
-        let completedSteps = 0;
+      // Status messages for different states
+      const statusMessages = {
+        "not-started": {
+          text: "This activity has not been started yet. Click Begin to get started.",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
+          class: "",
+        },
+        "in-progress": {
+          text: "This activity is currently in progress. Your responses are saved automatically.",
+          description:
+            "After completing, click 'Submit' to finalize your submission. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
+          class: "in-progress",
+        },
+        completed: {
+          text: "You've completed this lesson.",
+          description:
+            "Your responses have been submitted. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+          class: "completed",
+        },
+      };
 
-        for (let i = 1; i <= totalSteps; i++) {
-          const status = document.getElementById(`step${i}Status`);
-          if (status && status.textContent === "In Progress") {
-            completedSteps++;
-          }
-        }
+      // Function to update status message
+      function updateStatusMessage(sectionId, status) {
+        const messageElement = document.getElementById(
+          `statusMessage${sectionId}`
+        );
+        if (!messageElement) return;
 
-        const progressPercent = (completedSteps / totalSteps) * 100;
-        const progressBar = document.querySelector(".progress-bar-fill");
-        const progressPercentText = document.querySelector(".progress-percent");
+        const statusData =
+          statusMessages[status] || statusMessages["not-started"];
 
-        if (progressBar) {
-          progressBar.style.width = `${progressPercent}%`;
-        }
-        if (progressPercentText) {
-          progressPercentText.textContent = `${Math.round(progressPercent)}%`;
-        }
+        messageElement.className =
+          "status-message" + (statusData.class ? ` ${statusData.class}` : "");
+
+          messageElement.innerHTML = `
+          <p class="status-text">${statusData.text}</p>
+          <p class="status-description">${statusData.description}</p>
+        `;
       }
 
       function readAloud() {
@@ -296,7 +330,7 @@
       }
 
       .section-directions {
-        padding: 20px;
+        padding: 20px 0px;
         margin-bottom: 24px;
       }
 
@@ -432,6 +466,18 @@
       .hint-btn.used {
         background: #fef3c7;
         border-color: #f59e0b;
+      }
+
+      .status-text {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #1f2937;
+      }
+
+      .status-description {
+        color: #4b5563;
+        font-size: 0.9em;
+        line-height: 1.5;
       }
 
       .help-btn {
@@ -613,7 +659,7 @@
             color: #1a202c;
             margin-bottom: 12px;
           ">
-          Review of Linear Graphs
+          Modeling Real World Situations - The Race
         </h1>
         <ul style="display: flex; gap: 12px; margin-bottom: 20px">
           <li
@@ -636,7 +682,7 @@
               color: #4a5568;
               list-style: none;
             ">
-            Connect
+            Apply
           </li>
           <li
             style="
@@ -647,7 +693,7 @@
               color: #4a5568;
               list-style: none;
             ">
-            Interpret
+            Evaluate
           </li>
         </ul>
         <div style="margin-top: 24px">
@@ -669,7 +715,7 @@
               margin-bottom: 20px;
             ">
             <li>
-              In this task you will use your prior knowledge of linear relationships and graphing to interpret real-world scenarios, calculate slope and y-intercepts, and write equations in y = mx + b format.
+              I can read graphs to determine their y-intercept and slope to create an approximate equation for a line.
             </li>
           </ul>
 
@@ -800,11 +846,20 @@
                 ">
                 Review of Linear Graphs Concepts
               </h2>
-              <p
-                style="font-size: 13px; color: #94a3b8; font-weight: 500"
-                id="step1Status">
+              <div 
+                id="step1Status"
+                style="
+                  display: inline-block;
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: #94a3b8;
+                  background-color: #f1f5f9;
+                  padding: 2px 12px;
+                  border-radius: 9999px;
+                  border: 1px solid #e2e8f0;
+                ">
                 Not Started
-              </p>
+              </div>
             </div>
           </div>
 
@@ -844,11 +899,20 @@
                 ">
                 Positive Slope Example
               </h2>
-              <p
-                style="font-size: 13px; color: #94a3b8; font-weight: 500"
-                id="step2Status">
+              <div 
+                id="step2Status"
+                style="
+                  display: inline-block;
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: #94a3b8;
+                  background-color: #f1f5f9;
+                  padding: 2px 12px;
+                  border-radius: 9999px;
+                  border: 1px solid #e2e8f0;
+                ">
                 Not Started
-              </p>
+              </div>
             </div>
           </div>
 
@@ -856,7 +920,7 @@
           <div
             style="
               display: flex;
-              align-items: flex-start;
+              align-items: center;
               gap: 16px;
               position: relative;
             ">
@@ -887,11 +951,20 @@
                 ">
                 Negative Slope Example
               </h2>
-              <p
-                style="font-size: 13px; color: #94a3b8; font-weight: 500"
-                id="step3Status">
+              <div 
+                id="step3Status"
+                style="
+                  display: inline-block;
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: #94a3b8;
+                  background-color: #f1f5f9;
+                  padding: 2px 12px;
+                  border-radius: 9999px;
+                  border: 1px solid #e2e8f0;
+                ">
                 Not Started
-              </p>
+              </div>
             </div>
           </div>
         </div>
@@ -910,38 +983,24 @@
                 align-items: center;
                 margin-bottom: 24px;
               ">
-              <p style="font-size: 15px; font-weight: 600; color: #1e293b">
+              <p style="font-size: 15px; color: #4a5568">
                 Step 1 of 3
               </p>
               <div style="display: flex; gap: 8px">
                 <button
-                  class="begin-btn"
-                  onclick="startTask(this)"
-                  style="
-                    padding: 8px 16px;
-                    background: #3b82f6;
-                    color: white;
-                    border: none;
-                    border-radius: 6px;
-                    font-size: 14px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                  ">
-                  Begin
-                </button>
-                <button
                   class="status-btn"
                   style="
-                    padding: 8px 16px;
-                    background: white;
+                    padding: 2px 12px;
+                    background: #f1f5f9;
                     color: #94a3b8;
                     border: 1px solid #e2e8f0;
-                    border-radius: 6px;
-                    font-size: 14px;
-                    font-weight: 600;
+                    border-radius: 9999px;
+                    font-size: 13px;
                     cursor: default;
                     transition: all 0.2s;
+                    display: inline-flex;
+                    align-items: center;
+                    height: 26px;
                   ">
                   Not Started
                 </button>
@@ -950,8 +1009,60 @@
             <h2 class="section-title">
               Review of Linear Graphs - what do they really tell you?
             </h2>
+            <div style="margin-bottom: 20px; padding: 20px 0px; border-radius: 8px;">
+              <p style="margin: 0; color: #2d3748; line-height: 1.6;">
+                Before you get to the challenge for this section of the course, we need to review a few key skills. In this task, you will practice reading graphs and creating the equations written in slope-intercept form to represent those graphs. You will be taking what you learned in the previous task (creating a slope intercept form equation from a word problem) and graphing the equations you create!
+                <br><br>
+                First, is a quick review of slope-intercept form and graphing it.
+              </p>
+            </div>
+            <div
+              class="status-container"
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+                margin: 24px 0;
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                padding: 16px;
+              ">
+              <div class="status-message" id="statusMessage1" style="flex: 1">
+                <p style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0">
+                  This activity has not been started yet. Click Begin to get started.
+                </p>
+                <p style="color: #4b5563; margin: 0; font-size: 14px">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Eligendi, maiores totam dicta libero illo nostrum odit nam
+                  atque temporibus fugit quisquam voluptatem officiis incidunt
+                  ipsam distinctio consequatur. Quam accusantium illum aut,
+                  iusto quibusdam necessitatibus animi qui ipsa officiis
+                  voluptates similique.
+                </p>
+              </div>
+              <button
+                class="begin-btn"
+                onclick="startTask(this)"
+                style="
+                  padding: 10px 24px;
+                  background: #3b82f6;
+                  color: white;
+                  border: none;
+                  border-radius: 6px;
+                  font-size: 15px;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.2s;
+                  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+                  white-space: nowrap;
+                  height: fit-content;
+                ">
+                Begin
+              </button>
+            </div>
             <p class="section-directions">
-              <strong>Directions:</strong> Read the info and then answer the questions.
+              <strong>Directions:</strong> Go through the assignment linked below, to review linear graphs. This part of the task will help you with the second part, where you will be asked to label and graph equations.
             </p>
           </header>
 
@@ -993,7 +1104,8 @@
             </div>
           </div>
 
-          <div style="text-align: center; margin-top: 32px">
+          <!-- Submit Button (initially hidden) -->
+          <div class="submit-button-container" style="display: none; text-align: center; margin: 32px 0 0 0;">
             <button
               style="
                 padding: 16px 44px;
@@ -1104,15 +1216,18 @@
                 <button
                   class="status-btn"
                   style="
-                    padding: 8px 16px;
-                    background: white;
+                    padding: 2px 12px;
+                    background: #f1f5f9;
                     color: #94a3b8;
                     border: 1px solid #e2e8f0;
-                    border-radius: 6px;
-                    font-size: 14px;
+                    border-radius: 9999px;
+                    font-size: 13px;
                     font-weight: 600;
                     cursor: default;
                     transition: all 0.2s;
+                    display: inline-flex;
+                    align-items: center;
+                    height: 26px;
                   ">
                   Not Started
                 </button>
@@ -1205,7 +1320,7 @@
             </button>
           </div>
         </div>
-      </section> -->
+      </section>
 
       <!-- Help and Discussion Box for Step 2 -->
       <!-- <section
@@ -1300,15 +1415,18 @@
                 <button
                   class="status-btn"
                   style="
-                    padding: 8px 16px;
-                    background: white;
+                    padding: 2px 12px;
+                    background: #f1f5f9;
                     color: #94a3b8;
                     border: 1px solid #e2e8f0;
-                    border-radius: 6px;
-                    font-size: 14px;
+                    border-radius: 9999px;
+                    font-size: 13px;
                     font-weight: 600;
                     cursor: default;
                     transition: all 0.2s;
+                    display: inline-flex;
+                    align-items: center;
+                    height: 26px;
                   ">
                   Not Started
                 </button>
