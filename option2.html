@@ -11,9 +11,7 @@
       rel="stylesheet" />
     <script>
       function startTask(button) {
-        // Find the closest parent section
         const section = button.closest(".part-section");
-        // Update status to in-progress when starting a section
         const sectionId =
           section
             .closest(".part-card")
@@ -21,14 +19,12 @@
             ?.id.replace("statusMessage", "") || "1";
         updateStatusMessage(sectionId, "in-progress");
 
-        // Get the step number from the section
         const stepNumberDiv = section.querySelector(
           'div[style*="font-size: 15px; font-weight: 600; color: #1e293b;"]'
         );
         let stepNumber = null;
 
         if (stepNumberDiv) {
-          // Try to extract step number from the text content
           const stepText = stepNumberDiv.textContent.trim();
           const match = stepText.match(/Step (\d+)/i);
           if (match && match[1]) {
@@ -36,7 +32,6 @@
           }
         }
 
-        // If we couldn't find step number, try to determine it from the section position
         if (!stepNumber) {
           const sections = document.querySelectorAll(".part-section");
           for (let i = 0; i < sections.length; i++) {
@@ -47,13 +42,10 @@
           }
         }
 
-        // Get the parent part-card to find all textareas within this step
         const partCard = section.closest(".part-card");
         if (partCard) {
-          // Enable all textareas in both part-section and connections-section
           const allTextareas = partCard.querySelectorAll("textarea");
           allTextareas.forEach((textarea) => {
-            // Skip help textareas if they have that class
             if (!textarea.classList.contains("help-textarea")) {
               textarea.disabled = false;
               textarea.placeholder =
@@ -67,7 +59,6 @@
           });
         }
 
-        // Update button states within this section
         const beginBtn = section.querySelector(".begin-btn");
         const statusBtn = section.querySelector(".status-btn");
 
@@ -79,7 +70,6 @@
           statusBtn.style.borderColor = "#eab308";
         }
 
-        // Show the submit button for this step
         const cardContainer = section.closest(".part-card");
         if (cardContainer) {
           const submitButton = cardContainer.querySelector(
@@ -90,7 +80,6 @@
           }
         }
 
-        // Update status indicator if it exists in this section
         const statusIndicator = section.querySelector(".status-indicator");
         if (statusIndicator) {
           statusIndicator.textContent = "In Progress";
@@ -102,7 +91,6 @@
           statusIndicator.style.display = "inline-block";
         }
 
-        // Update the status in the header overview section
         if (stepNumber) {
           const headerStatus = document.getElementById(
             `step${stepNumber}Status`
@@ -118,11 +106,33 @@
         }
       }
 
+      function toggleAccordion(button) {
+        const partCard = button.closest(".part-card");
+        const content = partCard.querySelector(".accordion-content");
+        const arrow = button.querySelector("svg") || button;
+        const helpSection = partCard.nextElementSibling;
+
+        if (content.classList.contains("collapsed")) {
+          content.classList.remove("collapsed");
+          partCard.classList.remove("collapsed");
+          arrow.style.transform = "rotate(0deg)";
+          if (helpSection && helpSection.querySelector(".help-textarea")) {
+            helpSection.classList.remove("collapsed");
+          }
+        } else {
+          content.classList.add("collapsed");
+          partCard.classList.add("collapsed");
+          arrow.style.transform = "rotate(180deg)";
+          if (helpSection && helpSection.querySelector(".help-textarea")) {
+            helpSection.classList.add("collapsed");
+          }
+        }
+      }
+
       function updateProgressBar() {
         const totalSteps = 3;
         let completedSteps = 0;
 
-        // Count completed steps
         for (let i = 1; i <= totalSteps; i++) {
           const status = document.getElementById(`step${i}Status`);
           if (status && status.textContent === "In Progress") {
@@ -130,7 +140,6 @@
           }
         }
 
-        // Update progress bar
         const progressPercent = (completedSteps / totalSteps) * 100;
         const progressBar = document.querySelector(".progress-bar-fill");
         const progressPercentText = document.querySelector(".progress-percent");
@@ -143,8 +152,6 @@
         }
       }
 
-      // Initialize the page
-      // Status messages for different states
       const statusMessages = {
         "not-started": {
           text: "This activity has not been started yet. Click Begin to get started.",
@@ -166,7 +173,6 @@
         },
       };
 
-      // Function to update status message
       function updateStatusMessage(sectionId, status) {
         const messageElement = document.getElementById(
           `statusMessage${sectionId}`
@@ -185,14 +191,11 @@
         `;
       }
 
-      // Initialize status messages
       document.addEventListener("DOMContentLoaded", function () {
-        // Set initial status for all sections
         updateStatusMessage(1, "not-started");
         updateStatusMessage(2, "not-started");
         updateStatusMessage(3, "not-started");
 
-        // Set initial disabled state for all textareas except help textareas
         document.querySelectorAll("textarea").forEach((textarea) => {
           if (!textarea.classList.contains("help-textarea")) {
             textarea.setAttribute(
@@ -210,7 +213,6 @@
           }
         });
 
-        // Ensure help textarea is always enabled
         const helpTextarea = document.querySelector(".help-textarea");
         if (helpTextarea) {
           helpTextarea.disabled = false;
@@ -241,7 +243,6 @@
         margin-bottom: 24px;
       }
 
-      /* Task Header - Outside the card */
       .task-header {
         text-align: center;
         margin-bottom: 30px;
@@ -272,13 +273,58 @@
         color: #718096;
       }
 
-      /* Single Part Card */
       .part-card {
         background: white;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
         padding: 40px 50px;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        transition: padding 0.3s ease, border-radius 0.3s ease;
+      }
+
+      .part-card.collapsed {
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+      }
+
+      .accordion-header {
+        user-select: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+      }
+
+      .accordion-arrow {
+        transition: transform 0.3s ease;
+        display: flex;
+        align-items: center;
+      }
+
+      .accordion-content {
+        max-height: 10000px;
+        overflow: hidden;
+        transition: max-height 0.5s ease, opacity 0.3s ease;
+        opacity: 1;
+      }
+
+      .accordion-content.collapsed {
+        max-height: 0;
+        opacity: 0;
+      }
+
+      .help-section.collapsed {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.5s ease, opacity 0.3s ease;
+      }
+
+      .help-section:not(.collapsed) {
+        max-height: 10000px;
+        overflow: visible;
+        opacity: 1;
+        transition: max-height 0.5s ease, opacity 0.3s ease;
       }
 
       .part-section:last-child {
@@ -286,7 +332,6 @@
       }
 
       .section-header {
-        margin-bottom: 30px;
       }
 
       .section-quote {
@@ -306,7 +351,6 @@
         color: #2d3748;
       }
 
-      /* Author Quote Item */
       .quote-item {
         padding-bottom: 40px;
       }
@@ -404,7 +448,6 @@
         margin-top: 6px;
       }
 
-      /* Connections Section */
       .connections-section {
         padding-top: 40px;
         border-top: 3px solid #e2e8f0;
@@ -458,7 +501,7 @@
         font-size: 0.9em;
         line-height: 1.5;
       }
-      /* Completion Notice */
+
       .completion-notice {
         margin-top: 40px;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -484,6 +527,203 @@
         opacity: 0.95;
       }
 
+      .flashcard-container {
+        perspective: 1000px;
+        margin: 20px auto;
+      }
+
+      .flashcard {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+        cursor: pointer;
+      }
+
+      .flashcard.flipped {
+        transform: rotateY(180deg);
+      }
+
+      .flashcard-front,
+      .flashcard-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 10px;
+        padding: 20px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .flashcard-front {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+      }
+
+      .flashcard-back {
+        background-color: white;
+        transform: rotateY(180deg);
+        overflow-y: auto;
+        text-align: justify;
+      }
+
+      .flashcard-portrait {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+        border: 3px solid #6c757d;
+      }
+
+      .flip-instruction {
+        margin-top: 15px;
+        font-style: italic;
+        color: #6c757d;
+        font-size: 0.9em;
+      }
+
+      .question-section {
+        margin-top: 8px;
+        padding: 20px 0px;
+      }
+
+      .question-section h4 {
+        margin-top: 0;
+        margin-bottom: 15px;
+      }
+
+      .response-area {
+        width: 100%;
+        min-height: 100px;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        resize: vertical;
+        margin-left: 0px;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        overflow: auto;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      .modal-content {
+        background-color: #fff;
+        margin: 5% auto;
+        padding: 25px;
+        width: 80%;
+        max-width: 1000px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        position: relative;
+      }
+
+      .close {
+        position: absolute;
+        right: 25px;
+        top: 15px;
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: #000;
+        text-decoration: none;
+      }
+
+      .modal-body {
+        display: flex;
+        gap: 25px;
+        margin-top: 15px;
+      }
+
+      .modal-image {
+        display: flex;
+        flex: 1;
+        min-width: 0;
+      }
+
+      .modal-text {
+        flex: 1;
+        min-width: 0;
+        overflow-y: auto;
+        max-height: 70vh;
+        padding-right: 10px;
+      }
+
+      .modal-text h3 {
+        margin-top: 0;
+        color: #2c3e50;
+      }
+
+      .modal-text p {
+        line-height: 1.6;
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .letter-content {
+        font-family: "Times New Roman", serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .letter-date {
+        text-align: right;
+        margin-bottom: 30px;
+      }
+
+      .letter-address {
+        margin-bottom: 20px;
+        line-height: 1.4;
+      }
+
+      .letter-salutation {
+        margin: 20px 0;
+      }
+
+      .letter-closing {
+        margin: 30px 0 5px 0;
+      }
+
+      .letter-signature {
+        font-family: "Times New Roman", serif;
+        font-size: 1rem;
+      }
+
+      .modal-text {
+        text-align: left;
+      }
+
+      .modal-text h3 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #2c3e50;
+        padding-bottom: 10px;
+      }
+
       @media (max-width: 768px) {
         body {
           padding: 20px 12px;
@@ -505,6 +745,15 @@
           flex-direction: column;
           text-align: center;
         }
+
+        .modal-body {
+          flex-direction: column;
+        }
+
+        .modal-content {
+          width: 95%;
+          margin: 10% auto;
+        }
       }
     </style>
   </head>
@@ -519,7 +768,6 @@
         width: 100%;
         padding: 40px 80px;
       ">
-      <!--TITLE-->
       <section style="width: 50%">
         <p
           style="
@@ -652,7 +900,6 @@
         </div>
       </section>
 
-      <!--PROGRESS AND STEPS-->
       <section
         style="
           width: 40%;
@@ -707,7 +954,6 @@
         </div>
 
         <div style="display: flex; flex-direction: column; position: relative">
-          <!-- Vertical connector line (connects only between steps) -->
           <div
             style="
               position: absolute;
@@ -720,7 +966,6 @@
               height: 80%;
             "></div>
 
-          <!-- Step 1 -->
           <div
             style="
               display: flex;
@@ -773,7 +1018,6 @@
             </div>
           </div>
 
-          <!-- Step 2 -->
           <div
             style="
               display: flex;
@@ -826,7 +1070,6 @@
             </div>
           </div>
 
-          <!-- Step 3 -->
           <div
             style="
               display: flex;
@@ -877,7 +1120,6 @@
               </div>
             </div>
           </div>
-          <!-- Submit Button (initially hidden) -->
           <div
             class="submit-button-container"
             style="display: none; text-align: center; margin: 32px 0">
@@ -901,333 +1143,263 @@
     <main class="container">
       <!-- Part 1 Card -->
       <section class="part-card">
-        <!-- Quote Analysis Section -->
         <div class="part-section">
           <header class="section-header">
-            <div
-              style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 24px;
-              ">
-              <div style="display: flex; gap: 16px; align-items: center">
-                <p style="font-size: 15px; color: #4a5568">Step 1 of 3</p>
-                <div>
+            <div class="accordion-header">
+              <div style="flex: 1">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 16px;
+                  ">
+                  <div style="display: flex; gap: 16px; align-items: center">
+                    <p style="font-size: 15px; color: #4a5568; margin: 0">
+                      Step 1 of 3
+                    </p>
+                    <div>
+                      <button
+                        class="status-btn"
+                        style="
+                          padding: 8px 16px;
+                          background: #f1f5f9;
+                          color: #4b5563;
+                          border: 1px solid #e2e8f0;
+                          border-radius: 20px;
+                          cursor: default;
+                          transition: all 0.2s;
+                          pointer-events: none;
+                        ">
+                        Not Started
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="accordion-arrow"
+                    onclick="toggleAccordion(this)"
+                    style="cursor: pointer; padding: 8px">
+                    <svg
+                      width="24px"
+                      height="24px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+                        stroke="#292D32"
+                        stroke-width="2.4"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg>
+                  </div>
+                </div>
+                <h2 class="section-quote" style="margin: 0">
+                  Quotable Connections - "I sit with Shakespeare and he winces
+                  not." —W.E.B. DuBois
+                </h2>
+              </div>
+            </div>
+
+            <div class="accordion-content">
+              <div
+                class="status-container"
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  gap: 16px;
+                  margin: 24px 0;
+                  background-color: #f8f9fa;
+                  border-radius: 8px;
+                  padding: 16px;
+                ">
+                <div class="status-message" id="statusMessage1" style="flex: 1">
+                  <p
+                    style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0">
+                    Click Begin to start working.
+                  </p>
+                  <p style="color: #4b5563; margin: 0; font-size: 14px">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Eligendi, maiores totam dicta libero illo nostrum odit nam
+                    atque temporibus fugit quisquam voluptatem officiis incidunt
+                    ipsam distinctio consequatur. Quam accusantium illum aut,
+                    iusto quibusdam necessitatibus animi qui ipsa officiis
+                    voluptates similique.
+                  </p>
+                </div>
+                <button
+                  class="begin-btn"
+                  onclick="startTask(this)"
+                  style="
+                    padding: 10px 24px;
+                    background: #3b82f6;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    font-size: 15px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+                    white-space: nowrap;
+                    height: fit-content;
+                  ">
+                  Begin
+                </button>
+              </div>
+              <p class="section-directions">
+                <strong>Directions:</strong> Read each quote carefully. State
+                the main idea of each one in your own words using the response
+                area provided.
+              </p>
+
+              <div class="flashcard-container">
+                <div class="flashcard">
+                  <div class="flashcard-front">
+                    <img
+                      src="./image1.png"
+                      alt="W.E.B. DuBois"
+                      class="flashcard-portrait" />
+                    <h3>W.E.B. DuBois</h3>
+                    <div class="work-title">The Souls of Black Folk</div>
+                  </div>
+                  <div class="flashcard-back">
+                    <p class="quote-text">
+                      ...the Negro is a sort of seventh son, born with a veil,
+                      and gifted with second-sight in this American world,—a
+                      world which yields him no true self-consciousness, but
+                      only lets him see himself through the revelation of the
+                      other world. It is a peculiar sensation, this
+                      <strong>double-consciousness</strong>, this sense of
+                      always
+                      <strong
+                        >looking at one's self through the eyes of others, of
+                        measuring one's soul by the tape of a world that looks
+                        on in amused contempt and pity.</strong
+                      >
+                    </p>
+                  </div>
+                </div>
+
+                <div class="question-section">
+                  <textarea
+                    class="response-area"
+                    data-index="0"
+                    placeholder="Explain what DuBois is saying here..."></textarea>
+                </div>
+              </div>
+
+              <div class="flashcard-container">
+                <div class="flashcard">
+                  <div class="flashcard-front">
+                    <img
+                      src="./image2.png"
+                      alt="Ralph Ellison"
+                      class="flashcard-portrait" />
+                    <h3>Ralph Ellison</h3>
+                    <div class="work-title">Invisible Man</div>
+                  </div>
+                  <div class="flashcard-back">
+                    <p class="quote-text">
+                      I am an invisible man. . .
+                      <strong>I am invisible</strong>, understand, simply
+                      because people refuse to see me. Like the bodiless heads
+                      you see sometimes in circus sideshows, it is as though I
+                      have been surrounded by mirrors of hard, distorting glass.
+                      When they approach me
+                      <strong
+                        >they see only my surroundings, themselves or figments
+                        of their imagination, indeed, everything and anything
+                        except me.</strong
+                      >
+                    </p>
+                  </div>
+                </div>
+
+                <div class="question-section">
+                  <textarea
+                    class="response-area"
+                    data-index="1"
+                    placeholder="What does Ellison mean by being 'invisible'?"></textarea>
+                </div>
+              </div>
+
+              <div class="flashcard-container">
+                <div class="flashcard">
+                  <div class="flashcard-front">
+                    <img
+                      src="./image3.png"
+                      alt="William Shakespeare"
+                      class="flashcard-portrait" />
+                    <h3>William Shakespeare</h3>
+                    <div class="work-title">Othello</div>
+                  </div>
+                  <div class="flashcard-back">
+                    <p class="quote-text">
+                      . . .I pray you, in your letters, / When you shall these
+                      unlucky deeds relate, /
+                      <strong
+                        >Speak of me as I am. Nothing extenuate, / Nor set down
+                        aught in malice.</strong
+                      >
+                      Then must you speak / Of one that loved not wisely, but
+                      too well. / Of one not easily jealous, but being wrought,
+                      / Perplexed in the extreme. Of one whose hand, / Like the
+                      base Indian, threw a pearl away / Richer than all his
+                      tribe. Of one whose subdued eyes, / Albeit unused to the
+                      melting mood, / Drop tears as fast as the Arabian trees /
+                      Their medicinal gum. . .
+                    </p>
+                  </div>
+                </div>
+
+                <div class="question-section">
+                  <textarea
+                    class="response-area"
+                    data-index="2"
+                    placeholder="What is Othello asking for in this speech?"></textarea>
+                </div>
+              </div>
+
+              <div class="connections-section">
+                <div class="section-directions">
+                  <p>
+                    <strong>Directions:</strong> Connect the main ideas stated
+                    by the authors above. How do their ideas compliment each
+                    other? Explain..
+                  </p>
+                </div>
+                <textarea
+                  class="response-area"
+                  data-index="3"
+                  placeholder="Write your connections here..."></textarea>
+                <div
+                  class="submit-button-container"
+                  style="display: none; text-align: center; margin: 32px 0 0 0">
                   <button
-                    class="status-btn"
                     style="
-                      padding: 8px 16px;
-                      background: #f1f5f9;
-                      color: #4b5563;
-                      border: 1px solid #e2e8f0;
-                      border-radius: 20px;
-                      cursor: default;
-                      transition: all 0.2s;
+                      padding: 16px 44px;
+                      background-color: #3b82f6;
+                      color: white;
+                      border: none;
+                      border-radius: 6px;
+                      cursor: pointer;
+                      font-size: 15px;
+                      font-weight: 600;
                     ">
-                    Not Started
+                    Submit
                   </button>
                 </div>
               </div>
-              <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="1.056"></g><g id="SVGRepo_iconCarrier"> <path d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501" stroke="#292D32" stroke-width="2.4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
             </div>
-            <h2 class="section-quote">
-              Quotable Connections - "I sit with Shakespeare and he winces not."
-              —W.E.B. DuBois
-            </h2>
-
-            <div
-              class="status-container"
-              style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 16px;
-                margin: 24px 0;
-                background-color: #f8f9fa;
-                border-radius: 8px;
-                padding: 16px;
-              ">
-              <div class="status-message" id="statusMessage1" style="flex: 1">
-                <p style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0">
-                  Click Begin to start working.
-                </p>
-                <p style="color: #4b5563; margin: 0; font-size: 14px">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Eligendi, maiores totam dicta libero illo nostrum odit nam
-                  atque temporibus fugit quisquam voluptatem officiis incidunt
-                  ipsam distinctio consequatur. Quam accusantium illum aut,
-                  iusto quibusdam necessitatibus animi qui ipsa officiis
-                  voluptates similique.
-                </p>
-              </div>
-              <button
-                class="begin-btn"
-                onclick="startTask(this)"
-                style="
-                  padding: 10px 24px;
-                  background: #3b82f6;
-                  color: white;
-                  border: none;
-                  border-radius: 6px;
-                  font-size: 15px;
-                  font-weight: 600;
-                  cursor: pointer;
-                  transition: all 0.2s;
-                  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-                  white-space: nowrap;
-                  height: fit-content;
-                ">
-                Begin
-              </button>
-            </div>
-            <p class="section-directions">
-              <strong>Directions:</strong> Read each quote carefully. State the
-              main idea of each one in your own words using the response area
-              provided.
-            </p>
           </header>
-
-          <!-- W.E.B. DuBois Flashcard -->
-          <div class="flashcard-container">
-            <div class="flashcard">
-              <div class="flashcard-front">
-                <img
-                  src="./image1.png"
-                  alt="W.E.B. DuBois"
-                  class="flashcard-portrait" />
-                <h3>W.E.B. DuBois</h3>
-                <div class="work-title">The Souls of Black Folk</div>
-              </div>
-              <div class="flashcard-back">
-                <p class="quote-text">
-                  ...the Negro is a sort of seventh son, born with a veil, and
-                  gifted with second-sight in this American world,—a world which
-                  yields him no true self-consciousness, but only lets him see
-                  himself through the revelation of the other world. It is a
-                  peculiar sensation, this
-                  <strong>double-consciousness</strong>, this sense of always
-                  <strong
-                    >looking at one's self through the eyes of others, of
-                    measuring one's soul by the tape of a world that looks on in
-                    amused contempt and pity.</strong
-                  >
-                </p>
-              </div>
-            </div>
-
-            <div class="question-section">
-              <textarea
-                class="response-area"
-                data-index="0"
-                placeholder="Explain what DuBois is saying here..."></textarea>
-            </div>
-          </div>
-
-          <style>
-            .flashcard-container {
-              perspective: 1000px;
-
-              margin: 20px auto;
-            }
-
-            .flashcard {
-              position: relative;
-              width: 100%;
-              height: 300px;
-              transition: transform 0.8s;
-              transform-style: preserve-3d;
-              cursor: pointer;
-            }
-
-            .flashcard.flipped {
-              transform: rotateY(180deg);
-            }
-
-            .flashcard-front,
-            .flashcard-back {
-              position: absolute;
-              width: 100%;
-              height: 100%;
-              backface-visibility: hidden;
-              border-radius: 10px;
-              padding: 20px;
-              box-sizing: border-box;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            }
-
-            .flashcard-front {
-              background-color: #f8f9fa;
-              border: 1px solid #dee2e6;
-            }
-
-            .flashcard-back {
-              background-color: white;
-              transform: rotateY(180deg);
-              overflow-y: auto;
-              text-align: justify;
-            }
-
-            .flashcard-portrait {
-              width: 150px;
-              height: 150px;
-              border-radius: 50%;
-              object-fit: cover;
-              margin-bottom: 15px;
-              border: 3px solid #6c757d;
-            }
-
-            .flip-instruction {
-              margin-top: 15px;
-              font-style: italic;
-              color: #6c757d;
-              font-size: 0.9em;
-            }
-
-            .question-section {
-              margin-top: 8px;
-              padding: 20px 0px;
-            }
-
-            .question-section h4 {
-              margin-top: 0;
-              margin-bottom: 15px;
-            }
-
-            .response-area {
-              width: 100%;
-              min-height: 100px;
-              padding: 10px;
-              border: 1px solid #ced4da;
-              border-radius: 4px;
-              resize: vertical;
-              margin-left: 0px;
-            }
-          </style>
-
-          <script>
-            document.addEventListener("DOMContentLoaded", function () {
-              const flashcards = document.querySelectorAll(".flashcard");
-              flashcards.forEach((flashcard) => {
-                flashcard.addEventListener("click", function () {
-                  this.classList.toggle("flipped");
-                });
-              });
-            });
-          </script>
-
-          <!-- Ralph Ellison Flashcard -->
-          <div class="flashcard-container">
-            <div class="flashcard">
-              <div class="flashcard-front">
-                <img
-                  src="./image2.png"
-                  alt="Ralph Ellison"
-                  class="flashcard-portrait" />
-                <h3>Ralph Ellison</h3>
-                <div class="work-title">Invisible Man</div>
-              </div>
-              <div class="flashcard-back">
-                <p class="quote-text">
-                  I am an invisible man. . . <strong>I am invisible</strong>,
-                  understand, simply because people refuse to see me. Like the
-                  bodiless heads you see sometimes in circus sideshows, it is as
-                  though I have been surrounded by mirrors of hard, distorting
-                  glass. When they approach me
-                  <strong
-                    >they see only my surroundings, themselves or figments of
-                    their imagination, indeed, everything and anything except
-                    me.</strong
-                  >
-                </p>
-              </div>
-            </div>
-
-            <div class="question-section">
-              <textarea
-                class="response-area"
-                data-index="1"
-                placeholder="What does Ellison mean by being 'invisible'?"></textarea>
-            </div>
-          </div>
-
-          <!-- William Shakespeare Flashcard -->
-          <div class="flashcard-container">
-            <div class="flashcard">
-              <div class="flashcard-front">
-                <img
-                  src="./image3.png"
-                  alt="William Shakespeare"
-                  class="flashcard-portrait" />
-                <h3>William Shakespeare</h3>
-                <div class="work-title">Othello</div>
-              </div>
-              <div class="flashcard-back">
-                <p class="quote-text">
-                  . . .I pray you, in your letters, / When you shall these
-                  unlucky deeds relate, /
-                  <strong
-                    >Speak of me as I am. Nothing extenuate, / Nor set down
-                    aught in malice.</strong
-                  >
-                  Then must you speak / Of one that loved not wisely, but too
-                  well. / Of one not easily jealous, but being wrought, /
-                  Perplexed in the extreme. Of one whose hand, / Like the base
-                  Indian, threw a pearl away / Richer than all his tribe. Of one
-                  whose subdued eyes, / Albeit unused to the melting mood, /
-                  Drop tears as fast as the Arabian trees / Their medicinal gum.
-                  . .
-                </p>
-              </div>
-            </div>
-
-            <div class="question-section">
-              <textarea
-                class="response-area"
-                data-index="2"
-                placeholder="What is Othello asking for in this speech?"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <!-- Connections Section -->
-        <div class="connections-section">
-          <div class="section-directions">
-            <p>
-              <strong>Directions:</strong> Connect the main ideas stated by the
-              authors above. How do their ideas compliment each other? Explain..
-            </p>
-          </div>
-          <textarea
-            class="response-area"
-            data-index="3"
-            placeholder="Write your connections here..."></textarea>
-          <!-- Submit Button (initially hidden) -->
-          <div
-            class="submit-button-container"
-            style="display: none; text-align: center; margin: 32px 0 0 0">
-            <button
-              style="
-                padding: 16px 44px;
-                background-color: #3b82f6;
-                color: white;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 15px;
-                font-weight: 600;
-              ">
-              Submit
-            </button>
-          </div>
         </div>
       </section>
-      <!-- Help and Discussion Box -->
+
       <section
+        class="help-section"
         style="
           background: #f8f9fa;
           border-bottom-left-radius: 20px;
@@ -1292,209 +1464,234 @@
       <section class="part-card" style="margin-top: 32px">
         <div class="part-section">
           <header class="section-header">
-            <div
-              style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 24px;
-              ">
-              <p style="font-size: 15px; color: #4a5568; margin: 0">
-                Step 2 of 3
-              </p>
-              <div>
-                <button
-                  class="status-btn"
+            <div class="accordion-header">
+              <div style="flex: 1">
+                <div
                   style="
-                    padding: 8px 16px;
-                    background: #f1f5f9;
-                    color: #4b5563;
-                    border: 1px solid #e2e8f0;
-                    border-radius: 20px;
-                    font-size: 14px;
-                    cursor: default;
-                    transition: all 0.2s;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 16px;
                   ">
-                  Not Started
+                  <div style="display: flex; gap: 16px; align-items: center">
+                    <p style="font-size: 15px; color: #4a5568; margin: 0">
+                      Step 2 of 3
+                    </p>
+                    <div>
+                      <button
+                        class="status-btn"
+                        style="
+                          padding: 8px 16px;
+                          background: #f1f5f9;
+                          color: #4b5563;
+                          border: 1px solid #e2e8f0;
+                          border-radius: 20px;
+                          font-size: 14px;
+                          cursor: default;
+                          transition: all 0.2s;
+                          pointer-events: none;
+                        ">
+                        Not Started
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="accordion-arrow"
+                    onclick="toggleAccordion(this)"
+                    style="cursor: pointer; padding: 8px">
+                    <svg
+                      width="24px"
+                      height="24px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+                        stroke="#292D32"
+                        stroke-width="2.4"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg>
+                  </div>
+                </div>
+                <h2 class="section-quote" style="margin: 0">
+                  American Reception for Othello in the 19th and 20th Century
+                </h2>
+              </div>
+            </div>
+
+            <div class="accordion-content">
+              <div
+                class="status-container"
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  gap: 16px;
+                  margin: 24px 0;
+                  background-color: #f8f9fa;
+                  border-radius: 8px;
+                  padding: 16px;
+                ">
+                <div class="status-message" id="statusMessage2" style="flex: 1">
+                  <p
+                    style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0">
+                    This activity has not been started yet. Click Begin to get
+                    started.
+                  </p>
+                  <p style="color: #4b5563; margin: 0; font-size: 14px">
+                    You haven't started this lesson yet. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit.
+                  </p>
+                </div>
+                <button
+                  class="begin-btn"
+                  onclick="startTask(this)"
+                  style="
+                    padding: 10px 24px;
+                    background: #3b82f6;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    font-size: 15px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+                    white-space: nowrap;
+                    height: fit-content;
+                  ">
+                  Begin
+                </button>
+              </div>
+
+              <div class="section-directions">
+                <p>
+                  <strong>Directions:</strong> Use the timeline to track the
+                  evolution of Othello productions and how they connect to the
+                  time period they were in.
+                </p>
+              </div>
+
+              <div style="margin: 32px 0; text-align: center">
+                <img
+                  src="./image4.png"
+                  alt="Timeline of Othello Productions in America"
+                  style="
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                  " />
+              </div>
+
+              <div style="margin: 24px 0; padding: 0 0 0 16px">
+                <p
+                  style="
+                    font-size: 15px;
+                    color: #475569;
+                    line-height: 1.6;
+                    margin: 0 0 8px 0;
+                  ">
+                  <strong>Note:</strong> For the first 200 years of Othello
+                  productions, Othello was played by a white actor in dark make
+                  up. Lighter make up versions of Othello existed as a response
+                  to white audiences and critics wanting to distance Othello and
+                  Shakespeare from black identity.
+                </p>
+                <p
+                  style="
+                    font-size: 14px;
+                    color: #64748b;
+                    margin: 8px 0 0 0;
+                    font-style: normal;
+                  ">
+                  Source: "Not Just Black and White: Othello in America" by
+                  Andrew Carlson, American Theatre
+                </p>
+              </div>
+
+              <div style="margin-top: 40px">
+                <label class="response-label"
+                  >Othello was often put on as a morality play, and white
+                  audience members and critics mimicked John Quincy Adams'
+                  sentiment–that it was a cautionary tale about miscegenation
+                  (interracial marriage). Based on your analysis of the play, is
+                  this idea supported by the text or existing analysis of the
+                  text? Explain.</label
+                >
+                <textarea
+                  class="response-area"
+                  data-index="4"
+                  placeholder="Analyze whether the play supports this interpretation..."></textarea>
+              </div>
+
+              <div style="margin-top: 32px">
+                <label class="response-label"
+                  >Records prior to the 19th century don't show any controversy
+                  around theatrical performances of Othello in America. What
+                  historical events coincide with the timeline above that might
+                  have made audiences more sensitive to viewing this play with a
+                  racial lens? Explain.</label
+                >
+                <textarea
+                  class="response-area"
+                  data-index="5"
+                  placeholder="Identify and explain relevant historical events..."></textarea>
+              </div>
+
+              <div style="margin-top: 32px">
+                <label class="response-label"
+                  >James Hewlett and William A. Brown started The African
+                  Troupe, as shown on the previous page, but it was raided by
+                  police at the prompting of the Park Theatre. The actors were
+                  beaten and forced to swear before a judge that they would
+                  never perform Shakespeare in public again. Why would this
+                  performance be seen as threatening or unlawful at the
+                  time?</label
+                >
+                <textarea
+                  class="response-area"
+                  data-index="6"
+                  placeholder="Explain why this performance was considered threatening..."></textarea>
+              </div>
+
+              <div style="margin-top: 32px">
+                <label class="response-label"
+                  >What does the popularity of Paul Robeson's portrayal of
+                  Othello say about the audience and time period in which he
+                  performed?</label
+                >
+                <textarea
+                  class="response-area"
+                  data-index="7"
+                  placeholder="Analyze what Robeson's popularity reveals about the era..."></textarea>
+              </div>
+              <div
+                class="submit-button-container"
+                style="display: none; text-align: center; margin: 32px 0">
+                <button
+                  style="
+                    padding: 16px 44px;
+                    background-color: #3b82f6;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-size: 15px;
+                    font-weight: 600;
+                  ">
+                  Submit
                 </button>
               </div>
             </div>
-            <h2 class="section-quote">
-              American Reception for Othello in the 19th and 20th Century
-            </h2>
-
-            <div
-              class="status-container"
-              style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 16px;
-                margin: 24px 0;
-                background-color: #f8f9fa;
-                border-radius: 8px;
-                padding: 16px;
-              ">
-              <div class="status-message" id="statusMessage2" style="flex: 1">
-                <p style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0">
-                  This activity has not been started yet. Click Begin to get
-                  started.
-                </p>
-                <p style="color: #4b5563; margin: 0; font-size: 14px">
-                  You haven't started this lesson yet. Lorem ipsum dolor sit
-                  amet, consectetur adipiscing elit.
-                </p>
-              </div>
-              <button
-                class="begin-btn"
-                onclick="startTask(this)"
-                style="
-                  padding: 10px 24px;
-                  background: #3b82f6;
-                  color: white;
-                  border: none;
-                  border-radius: 6px;
-                  font-size: 15px;
-                  font-weight: 600;
-                  cursor: pointer;
-                  transition: all 0.2s;
-                  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-                  white-space: nowrap;
-                  height: fit-content;
-                ">
-                Begin
-              </button>
-            </div>
-
-            <div class="section-directions">
-              <p>
-                <strong>Directions:</strong> Use the timeline to track the
-                evolution of Othello productions and how they connect to the
-                time period they were in.
-              </p>
-            </div>
           </header>
-
-          <!-- Timeline Image -->
-          <div style="margin: 32px 0; text-align: center">
-            <img
-              src="./image4.png"
-              alt="Timeline of Othello Productions in America"
-              style="
-                max-width: 100%;
-                height: auto;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-              " />
-          </div>
-
-          <!-- Historical Note -->
-          <div style="margin: 24px 0; padding: 0 0 0 16px">
-            <p
-              style="
-                font-size: 15px;
-                color: #475569;
-                line-height: 1.6;
-                margin: 0 0 8px 0;
-              ">
-              <strong>Note:</strong> For the first 200 years of Othello
-              productions, Othello was played by a white actor in dark make up.
-              Lighter make up versions of Othello existed as a response to white
-              audiences and critics wanting to distance Othello and Shakespeare
-              from black identity.
-            </p>
-            <p
-              style="
-                font-size: 14px;
-                color: #64748b;
-                margin: 8px 0 0 0;
-                font-style: normal;
-              ">
-              Source: "Not Just Black and White: Othello in America" by Andrew
-              Carlson, American Theatre
-            </p>
-          </div>
-
-          <!-- Question 1 -->
-          <div style="margin-top: 40px">
-            <label class="response-label"
-              >Othello was often put on as a morality play, and white audience
-              members and critics mimicked John Quincy Adams' sentiment–that it
-              was a cautionary tale about miscegenation (interracial marriage).
-              Based on your analysis of the play, is this idea supported by the
-              text or existing analysis of the text? Explain.</label
-            >
-            <textarea
-              class="response-area"
-              data-index="4"
-              placeholder="Analyze whether the play supports this interpretation..."></textarea>
-          </div>
-
-          <!-- Question 2 -->
-          <div style="margin-top: 32px">
-            <label class="response-label"
-              >Records prior to the 19th century don't show any controversy
-              around theatrical performances of Othello in America. What
-              historical events coincide with the timeline above that might have
-              made audiences more sensitive to viewing this play with a racial
-              lens? Explain.</label
-            >
-            <textarea
-              class="response-area"
-              data-index="5"
-              placeholder="Identify and explain relevant historical events..."></textarea>
-          </div>
-
-          <!-- Question 3 -->
-          <div style="margin-top: 32px">
-            <label class="response-label"
-              >James Hewlett and William A. Brown started The African Troupe, as
-              shown on the previous page, but it was raided by police at the
-              prompting of the Park Theatre. The actors were beaten and forced
-              to swear before a judge that they would never perform Shakespeare
-              in public again. Why would this performance be seen as threatening
-              or unlawful at the time?</label
-            >
-            <textarea
-              class="response-area"
-              data-index="6"
-              placeholder="Explain why this performance was considered threatening..."></textarea>
-          </div>
-
-          <!-- Question 4 -->
-          <div style="margin-top: 32px">
-            <label class="response-label"
-              >What does the popularity of Paul Robeson's portrayal of Othello
-              say about the audience and time period in which he
-              performed?</label
-            >
-            <textarea
-              class="response-area"
-              data-index="7"
-              placeholder="Analyze what Robeson's popularity reveals about the era..."></textarea>
-          </div>
-          <!-- Submit Button (initially hidden) -->
-          <div
-            class="submit-button-container"
-            style="display: none; text-align: center; margin: 32px 0">
-            <button
-              style="
-                padding: 16px 44px;
-                background-color: #3b82f6;
-                color: white;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 15px;
-                font-weight: 600;
-              ">
-              Submit
-            </button>
-          </div>
         </div>
       </section>
-      <!-- Help and Discussion Box for Part 2 -->
+
       <section
+        class="help-section"
         style="
           background: #f8f9fa;
           border-bottom-right-radius: 20px;
@@ -1559,396 +1756,263 @@
       <section class="part-card" style="margin-top: 32px" id="step3">
         <div class="part-section">
           <header class="section-header" style="margin-bottom: 0px">
-            <div
-              style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 24px;
-              ">
-              <p style="font-size: 15px; color: #4a5568; margin: 0">
-                Step 3 of 3
-              </p>
-              <div>
-                <button
-                  class="status-btn"
+            <div class="accordion-header">
+              <div style="flex: 1">
+                <div
                   style="
-                    padding: 8px 16px;
-                    background: #f1f5f9;
-                    color: #4b5563;
-                    border: 1px solid #e2e8f0;
-                    border-radius: 20px;
-                    font-size: 14px;
-                    cursor: default;
-                    transition: all 0.2s;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 16px;
                   ">
-                  Not Started
-                </button>
-              </div>
-            </div>
-            <h2 class="section-quote">Primary Source Analysis</h2>
-
-            <div
-              class="status-container"
-              style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 16px;
-                margin: 24px 0;
-                background-color: #f8f9fa;
-                border-radius: 8px;
-                padding: 16px;
-              ">
-              <div class="status-message" id="statusMessage3" style="flex: 1">
-                <p style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0">
-                  You haven't started this activity yet. Click Begin to start
-                  working on it.
-                </p>
-                <p style="color: #4b5563; margin: 0; font-size: 14px">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </p>
-              </div>
-              <button
-                class="begin-btn"
-                onclick="startTask(this)"
-                style="
-                  padding: 10px 24px;
-                  background: #3b82f6;
-                  color: white;
-                  border: none;
-                  border-radius: 6px;
-                  font-size: 15px;
-                  font-weight: 600;
-                  cursor: pointer;
-                  transition: all 0.2s;
-                  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-                  white-space: nowrap;
-                  height: fit-content;
-                ">
-                Begin
-              </button>
-            </div>
-            <div style="margin-bottom: 16px">
-              <p
-                style="
-                  margin: 0 0 16px 0;
-                  color: #334155;
-                  line-height: 1.6;
-                  font-size: 15px;
-                "></p>
-              <p class="section-directions">
-                <strong>Directions:</strong> Examine the primary source below
-                and answer the following questions.
-              </p>
-            </div>
-
-            <!-- Prior Knowledge Context -->
-            <div style="margin: 24px 0; padding: 0 0 0 16px">
-              <h4
-                style="
-                  font-size: 15px;
-                  font-weight: 600;
-                  color: #1e293b;
-                  margin: 0 0 8px 0;
-                ">
-                Prior Knowledge
-              </h4>
-              <p
-                style="
-                  font-size: 15px;
-                  color: #475569;
-                  line-height: 1.6;
-                  margin: 0;
-                ">
-                In 1931, actor Paul Robeson was taking London by storm with his
-                portrayal of Othello and his roles in popular musicals like Show
-                Boat. He would later (1943) bring his Othello back to his
-                stomping grounds in New York, on Broadway no less. This would be
-                the first time a Black American actor would portray Othello in
-                America since James Hewlett in 1821 and the first ever to play
-                the character on Broadway. Below is a letter from W.E.B. DuBois
-                to Robeson.
-              </p>
-            </div>
-
-            <!-- Primary Source Image with Modal -->
-            <div style="margin: 32px 0; text-align: center">
-              <img
-                src="./image5.png"
-                alt="Letter from W.E.B. DuBois to Paul Robeson"
-                id="letterImage"
-                style="
-                  max-width: 100%;
-                  height: auto;
-                  border-radius: 8px;
-                  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                  border: 1px solid #e2e8f0;
-                  cursor: pointer;
-                " />
-            </div>
-
-            <!-- The Modal -->
-            <div id="letterModal" class="modal">
-              <div class="modal-content">
-                <span class="close">&times;</span>
-                <div class="modal-body">
-                  <div class="modal-image">
-                    <img
-                      src="./image5.png"
-                      alt="Letter from W.E.B. DuBois to Paul Robeson"
-                      style="
-                        max-width: 100%;
-                        height: auto;
-                        border-radius: 8px;
-                      " />
-                  </div>
-                  <div class="modal-text">
-                    <h3>W.E.B. DuBois' Letter to Paul Robeson</h3>
-                    <div class="letter-content">
-                      <p class="letter-date">April 17, 1931</p>
-                      <p class="letter-address">
-                        Mr. Paul Robeson,<br />
-                        C/O Metropolitan Music Bureau,<br />
-                        551 Fifth Avenue<br />
-                        New York, N.Y.
-                      </p>
-                      <p class="letter-salutation">My dear Mr. Robeson,</p>
-                      <p>
-                        I have about given up the possibility of getting my
-                        article or statement out of you but I am writing this as
-                        a sort of last appeal. I have got this etching of yours
-                        and I want to reproduce it in the THE CRISIS but there
-                        would be no point of doing it unless I had some article
-                        accompanying it. What I should like to have, as I have
-                        said before, is some statement about your London
-                        experience or your experience in "Othello". Couldn't you
-                        mail it to me?
-                      </p>
-                      <p class="letter-closing">Very Sincerely Yours,</p>
-                      <p class="letter-signature">WEBD/DW</p>
+                  <div style="display: flex; gap: 16px; align-items: center">
+                    <p style="font-size: 15px; color: #4a5568; margin: 0">
+                      Step 3 of 3
+                    </p>
+                    <div>
+                      <button
+                        class="status-btn"
+                        style="
+                          padding: 8px 16px;
+                          background: #f1f5f9;
+                          color: #4b5563;
+                          border: 1px solid #e2e8f0;
+                          border-radius: 20px;
+                          font-size: 14px;
+                          cursor: default;
+                          transition: all 0.2s;
+                          pointer-events: none;
+                        ">
+                        Not Started
+                      </button>
                     </div>
                   </div>
-                  <style>
-                    .letter-content {
-                      font-family: "Times New Roman", serif;
-                      line-height: 1.6;
-                      color: #333;
-                      max-width: 600px;
-                      margin: 0 auto;
-                      padding: 20px;
-                    }
-                    .letter-date {
-                      text-align: right;
-                      margin-bottom: 30px;
-                    }
-                    .letter-address {
-                      margin-bottom: 20px;
-                      line-height: 1.4;
-                    }
-                    .letter-salutation {
-                      margin: 20px 0;
-                    }
-                    .letter-closing {
-                      margin: 30px 0 5px 0;
-                    }
-                    .letter-signature {
-                      font-family: "Times New Roman", serif;
-                      font-size: 1rem;
-                    }
-                    .modal-text {
-                      text-align: left;
-                    }
-                    .modal-text h3 {
-                      text-align: center;
-                      margin-bottom: 20px;
-                      color: #2c3e50;
-                      padding-bottom: 10px;
-                    }
-                  </style>
+                  <div
+                    class="accordion-arrow"
+                    onclick="toggleAccordion(this)"
+                    style="cursor: pointer; padding: 8px">
+                    <svg
+                      width="24px"
+                      height="24px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+                        stroke="#292D32"
+                        stroke-width="2.4"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg>
+                  </div>
                 </div>
+                <h2 class="section-quote" style="margin: 0">
+                  Primary Source Analysis
+                </h2>
               </div>
             </div>
 
-            <style>
-              /* Modal Styles */
-              .modal {
-                display: none;
-                position: fixed;
-                z-index: 1000;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.8);
-                overflow: auto;
-                padding: 20px;
-                box-sizing: border-box;
-              }
-
-              .modal-content {
-                background-color: #fff;
-                margin: 5% auto;
-                padding: 25px;
-                width: 80%;
-                max-width: 1000px;
-                border-radius: 10px;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-                position: relative;
-              }
-
-              .close {
-                position: absolute;
-                right: 25px;
-                top: 15px;
-                color: #aaa;
-                font-size: 28px;
-                font-weight: bold;
-                cursor: pointer;
-              }
-
-              .close:hover,
-              .close:focus {
-                color: #000;
-                text-decoration: none;
-              }
-
-              .modal-body {
-                display: flex;
-                gap: 25px;
-                margin-top: 15px;
-              }
-
-              .modal-image {
-                display: flex;
-                flex: 1;
-                min-width: 0;
-              }
-
-              .modal-text {
-                flex: 1;
-                min-width: 0;
-                overflow-y: auto;
-                max-height: 70vh;
-                padding-right: 10px;
-              }
-
-              .modal-text h3 {
-                margin-top: 0;
-                color: #2c3e50;
-              }
-
-              .modal-text p {
-                line-height: 1.6;
-                color: #333;
-                margin-bottom: 15px;
-              }
-
-              @media (max-width: 768px) {
-                .modal-body {
-                  flex-direction: column;
-                }
-
-                .modal-content {
-                  width: 95%;
-                  margin: 10% auto;
-                }
-              }
-            </style>
-
-            <script>
-              // Get the modal
-              const modal = document.getElementById("letterModal");
-              const img = document.getElementById("letterImage");
-              const span = document.getElementsByClassName("close")[0];
-
-              // When the user clicks on the image, open the modal
-              img.onclick = function () {
-                modal.style.display = "block";
-                document.body.style.overflow = "hidden"; // Prevent scrolling when modal is open
-              };
-
-              // When the user clicks on (x), close the modal
-              span.onclick = function () {
-                modal.style.display = "none";
-                document.body.style.overflow = "auto"; // Re-enable scrolling
-              };
-
-              // When the user clicks anywhere outside of the modal, close it
-              window.onclick = function (event) {
-                if (event.target == modal) {
-                  modal.style.display = "none";
-                  document.body.style.overflow = "auto"; // Re-enable scrolling
-                }
-              };
-
-              // Close modal with Escape key
-              document.addEventListener("keydown", function (event) {
-                if (event.key === "Escape") {
-                  modal.style.display = "none";
-                  document.body.style.overflow = "auto"; // Re-enable scrolling
-                }
-              });
-            </script>
-
-            <!-- Question 1 -->
-            <div style="margin-top: 40px">
-              <label class="response-label"
-                >What is DuBois' purpose in writing Robeson and what is his
-                tone?</label
-              >
-              <textarea
-                class="response-area"
-                data-index="8"
-                placeholder="Identify DuBois' purpose and describe his tone in the letter..."></textarea>
-            </div>
-
-            <!-- Question 2 -->
-            <div style="margin-top: 32px">
-              <label class="response-label"
-                >How do we know what DuBois feels about Robeson and his work?
-                Explain.</label
-              >
-              <textarea
-                class="response-area"
-                data-index="9"
-                placeholder="Explain what evidence reveals DuBois' feelings..."></textarea>
-            </div>
-
-            <!-- Question 3 -->
-            <div style="margin-top: 32px">
-              <label class="response-label"
-                >What makes Robeson's work during this time period significant
-                to DuBois? Explain.</label
-              >
-              <textarea
-                class="response-area"
-                data-index="10"
-                placeholder="Analyze the significance of Robeson's work to DuBois..."></textarea>
-            </div>
-            <!-- Submit Button (initially hidden) -->
-            <div
-              class="submit-button-container"
-              style="display: none; text-align: center; margin: 32px 0">
-              <button
+            <div class="accordion-content">
+              <div
+                class="status-container"
                 style="
-                  padding: 16px 44px;
-                  background-color: #3b82f6;
-                  color: white;
-                  border: none;
-                  border-radius: 6px;
-                  cursor: pointer;
-                  font-size: 15px;
-                  font-weight: 600;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  gap: 16px;
+                  margin: 24px 0;
+                  background-color: #f8f9fa;
+                  border-radius: 8px;
+                  padding: 16px;
                 ">
-                Submit
-              </button>
+                <div class="status-message" id="statusMessage3" style="flex: 1">
+                  <p
+                    style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0">
+                    You haven't started this activity yet. Click Begin to start
+                    working on it.
+                  </p>
+                  <p style="color: #4b5563; margin: 0; font-size: 14px">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  </p>
+                </div>
+                <button
+                  class="begin-btn"
+                  onclick="startTask(this)"
+                  style="
+                    padding: 10px 24px;
+                    background: #3b82f6;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    font-size: 15px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+                    white-space: nowrap;
+                    height: fit-content;
+                  ">
+                  Begin
+                </button>
+              </div>
+              <div style="margin-bottom: 16px">
+                <p
+                  style="
+                    margin: 0 0 16px 0;
+                    color: #334155;
+                    line-height: 1.6;
+                    font-size: 15px;
+                  "></p>
+                <p class="section-directions">
+                  <strong>Directions:</strong> Examine the primary source below
+                  and answer the following questions.
+                </p>
+              </div>
+
+              <div style="margin: 24px 0; padding: 0 0 0 16px">
+                <h4
+                  style="
+                    font-size: 15px;
+                    font-weight: 600;
+                    color: #1e293b;
+                    margin: 0 0 8px 0;
+                  ">
+                  Prior Knowledge
+                </h4>
+                <p
+                  style="
+                    font-size: 15px;
+                    color: #475569;
+                    line-height: 1.6;
+                    margin: 0;
+                  ">
+                  In 1931, actor Paul Robeson was taking London by storm with
+                  his portrayal of Othello and his roles in popular musicals
+                  like Show Boat. He would later (1943) bring his Othello back
+                  to his stomping grounds in New York, on Broadway no less. This
+                  would be the first time a Black American actor would portray
+                  Othello in America since James Hewlett in 1821 and the first
+                  ever to play the character on Broadway. Below is a letter from
+                  W.E.B. DuBois to Robeson.
+                </p>
+              </div>
+
+              <div style="margin: 32px 0; text-align: center">
+                <img
+                  src="./image5.png"
+                  alt="Letter from W.E.B. DuBois to Paul Robeson"
+                  id="letterImage"
+                  style="
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    border: 1px solid #e2e8f0;
+                    cursor: pointer;
+                  " />
+              </div>
+
+              <div id="letterModal" class="modal">
+                <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <div class="modal-body">
+                    <div class="modal-image">
+                      <img
+                        src="./image5.png"
+                        alt="Letter from W.E.B. DuBois to Paul Robeson"
+                        style="
+                          max-width: 100%;
+                          height: auto;
+                          border-radius: 8px;
+                        " />
+                    </div>
+                    <div class="modal-text">
+                      <h3>W.E.B. DuBois' Letter to Paul Robeson</h3>
+                      <div class="letter-content">
+                        <p class="letter-date">April 17, 1931</p>
+                        <p class="letter-address">
+                          Mr. Paul Robeson,<br />
+                          C/O Metropolitan Music Bureau,<br />
+                          551 Fifth Avenue<br />
+                          New York, N.Y.
+                        </p>
+                        <p class="letter-salutation">My dear Mr. Robeson,</p>
+                        <p>
+                          I have about given up the possibility of getting my
+                          article or statement out of you but I am writing this
+                          as a sort of last appeal. I have got this etching of
+                          yours and I want to reproduce it in the THE CRISIS but
+                          there would be no point of doing it unless I had some
+                          article accompanying it. What I should like to have,
+                          as I have said before, is some statement about your
+                          London experience or your experience in "Othello".
+                          Couldn't you mail it to me?
+                        </p>
+                        <p class="letter-closing">Very Sincerely Yours,</p>
+                        <p class="letter-signature">WEBD/DW</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top: 40px">
+                <label class="response-label"
+                  >What is DuBois' purpose in writing Robeson and what is his
+                  tone?</label
+                >
+                <textarea
+                  class="response-area"
+                  data-index="8"
+                  placeholder="Identify DuBois' purpose and describe his tone in the letter..."></textarea>
+              </div>
+
+              <div style="margin-top: 32px">
+                <label class="response-label"
+                  >How do we know what DuBois feels about Robeson and his work?
+                  Explain.</label
+                >
+                <textarea
+                  class="response-area"
+                  data-index="9"
+                  placeholder="Explain what evidence reveals DuBois' feelings..."></textarea>
+              </div>
+
+              <div style="margin-top: 32px">
+                <label class="response-label"
+                  >What makes Robeson's work during this time period significant
+                  to DuBois? Explain.</label
+                >
+                <textarea
+                  class="response-area"
+                  data-index="10"
+                  placeholder="Analyze the significance of Robeson's work to DuBois..."></textarea>
+              </div>
+              <div
+                class="submit-button-container"
+                style="display: none; text-align: center; margin: 32px 0">
+                <button
+                  style="
+                    padding: 16px 44px;
+                    background-color: #3b82f6;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-size: 15px;
+                    font-weight: 600;
+                  ">
+                  Submit
+                </button>
+              </div>
             </div>
           </header>
         </div>
       </section>
-      <!-- Help and Discussion Box for Part 2 -->
+
       <section
+        class="help-section"
         style="
           background: #f8f9fa;
           border-radius: 0 0 20px 20px;
@@ -2008,5 +2072,48 @@
         </div>
       </section>
     </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const flashcards = document.querySelectorAll(".flashcard");
+        flashcards.forEach((flashcard) => {
+          flashcard.addEventListener("click", function () {
+            this.classList.toggle("flipped");
+          });
+        });
+
+        const modal = document.getElementById("letterModal");
+        const img = document.getElementById("letterImage");
+        const span = document.getElementsByClassName("close")[0];
+
+        if (img) {
+          img.onclick = function () {
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden";
+          };
+        }
+
+        if (span) {
+          span.onclick = function () {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+          };
+        }
+
+        window.onclick = function (event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+          }
+        };
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+          }
+        });
+      });
+    </script>
   </body>
 </html>
