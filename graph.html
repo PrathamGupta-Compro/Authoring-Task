@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Slope Explanation (Corrected)</title>
+  <script src="https://www.desmos.com/api/v1.9/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f5f5f5;
+    }
+    #calculator {
+      width: 600px;
+      height: 400px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      background: white;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Interactive Slope Explanation</h2>
+
+  <div id="calculator"></div>
+
+  <p id="text">
+    Let's look at these two lines. The red line is steeper. 
+    It has a higher rate of change.
+  </p>
+
+  <button onclick="playNarration()">▶ Play Narration</button>
+
+  <script>
+    // Initialize Desmos graph
+    const elt = document.getElementById('calculator');
+    const calculator = Desmos.GraphingCalculator(elt, {
+      expressions: false,
+      settingsMenu: false,
+      zoomButtons: false
+    });
+
+    // Define visible graph area
+    calculator.setMathBounds({
+      left: 0,
+      right: 7,
+      bottom: 0,
+      top: 6
+    });
+
+    // Add lines
+    calculator.setExpression({ id: 'line1', latex: 'y=x', color: Desmos.Colors.BLUE });
+    calculator.setExpression({ id: 'line2', latex: 'y=2x', color: Desmos.Colors.GRAY });
+
+    // Highlight functions
+    function highlightSteeper() {
+      calculator.setExpression({ id: 'line2', color: Desmos.Colors.RED });
+    }
+
+    function highlightSlopeLabel() {
+      calculator.setExpression({
+        id: 'label1',
+        latex: '\\text{slope = 2}',
+        label: 'slope = 2',
+        color: Desmos.Colors.RED,
+        showLabel: true,
+        labelSize: Desmos.LabelSizes.LARGE,
+        point: [1, 2]
+      });
+    }
+
+    // Narration logic
+    function playNarration() {
+      const text = "Let's look at these two lines. The red line is steeper. It has a higher rate of change.";
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1.0;
+      utterance.pitch = 1;
+
+      utterance.onboundary = (event) => {
+        if (event.name === 'word' || event.name === undefined) {
+          const spoken = text.substring(0, event.charIndex).toLowerCase();
+          if (spoken.includes('steeper')) highlightSteeper();
+          if (spoken.includes('higher rate of change')) highlightSlopeLabel();
+        }
+      };
+
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utterance);
+    }
+  </script>
+
+</body>
+</html>
