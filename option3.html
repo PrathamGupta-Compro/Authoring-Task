@@ -80,11 +80,13 @@
         }
 
         // Show the submit button for this step
-        const cardContainer = section.closest('.part-card');
+        const cardContainer = section.closest(".part-card");
         if (cardContainer) {
-          const submitButton = cardContainer.querySelector('.submit-button-container');
+          const submitButton = cardContainer.querySelector(
+            ".submit-button-container"
+          );
           if (submitButton) {
-            submitButton.style.display = 'block';
+            submitButton.style.display = "block";
           }
         }
 
@@ -177,7 +179,7 @@
         messageElement.className =
           "status-message" + (statusData.class ? ` ${statusData.class}` : "");
 
-          messageElement.innerHTML = `
+        messageElement.innerHTML = `
           <p class="status-text">${statusData.text}</p>
           <p class="status-description">${statusData.description}</p>
         `;
@@ -229,19 +231,17 @@
         margin-left: 8px;
         vertical-align: middle;
       }
-      
+
       .system-generated {
-        background-color: #e0f2fe;
-        color: #0369a1;
-        border: 1px solid #bae6fd;
+        font-style: italic;
+        color: #ef4444; /* red-500 */
       }
-      
+
       .author-generated {
-        background-color: #f0fdf4;
-        color: #15803d;
-        border: 1px solid #bbf7d0;
+        font-style: italic;
+        color: #ef4444; /* red-500 */
       }
-      
+
       * {
         margin: 0;
         padding: 0;
@@ -777,7 +777,7 @@
                 Quotable Connections - "I sit with Shakespeare and he winces
                 not." —W.E.B. DuBois
               </h2>
-              <div 
+              <div
                 id="step1Status"
                 style="
                   display: inline-block;
@@ -830,7 +830,7 @@
                 ">
                 American Reception for Othello in the 19th and 20th Century
               </h2>
-              <div 
+              <div
                 id="step2Status"
                 style="
                   display: inline-block;
@@ -882,7 +882,7 @@
                 ">
                 Primary Source Analysis
               </h2>
-              <div 
+              <div
                 id="step3Status"
                 style="
                   display: inline-block;
@@ -899,7 +899,9 @@
             </div>
           </div>
           <!-- Submit Button (initially hidden) -->
-          <div class="submit-button-container" style="display: none; text-align: center; margin: 32px 0;">
+          <div
+            class="submit-button-container"
+            style="display: none; text-align: center; margin: 32px 0">
             <button
               style="
                 padding: 16px 44px;
@@ -930,8 +932,19 @@
                 align-items: center;
                 margin-bottom: 24px;
               ">
-              <p style="font-size: 15px; color: #4a5568">Step 1 of 3 <span class="source-indicator system-generated">System Generated</span></p>
-              <div>
+              <p style="font-size: 15px; color: #4a5568">
+                Step 1 of 3
+                <span class="source-indicator system-generated"
+                  >System Generated</span
+                >
+              </p>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  align-items: flex-start;
+                  gap: 6px;
+                ">
                 <button
                   class="status-btn"
                   style="
@@ -942,16 +955,22 @@
                     border-radius: 20px;
                     cursor: default;
                     transition: all 0.2s;
-                    position: relative;
-                    padding-right: 120px;
                   ">
-                  Not Started <span class="source-indicator system-generated" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%);">System Generated</span>
+                  Not Started
                 </button>
+                <span
+                  class="source-indicator system-generated"
+                  style="margin-left: 6px"
+                  >System Generated</span
+                >
               </div>
             </div>
             <h2 class="section-quote">
-              Quotable Connections - "I sit with Shakespeare and he winces not." —W.E.B. DuBois
-              <span class="source-indicator system-generated">System Generated</span>
+              Quotable Connections - "I sit with Shakespeare and he winces not."
+              —W.E.B. DuBois
+              <span class="source-indicator author-generated"
+                >Author Generated</span
+              >
             </h2>
 
             <div
@@ -968,7 +987,7 @@
               ">
               <div class="status-message" id="statusMessage1" style="flex: 1">
                 <p style="font-weight: 600; color: #1f2937; margin: 0 0 4px 0">
-                  This activity has not been started yet... <span class="source-indicator system-generated">System Generated</span>
+                  This activity has not been started yet...
                 </p>
                 <p style="color: #4b5563; margin: 0; font-size: 14px">
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -998,12 +1017,17 @@
                 ">
                 Begin
               </button>
+              <span class="source-indicator system-generated"
+                >System Generated</span
+              >
             </div>
             <p class="section-directions">
               <strong>Directions:</strong> Read each quote carefully. State the
               main idea of each one in your own words using the response area
               provided.
-              <span class="source-indicator author-generated">Author Generated</span>
+              <span class="source-indicator author-generated"
+                >Author Generated</span
+              >
             </p>
           </header>
 
@@ -1011,9 +1035,15 @@
           <div class="flashcard-container">
             <div class="flashcard">
               <div class="flashcard-front">
-                <img src="./image1.png" alt="W.E.B. DuBois" class="flashcard-portrait">
-                <h3>W.E.B. DuBois <span class="source-indicator author-generated">Author Generated</span></h3>
+                <img
+                  src="./image1.png"
+                  alt="W.E.B. DuBois"
+                  class="flashcard-portrait" />
+                <h3>W.E.B. DuBois</h3>
                 <div class="work-title">The Souls of Black Folk</div>
+                <span class="source-indicator author-generated"
+                  >Author Generated</span
+                >
               </div>
               <div class="flashcard-back">
                 <p class="quote-text">
@@ -1021,18 +1051,24 @@
                   gifted with second-sight in this American world,—a world which
                   yields him no true self-consciousness, but only lets him see
                   himself through the revelation of the other world. It is a
-                  peculiar sensation, this <strong>double-consciousness</strong>,
-                  this sense of always
-                  <strong>looking at one's self through the eyes of others, of
+                  peculiar sensation, this
+                  <strong>double-consciousness</strong>, this sense of always
+                  <strong
+                    >looking at one's self through the eyes of others, of
                     measuring one's soul by the tape of a world that looks on in
-                    amused contempt and pity.</strong>
+                    amused contempt and pity.</strong
+                  >
                 </p>
               </div>
             </div>
-            
+
             <div class="question-section">
-              <div style="position: relative;">
-                <div class="source-indicator author-generated" style="position: absolute; top: -20px; right: 0;">Response Area - Author Generated</div>
+              <div style="position: relative">
+                <div
+                  class="source-indicator author-generated"
+                  style="position: absolute; top: -20px; right: 0">
+                  Response Area - Author Generated
+                </div>
                 <textarea
                   class="response-area"
                   data-index="0"
@@ -1044,10 +1080,10 @@
           <style>
             .flashcard-container {
               perspective: 1000px;
-              
+
               margin: 20px auto;
             }
-            
+
             .flashcard {
               position: relative;
               width: 100%;
@@ -1056,12 +1092,13 @@
               transform-style: preserve-3d;
               cursor: pointer;
             }
-            
+
             .flashcard.flipped {
               transform: rotateY(180deg);
             }
-            
-            .flashcard-front, .flashcard-back {
+
+            .flashcard-front,
+            .flashcard-back {
               position: absolute;
               width: 100%;
               height: 100%;
@@ -1073,21 +1110,21 @@
               flex-direction: column;
               align-items: center;
               justify-content: center;
-              box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             }
-            
+
             .flashcard-front {
               background-color: #f8f9fa;
               border: 1px solid #dee2e6;
             }
-            
+
             .flashcard-back {
               background-color: white;
               transform: rotateY(180deg);
               overflow-y: auto;
               text-align: justify;
             }
-            
+
             .flashcard-portrait {
               width: 150px;
               height: 150px;
@@ -1096,24 +1133,24 @@
               margin-bottom: 15px;
               border: 3px solid #6c757d;
             }
-            
+
             .flip-instruction {
               margin-top: 15px;
               font-style: italic;
               color: #6c757d;
               font-size: 0.9em;
             }
-            
+
             .question-section {
               margin-top: 8px;
               padding: 20px 0px;
             }
-            
+
             .question-section h4 {
               margin-top: 0;
               margin-bottom: 15px;
             }
-            
+
             .response-area {
               width: 100%;
               min-height: 100px;
@@ -1126,11 +1163,11 @@
           </style>
 
           <script>
-            document.addEventListener('DOMContentLoaded', function() {
-              const flashcards = document.querySelectorAll('.flashcard');
-              flashcards.forEach(flashcard => {
-                flashcard.addEventListener('click', function() {
-                  this.classList.toggle('flipped');
+            document.addEventListener("DOMContentLoaded", function () {
+              const flashcards = document.querySelectorAll(".flashcard");
+              flashcards.forEach((flashcard) => {
+                flashcard.addEventListener("click", function () {
+                  this.classList.toggle("flipped");
                 });
               });
             });
@@ -1140,7 +1177,10 @@
           <div class="flashcard-container">
             <div class="flashcard">
               <div class="flashcard-front">
-                <img src="./image2.png" alt="Ralph Ellison" class="flashcard-portrait">
+                <img
+                  src="./image2.png"
+                  alt="Ralph Ellison"
+                  class="flashcard-portrait" />
                 <h3>Ralph Ellison</h3>
                 <div class="work-title">Invisible Man</div>
               </div>
@@ -1151,13 +1191,15 @@
                   bodiless heads you see sometimes in circus sideshows, it is as
                   though I have been surrounded by mirrors of hard, distorting
                   glass. When they approach me
-                  <strong>they see only my surroundings, themselves or figments of
+                  <strong
+                    >they see only my surroundings, themselves or figments of
                     their imagination, indeed, everything and anything except
-                    me.</strong>
+                    me.</strong
+                  >
                 </p>
               </div>
             </div>
-            
+
             <div class="question-section">
               <textarea
                 class="response-area"
@@ -1170,26 +1212,32 @@
           <div class="flashcard-container">
             <div class="flashcard">
               <div class="flashcard-front">
-                <img src="./image3.png" alt="William Shakespeare" class="flashcard-portrait">
+                <img
+                  src="./image3.png"
+                  alt="William Shakespeare"
+                  class="flashcard-portrait" />
                 <h3>William Shakespeare</h3>
                 <div class="work-title">Othello</div>
               </div>
               <div class="flashcard-back">
                 <p class="quote-text">
-                  . . .I pray you, in your letters, / When you shall these unlucky
-                  deeds relate, /
-                  <strong>Speak of me as I am. Nothing extenuate, / Nor set down aught
-                    in malice.</strong>
+                  . . .I pray you, in your letters, / When you shall these
+                  unlucky deeds relate, /
+                  <strong
+                    >Speak of me as I am. Nothing extenuate, / Nor set down
+                    aught in malice.</strong
+                  >
                   Then must you speak / Of one that loved not wisely, but too
                   well. / Of one not easily jealous, but being wrought, /
                   Perplexed in the extreme. Of one whose hand, / Like the base
                   Indian, threw a pearl away / Richer than all his tribe. Of one
-                  whose subdued eyes, / Albeit unused to the melting mood, / Drop
-                  tears as fast as the Arabian trees / Their medicinal gum. . .
+                  whose subdued eyes, / Albeit unused to the melting mood, /
+                  Drop tears as fast as the Arabian trees / Their medicinal gum.
+                  . .
                 </p>
               </div>
             </div>
-            
+
             <div class="question-section">
               <textarea
                 class="response-area"
@@ -1212,7 +1260,9 @@
             data-index="3"
             placeholder="Write your connections here..."></textarea>
           <!-- Submit Button (initially hidden) -->
-          <div class="submit-button-container" style="display: none; text-align: center; margin: 32px 0 0 0;">
+          <div
+            class="submit-button-container"
+            style="display: none; text-align: center; margin: 32px 0 0 0">
             <button
               style="
                 padding: 16px 44px;
@@ -1477,7 +1527,9 @@
               placeholder="Analyze what Robeson's popularity reveals about the era..."></textarea>
           </div>
           <!-- Submit Button (initially hidden) -->
-          <div class="submit-button-container" style="display: none; text-align: center; margin: 32px 0;">
+          <div
+            class="submit-button-container"
+            style="display: none; text-align: center; margin: 32px 0">
             <button
               style="
                 padding: 16px 44px;
@@ -1695,27 +1747,44 @@
                 <span class="close">&times;</span>
                 <div class="modal-body">
                   <div class="modal-image">
-                    <img src="./image5.png" alt="Letter from W.E.B. DuBois to Paul Robeson" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <img
+                      src="./image5.png"
+                      alt="Letter from W.E.B. DuBois to Paul Robeson"
+                      style="
+                        max-width: 100%;
+                        height: auto;
+                        border-radius: 8px;
+                      " />
                   </div>
                   <div class="modal-text">
                     <h3>W.E.B. DuBois' Letter to Paul Robeson</h3>
                     <div class="letter-content">
                       <p class="letter-date">April 17, 1931</p>
                       <p class="letter-address">
-                        Mr. Paul Robeson,<br>
-                        C/O Metropolitan Music Bureau,<br>
-                        551 Fifth Avenue<br>
+                        Mr. Paul Robeson,<br />
+                        C/O Metropolitan Music Bureau,<br />
+                        551 Fifth Avenue<br />
                         New York, N.Y.
                       </p>
                       <p class="letter-salutation">My dear Mr. Robeson,</p>
-                      <p>I have about given up the possibility of getting my article or statement out of you but I am writing this as a sort of last appeal. I have got this etching of yours and I want to reproduce it in the THE CRISIS but there would be no point of doing it unless I had some article accompanying it. What I should like to have, as I have said before, is some statement about your London experience or your experience in "Othello". Couldn't you mail it to me?</p>
+                      <p>
+                        I have about given up the possibility of getting my
+                        article or statement out of you but I am writing this as
+                        a sort of last appeal. I have got this etching of yours
+                        and I want to reproduce it in the THE CRISIS but there
+                        would be no point of doing it unless I had some article
+                        accompanying it. What I should like to have, as I have
+                        said before, is some statement about your London
+                        experience or your experience in "Othello". Couldn't you
+                        mail it to me?
+                      </p>
                       <p class="letter-closing">Very Sincerely Yours,</p>
                       <p class="letter-signature">WEBD/DW</p>
                     </div>
                   </div>
                   <style>
                     .letter-content {
-                      font-family: 'Times New Roman', serif;
+                      font-family: "Times New Roman", serif;
                       line-height: 1.6;
                       color: #333;
                       max-width: 600px;
@@ -1737,7 +1806,7 @@
                       margin: 30px 0 5px 0;
                     }
                     .letter-signature {
-                      font-family: 'Times New Roman', serif;
+                      font-family: "Times New Roman", serif;
                       font-size: 1rem;
                     }
                     .modal-text {
@@ -1832,7 +1901,7 @@
                 .modal-body {
                   flex-direction: column;
                 }
-                
+
                 .modal-content {
                   width: 95%;
                   margin: 10% auto;
@@ -1842,35 +1911,35 @@
 
             <script>
               // Get the modal
-              const modal = document.getElementById('letterModal');
-              const img = document.getElementById('letterImage');
-              const span = document.getElementsByClassName('close')[0];
+              const modal = document.getElementById("letterModal");
+              const img = document.getElementById("letterImage");
+              const span = document.getElementsByClassName("close")[0];
 
               // When the user clicks on the image, open the modal
-              img.onclick = function() {
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
-              }
+              img.onclick = function () {
+                modal.style.display = "block";
+                document.body.style.overflow = "hidden"; // Prevent scrolling when modal is open
+              };
 
               // When the user clicks on (x), close the modal
-              span.onclick = function() {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto'; // Re-enable scrolling
-              }
+              span.onclick = function () {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto"; // Re-enable scrolling
+              };
 
               // When the user clicks anywhere outside of the modal, close it
-              window.onclick = function(event) {
+              window.onclick = function (event) {
                 if (event.target == modal) {
-                  modal.style.display = 'none';
-                  document.body.style.overflow = 'auto'; // Re-enable scrolling
+                  modal.style.display = "none";
+                  document.body.style.overflow = "auto"; // Re-enable scrolling
                 }
-              }
+              };
 
               // Close modal with Escape key
-              document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape') {
-                  modal.style.display = 'none';
-                  document.body.style.overflow = 'auto'; // Re-enable scrolling
+              document.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") {
+                  modal.style.display = "none";
+                  document.body.style.overflow = "auto"; // Re-enable scrolling
                 }
               });
             </script>
@@ -1911,7 +1980,9 @@
                 placeholder="Analyze the significance of Robeson's work to DuBois..."></textarea>
             </div>
             <!-- Submit Button (initially hidden) -->
-            <div class="submit-button-container" style="display: none; text-align: center; margin: 32px 0;">
+            <div
+              class="submit-button-container"
+              style="display: none; text-align: center; margin: 32px 0">
               <button
                 style="
                   padding: 16px 44px;
