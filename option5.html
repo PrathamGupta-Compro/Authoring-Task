@@ -232,13 +232,27 @@
       color: #1a202c;
       font-size: 24px;
       font-weight: 600;
+      margin-bottom: 12px;
     }
 
-    .part-card:not(.collapsed) .section-quote {
+    .section-quote-small {
+      color: #a2b2be;
+      font-size: 16px;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .section-quote-2 {
+      color: #1A5AC2;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    /* .part-card:not(.collapsed) .section-quote {
       padding-bottom: 24px;
       margin-bottom: 20px;
       border-bottom: 3px solid #e2e8f0;
-    }
+    } */
 
     .section-directions {
       padding: 20px 0px;
@@ -869,50 +883,42 @@
   <main class="container">
     <!-- Part 1 Card -->
     <section class="part-card">
-      <!-- Quote Analysis Section -->
-      <div class="part-section">
-        <header class="section-header">
-          <div class="accordion-header">
-            <div style="flex: 1">
-              <div style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 16px;
-                  ">
-                <div style="display: flex; gap: 16px; align-items: center">
-                  <p style="font-size: 15px; color: #4a5568; margin: 0">
-                    Step 1 of 3
-                  </p>
-                  <button class="status-btn">
-                    Not Started
-                  </button>
+        <!-- Quote Analysis Section -->
+        <div class="part-section">
+          <header class="section-header">
+            <div class="accordion-header">
+              <div style="flex: 1">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="display: flex; gap: 16px; align-items: center">
+                    <p style="font-size: 15px; color: #4a5568; margin: 0">
+                      Step 1 of 3
+                    </p>
+                    <button class="status-btn">
+                      Not Started
+                    </button>
+                  </div>
+                  <div class="accordion-arrow" onclick="toggleAccordion(this)" style="cursor: pointer; padding: 8px">
+                    <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501" stroke="#292D32" stroke-width="2.4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </div>
                 </div>
-                <div class="accordion-arrow" onclick="toggleAccordion(this)" style="cursor: pointer; padding: 8px">
-                  <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
-                      stroke="#292D32" stroke-width="2.4" stroke-miterlimit="10" stroke-linecap="round"
-                      stroke-linejoin="round" />
-                  </svg>
-                </div>
+                <p class="section-quote-small">
+                    Quotable Connections - "I sit with Shakespeare and he winces not." —W.E.B. DuBois
+                </p>
+                <h2 class="section-quote">
+                  Quotable Connections
+                </h2>
+                <h2 class="section-quote-2">
+                    "I sit with Shakespeare and he winces not." —W.E.B. DuBois
+                </h2>
               </div>
-              <h2 class="section-quote">
-                Quotable Connections - "I sit with Shakespeare and he winces
-                not." —W.E.B. DuBois
-              </h2>
             </div>
-          </div>
-
-          <div class="accordion-content">
-
-
-            <p class="section-directions">
-              Read each quote carefully. State the
-              main idea of each one in your own words using the response area
-              provided.
-            </p>
-
+    
+            <div class="accordion-content">
+              <p class="section-directions">
+                Read each quote carefully. State the main idea of each one in your own words using the response area provided.
+              </p>
             <!-- W.E.B. DuBois -->
             <div class="quote-item">
               <div class="quote-column">
