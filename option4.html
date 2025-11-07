@@ -110,7 +110,7 @@
       // Set initial status for all sections
       updateStatusMessage(1, "not-started");
       updateStatusMessage(2, "not-started");
-      updateStatusMessage(3, "not-started"); 
+      updateStatusMessage(3, "not-started");
     });
   </script>
   <style>
@@ -250,6 +250,12 @@
       color: #2d3748;
     }
 
+    .section-letter {
+      font-size: 20px;
+      color: #4a5568;
+      font-weight: 700;
+    }
+
     /* Author Quote Item */
     .quote-item {
       display: grid;
@@ -298,16 +304,15 @@
 
     .quote-box {
       background: white;
-      padding: 24px;
-      padding-top: 0px;
+      padding: 0 24px;
       border-radius: 12px;
       color: #2d3748;
     }
 
     .quote-text {
       font-family: "Merriweather", serif;
-      font-size: 16px;
-      line-height: 1.8;
+      font-size: 14px;
+      line-height: 1.6;
     }
 
     /* Right column wrapper */
@@ -326,11 +331,11 @@
 
     .response-area {
       width: 100%;
-      height: 65%;
+      height: 100%;
       padding: 16px;
       border: 2px solid #e2e8f0;
       border-radius: 8px;
-      font-size: 15px;
+      font-size: 14px;
       font-family: "Inter", sans-serif;
       line-height: 1.6;
       resize: vertical;
@@ -353,6 +358,12 @@
 
     .response-area:disabled::placeholder {
       color: #94a3b8;
+      font-style: italic;
+    }
+
+    .response-area::placeholder {
+      color: #94a3b8;
+      font-size: 13px;
       font-style: italic;
     }
 
@@ -418,6 +429,18 @@
       line-height: 1.5;
     }
 
+    .status-btn {
+      font-size: 12px;
+      padding: 4px 8px;
+      background: #f1f5f9;
+      color: #4b5563;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      cursor: default;
+      transition: all 0.2s;
+      pointer-events: none;
+    }
+
     /* Completion Notice */
     .completion-notice {
       margin-top: 40px;
@@ -444,10 +467,44 @@
       opacity: 0.95;
     }
 
-    .submit-button-container{
+    .submit-button-container {
       display: flex;
       justify-content: end;
       gap: 24px;
+    }
+
+    .submit-button {
+      padding: 10px 24px;
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .request-button {
+      padding: 10px 24px;
+      background-color: transparent;
+      color: #3b82f6;
+      border: 2px solid #3b82f6;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .help-text {
+      margin: 16px;
+      margin-left: 0px;
+      padding-left: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #4a5568;
+      line-height: 1.2;
+      font-family: 'Inter', sans-serif;
     }
 
     @media (max-width: 768px) {
@@ -808,7 +865,7 @@
             </div>
           </div>
         </div>
-        <div style="text-align: center; margin: 32px 0;">
+        <!-- <div style="text-align: center; margin: 32px 0;">
           <button style="
                 padding: 16px 44px;
                 background-color: #3b82f6;
@@ -821,7 +878,7 @@
               ">
             Submit
           </button>
-        </div>
+        </div> -->
       </div>
     </section>
   </header>
@@ -843,20 +900,9 @@
                   <p style="font-size: 15px; color: #4a5568; margin: 0">
                     Step 1 of 3
                   </p>
-                  <div>
-                    <button class="status-btn" style="
-                          padding: 8px 16px;
-                          background: #f1f5f9;
-                          color: #4b5563;
-                          border: 1px solid #e2e8f0;
-                          border-radius: 20px;
-                          cursor: default;
-                          transition: all 0.2s;
-                          pointer-events: none;
-                        ">
+                    <button class="status-btn">
                       Not Started
                     </button>
-                  </div>
                 </div>
                 <div class="accordion-arrow" onclick="toggleAccordion(this)" style="cursor: pointer; padding: 8px">
                   <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -867,7 +913,7 @@
                   </svg>
                 </div>
               </div>
-              <h2 class="section-quote" >
+              <h2 class="section-quote">
                 Quotable Connections - "I sit with Shakespeare and he winces
                 not." —W.E.B. DuBois
               </h2>
@@ -876,9 +922,12 @@
 
           <div class="accordion-content">
 
+            <p class="section-letter">
+              A.
+            </p>
 
             <p class="section-directions">
-              <strong>Directions:</strong> Read each quote carefully. State the
+              Read each quote carefully. State the
               main idea of each one in your own words using the response area
               provided.
             </p>
@@ -945,8 +994,7 @@
               </div>
 
               <div class="response-column">
-                <textarea class="response-area" placeholder="Add your response here"
-                  ></textarea>
+                <textarea class="response-area" placeholder="Add your response here"></textarea>
               </div>
             </div>
 
@@ -981,8 +1029,7 @@
               </div>
 
               <div class="response-column">
-                <textarea class="response-area" placeholder="Add your response here"
-                  ></textarea>
+                <textarea class="response-area" placeholder="Add your response here"></textarea>
               </div>
             </div>
 
@@ -990,9 +1037,12 @@
 
             <div class="connections-section">
 
+              <p class="section-letter">
+                B.
+              </p>
               <div class="section-directions">
                 <p>
-                  <strong>Directions:</strong> Connect the main ideas stated by the
+                  Connect the main ideas stated by the
                   authors above. How do their ideas compliment each other? Explain..
                 </p>
               </div>
@@ -1002,32 +1052,11 @@
                 style="cursor: not-allowed; background-color: rgb(248, 250, 252); border: 1px dashed rgb(203, 213, 224); border-radius: 6px; padding: 12px;"></textarea>
               <!-- Submit Button (initially hidden) -->
               <div class="submit-button-container" style="text-align: center; margin: 32px 0 0 0;">
-                <button style="
-                      padding: 16px 40px;
-                      background-color: #3b82f6;
-                      color: white;
-                      border: none;
-                      border-radius: 6px;
-                      cursor: pointer;
-                      font-size: 15px;
-                      font-weight: 600;
-                    ">
+                <button class="submit-button">
                   Submit
                 </button>
-                <button style="
-                  padding: 16px 40px;
-                  background-color: transparent;
-                  color: #3b82f6;
-                  border: 2px solid #3b82f6;
-                  border-radius: 6px;
-                  cursor: pointer;
-                  font-size: 15px;
-                  font-weight: 600;
-                  transition: background 0.2s, color 0.2s;
-                "
-                onmouseover="this.style.backgroundColor='#e0edfd';"
-                onmouseout="this.style.backgroundColor='transparent';"
-                >
+                <button class="request-button" onmouseover="this.style.backgroundColor='#e0edfd';"
+                  onmouseout="this.style.backgroundColor='transparent';">
                   Request Help
                 </button>
               </div>
@@ -1045,16 +1074,9 @@
           overflow: hidden;
         ">
 
-        <p class="help-text" style="
-              margin: 16px;
-              font-size: 14px;
-              font-weight: 600;
-              color: #4a5568;
-              line-height: 1.2;
-              font-family: 'Inter', sans-serif;
-            ">
-          Help &amp; Discussion
-  </p>
+      <p class="help-text">
+        Help &amp; Discussion
+      </p>
 
 
     </section>
@@ -1075,21 +1097,10 @@
                   <p style="font-size: 15px; color: #4a5568; margin: 0">
                     Step 2 of 3
                   </p>
-                  <div>
-                    <button class="status-btn" style="
-                          padding: 8px 16px;
-                          background: #f1f5f9;
-                          color: #4b5563;
-                          border: 1px solid #e2e8f0;
-                          border-radius: 20px;
-                          font-size: 14px;
-                          cursor: default;
-                          transition: all 0.2s;
-                          pointer-events: none;
-                        ">
+                  
+                    <button class="status-btn" >
                       Not Started
                     </button>
-                  </div>
                 </div>
                 <div class="accordion-arrow" onclick="toggleAccordion(this)" style="cursor: pointer; padding: 8px">
                   <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1100,7 +1111,7 @@
                   </svg>
                 </div>
               </div>
-              <h2 class="section-quote" >
+              <h2 class="section-quote">
                 American Reception for Othello in the 19th and 20th Century
               </h2>
             </div>
@@ -1108,11 +1119,13 @@
 
           <div class="accordion-content">
 
-
+            <p class="section-letter">
+              A.
+            </p>
 
             <div class="section-directions">
               <p>
-                <strong>Directions:</strong> Use the timeline to track the
+                Use the timeline to track the
                 evolution of Othello productions and how they connect to the
                 time period they were in.
               </p>
@@ -1206,34 +1219,13 @@
             </div>
             <!-- Submit Button (initially hidden) -->
             <div class="submit-button-container" style="text-align: center; margin: 32px 0;">
-              <button style="
-                    padding: 16px 44px;
-                    background-color: #3b82f6;
-                    color: white;
-                    border: none;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    font-size: 15px;
-                    font-weight: 600;
-                  ">
+              <button class="submit-button">
                 Submit
               </button>
-              <button style="
-              padding: 16px 40px;
-              background-color: transparent;
-              color: #3b82f6;
-              border: 2px solid #3b82f6;
-              border-radius: 6px;
-              cursor: pointer;
-              font-size: 15px;
-              font-weight: 600;
-              transition: background 0.2s, color 0.2s;
-            "
-            onmouseover="this.style.backgroundColor='#e0edfd';"
-            onmouseout="this.style.backgroundColor='transparent';"
-            >
-              Request Help
-            </button>
+              <button class="request-button" onmouseover="this.style.backgroundColor='#e0edfd';"
+                onmouseout="this.style.backgroundColor='transparent';">
+                Request Help
+              </button>
             </div>
           </div>
         </header>
@@ -1248,16 +1240,9 @@
           overflow: hidden;
         ">
 
-        <p style="
-              margin: 16px;
-              font-size: 14px;
-              font-weight: 600;
-              color: #4a5568;
-              line-height: 1.2;
-              font-family: 'Inter', sans-serif;
-            ">
-          Help &amp; Discussion
-  </p>
+      <p class="help-text">
+        Help &amp; Discussion
+      </p>
 
 
     </section>
@@ -1278,21 +1263,9 @@
                   <p style="font-size: 15px; color: #4a5568; margin: 0">
                     Step 3 of 3
                   </p>
-                  <div>
-                    <button class="status-btn" style="
-                          padding: 8px 16px;
-                          background: #f1f5f9;
-                          color: #4b5563;
-                          border: 1px solid #e2e8f0;
-                          border-radius: 20px;
-                          font-size: 14px;
-                          cursor: default;
-                          transition: all 0.2s;
-                          pointer-events: none;
-                        ">
+                    <button class="status-btn">
                       Not Started
                     </button>
-                  </div>
                 </div>
                 <div class="accordion-arrow" onclick="toggleAccordion(this)" style="cursor: pointer; padding: 8px">
                   <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1303,7 +1276,7 @@
                   </svg>
                 </div>
               </div>
-              <h2 class="section-quote" >
+              <h2 class="section-quote">
                 Primary Source Analysis
               </h2>
             </div>
@@ -1312,9 +1285,11 @@
           <div class="accordion-content">
 
             <div style="margin-bottom: 16px">
-
+              <p class="section-letter">
+                A.
+              </p>
               <p class="section-directions">
-                <strong>Directions:</strong> Examine the primary source below
+                Examine the primary source below
                 and answer the following questions.
               </p>
             </div>
@@ -1390,34 +1365,13 @@
             </div>
             <!-- Submit Button (initially hidden) -->
             <div class="submit-button-container" style="text-align: center; margin: 32px 0;">
-              <button style="
-                    padding: 16px 44px;
-                    background-color: #3b82f6;
-                    color: white;
-                    border: none;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    font-size: 15px;
-                    font-weight: 600;
-                  ">
+              <button class="submit-button">
                 Submit
               </button>
-              <button style="
-              padding: 16px 40px;
-              background-color: transparent;
-              color: #3b82f6;
-              border: 2px solid #3b82f6;
-              border-radius: 6px;
-              cursor: pointer;
-              font-size: 15px;
-              font-weight: 600;
-              transition: background 0.2s, color 0.2s;
-            "
-            onmouseover="this.style.backgroundColor='#e0edfd';"
-            onmouseout="this.style.backgroundColor='transparent';"
-            >
-              Request Help
-            </button>
+              <button class="request-button" onmouseover="this.style.backgroundColor='#e0edfd';"
+                onmouseout="this.style.backgroundColor='transparent';">
+                Request Help
+              </button>
             </div>
           </div>
         </header>
@@ -1432,16 +1386,9 @@
           overflow: hidden;
         ">
 
-        <p style="
-              margin: 16px;
-              font-size: 14px;
-              font-weight: 600;
-              color: #4a5568;
-              line-height: 1.2;
-              font-family: 'Inter', sans-serif;
-            ">
-          Help &amp; Discussion
-  </p>
+      <p class="help-text">
+        Help &amp; Discussion
+      </p>
 
 
     </section>
