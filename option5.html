@@ -15,6 +15,54 @@
         rel="stylesheet" />
     <script>
 
+
+
+
+
+const header = document.getElementById('header');
+    const collapseToggle = document.getElementById('collapseToggle');
+    const expandableContent = document.getElementById('expandableContent');
+
+    collapseToggle.addEventListener('click', () => {
+      header.classList.toggle('collapsed');
+      collapseToggle.classList.toggle('collapsed');
+      expandableContent.classList.toggle('hidden');
+    });
+
+    // Example: Update progress dynamically
+    function updateProgress(percentage) {
+      const progressFill = document.getElementById('progressFill');
+      const progressPercent = document.getElementById('progressPercent');
+      progressFill.style.width = percentage + '%';
+      progressPercent.textContent = percentage + '%';
+    }
+
+    // Example: Mark a step as completed
+    function markStepCompleted(stepIndex) {
+      const steps = document.querySelectorAll('.step');
+      const step = steps[stepIndex];
+      const stepNumber = step.querySelector('.step-number');
+      const stepStatus = step.querySelector('.step-status');
+      
+      stepNumber.classList.remove('active');
+      stepNumber.classList.add('completed');
+      stepStatus.textContent = 'Completed';
+      stepStatus.classList.remove('not-started', 'in-progress');
+      stepStatus.classList.add('completed');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
         function toggleAccordion(button) {
             const partCard = button.closest(".part-card");
             const content = partCard.querySelector(".accordion-content");
@@ -122,10 +170,344 @@
 
         body {
             font-family: "Inter", sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+            background-color: #DAE6F0;
+
             line-height: 1.6;
             color: #2d3748;
         }
+
+
+
+
+
+
+    .header {
+      border-bottom: 2px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      background-color: white;
+      width: 100%;
+      padding: 40px 80px;
+      position: relative;
+      transition: padding 0.3s ease;
+    }
+
+    .header.collapsed {
+      padding: 24px 80px;
+    }
+
+    .title-section {
+      width: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .unit-label {
+      font-size: 13px;
+      color: #718096;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .main-title {
+      font-size: 36px;
+      font-weight: 700;
+      color: #1a202c;
+      margin-bottom: 12px;
+    }
+
+    .tags {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .tag {
+      padding: 6px 16px;
+      border: 1.5px solid #cbd5e0;
+      border-radius: 20px;
+      font-size: 14px;
+      color: #4a5568;
+      list-style: none;
+    }
+
+    .expandable-content {
+      max-height: 1000px;
+      opacity: 1;
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+      margin-top: 24px;
+    }
+
+    .expandable-content.hidden {
+      max-height: 0;
+      opacity: 0;
+      margin-top: 0;
+    }
+
+    .section-heading {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a202c;
+      margin: 20px 0 12px 0;
+    }
+
+    .objectives-list,
+    .questions-list {
+      margin-left: 20px;
+      color: #4a5568;
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .steps-panel {
+      width: 40%;
+      min-width: 300px;
+      background: white;
+      padding: 24px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .header.collapsed .steps-panel {
+      padding: 16px 24px;
+    }
+
+    .collapse-toggle {
+      position: absolute;
+      right: 80px;
+      top: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      color: #64748b;
+      font-size: 20px;
+      transition: transform 0.3s ease, top 0.3s ease;
+    }
+
+    .header.collapsed .collapse-toggle {
+      top: 24px;
+    }
+
+    .collapse-toggle:hover {
+      color: #1a202c;
+    }
+
+    .collapse-toggle.collapsed {
+      transform: rotate(180deg);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .progress-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .progress-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      margin-left: 16px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      width: 33%;
+      height: 100%;
+      background: #3b82f6;
+      transition: width 0.3s ease;
+    }
+
+    .progress-percent {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 500;
+      min-width: 35px;
+      text-align: right;
+    }
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      max-height: 500px;
+      opacity: 1;
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+    }
+
+    .header.collapsed .steps-list {
+      max-height: 0;
+      opacity: 0;
+    }
+
+    .connector-line {
+      position: absolute;
+      left: 15px;
+      top: 40px;
+      width: 2px;
+      background: #e2e8f0;
+      z-index: 1;
+      height: calc(100% - 80px);
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      position: relative;
+      padding: 12px 0;
+    }
+
+    .step:first-child {
+      padding-top: 0;
+    }
+
+    .step:last-child {
+      padding-bottom: 0;
+    }
+
+    .step-number {
+      position: relative;
+      z-index: 2;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: #94a3b8;
+      flex-shrink: 0;
+    }
+
+    .step-number.active {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .step-number.completed {
+      background: #10b981;
+      color: white;
+    }
+
+    .step-content {
+      flex: 1;
+      padding-top: 4px;
+    }
+
+    .step-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+
+    .step-status {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 2px 12px;
+      border-radius: 9999px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .step-status.not-started {
+      color: #94a3b8;
+      background-color: #f1f5f9;
+    }
+
+    .step-status.in-progress {
+      color: #3b82f6;
+      background-color: #eff6ff;
+      border-color: #bfdbfe;
+    }
+
+    .step-status.completed {
+      color: #10b981;
+      background-color: #d1fae5;
+      border-color: #a7f3d0;
+    }
+
+    .submit-container {
+      text-align: center;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
+      max-height: 120px;
+      opacity: 1;
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease, padding-top 0.3s ease;
+    }
+
+    .header.collapsed .submit-container {
+      max-height: 0;
+      opacity: 0;
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    .submit-button {
+      padding: 16px 44px;
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      transition: background-color 0.2s ease;
+    }
+
+    .submit-button:hover {
+      background-color: #2563eb;
+    }
+
+    .submit-button:disabled {
+      background-color: #cbd5e0;
+      cursor: not-allowed;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         table {
             width: 100%;
@@ -185,7 +567,7 @@
             background: white;
             border-top-left-radius: 20px;
             border-top-right-radius: 20px;
-            padding: 40px 50px;
+            padding-bottom: 40px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
             transition: padding 0.3s ease, border-radius 0.3s ease;
         }
@@ -196,11 +578,14 @@
         }
 
         .accordion-header {
+            background-color: #EEF7FF;
             user-select: none;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
+            padding: 40px 50px 24px 50px;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
         }
 
         .accordion-arrow {
@@ -214,6 +599,9 @@
             overflow: hidden;
             transition: max-height 0.5s ease, opacity 0.3s ease;
             opacity: 1;
+            padding-left: 50px;
+            padding-right: 50px;
+            padding-top: 32px;
         }
 
         .accordion-content.collapsed {
@@ -459,14 +847,15 @@
 
         .status-btn {
             font-size: 12px;
-            padding: 4px 8px;
-            background: #f1f5f9;
+            padding: 4px 12px;
+            background: #EAB308;
             color: #4b5563;
             border: 1px solid #e2e8f0;
             border-radius: 20px;
             cursor: default;
             transition: all 0.2s;
             pointer-events: none;
+            max-width: fit-content;
         }
 
         /* Completion Notice */
@@ -563,345 +952,106 @@
 </head>
 
 <body>
-    <header style="
-        border-bottom: 2px solid #e2e8f0;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        background-color: white;
-        width: 100%;
-        padding: 40px 80px;
-      ">
-        <!--TITLE-->
-        <section style="width: 50%">
-            <p style="
-            font-size: 13px;
-            color: #718096;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-          ">
-                UNIT: HARLEM RENAISSANCE &amp; SHAKESPEAREAN TRAGEDY
-            </p>
-            <h1 style="
-            font-size: 36px;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 12px;
-          ">
-                Othello's Renaissance
-            </h1>
-            <ul style="display: flex; gap: 12px; margin-bottom: 20px">
-                <li style="
-              padding: 6px 16px;
-              border: 1.5px solid #cbd5e0;
-              border-radius: 20px;
-              font-size: 14px;
-              color: #4a5568;
-              list-style: none;
-            ">
-                    Think Critically
-                </li>
-                <li style="
-              padding: 6px 16px;
-              border: 1.5px solid #cbd5e0;
-              border-radius: 20px;
-              font-size: 14px;
-              color: #4a5568;
-              list-style: none;
-            ">
-                    Communicate
-                </li>
-   
-            </ul>
-            <div style="margin-top: 24px">
-                <h3 style="
-              font-size: 16px;
-              font-weight: 600;
-              color: #1a202c;
-              margin: 20px 0 12px 0;
-            ">
-                    Objectives
-                </h3>
-                <ul style="
-              margin-left: 20px;
-              color: #4a5568;
-              font-size: 14px;
-              line-height: 1.8;
-              margin-bottom: 20px;
-            ">
-                    <li>
-                        In this task you will use your prior knowledge of the Harlem
-                        Renaissance and Shakespearean tragedy, and your analysis of
-                        primary and secondary sources, to make connections between Othello
-                        and the writings of W.E.B. DuBois and Ralph Ellison. You will draw
-                        insights that will allow you to answer the essential questions for
-                        this unit.
-                    </li>
-                </ul>
+    <header class="header" id="header">
 
-                <h3 style="
-              font-size: 16px;
-              font-weight: 600;
-              color: #1a202c;
-              margin: 20px 0 12px 0;
-            ">
-                    Essential Questions
-                </h3>
-                <ul style="
-              margin-left: 20px;
-              color: #4a5568;
-              font-size: 14px;
-              line-height: 1.8;
-              margin-bottom: 20px;
-            ">
-                    <li>
-                        What are the sources of political and cultural differences in the
-                        modern United States?
-                    </li>
-                    <li>
-                        How did the United States respond to new ideas about society?
-                    </li>
-                    <li>
-                        How can I draw connections between different subjects to deepen my
-                        understanding?
-                    </li>
-                    <li>What enduring issues can be seen reflected in literature?</li>
-                    <li>
-                        How much does the author's intent matter when interpreting
-                        literature for a modern audience?
-                    </li>
-                    <li>
-                        Why is Othello relevant when discussing the Harlem Renaissance
-                        era?
-                    </li>
-                    <li>
-                        What thematic parallels can be drawn between Othello and Invisible
-                        Man by Ralph Ellison?
-                    </li>
-                    <li>
-                        How do historical reactions to performances of Othello in America
-                        show Du Bois' idea of Double Consciousness?
-                    </li>
-                </ul>
+    
+        <section class="title-section">
+          <p class="unit-label">UNIT: HARLEM RENAISSANCE & SHAKESPEAREAN TRAGEDY</p>
+          <h1 class="main-title">Othello's Renaissance</h1>
+          <ul class="tags">
+            <li class="tag">Think Critically</li>
+            <li class="tag">Communicate</li>
+          </ul>
+    
+          <div class="expandable-content" id="expandableContent">
+            <div>
+              <h3 class="section-heading">Objectives</h3>
+              <ul class="objectives-list">
+                <li>
+                  In this task you will use your prior knowledge of the Harlem
+                  Renaissance and Shakespearean tragedy, and your analysis of
+                  primary and secondary sources, to make connections between Othello
+                  and the writings of W.E.B. DuBois and Ralph Ellison. You will draw
+                  insights that will allow you to answer the essential questions for
+                  this unit.
+                </li>
+              </ul>
+    
+              <h3 class="section-heading">Essential Questions (8)</h3>
+              <ul class="questions-list">
+                <li>What are the sources of political and cultural differences in the modern United States?</li>
+                <li>How did the United States respond to new ideas about society?</li>
+                <li>How can I draw connections between different subjects to deepen my understanding?</li>
+                <li>What enduring issues can be seen reflected in literature?</li>
+                <li>How much does the author's intent matter when interpreting literature for a modern audience?</li>
+                <li>Why is Othello relevant when discussing the Harlem Renaissance era?</li>
+                <li>What thematic parallels can be drawn between Othello and Invisible Man by Ralph Ellison?</li>
+                <li>How do historical reactions to performances of Othello in America show Du Bois' idea of Double Consciousness?</li>
+              </ul>
             </div>
+          </div>
+        </section>
+    
+        <section class="steps-panel">
+          <div class="progress-header">
+            <p class="progress-label">Steps (3)</p>
+            <div class="progress-container">
+              <div class="progress-bar">
+                <div class="progress-bar-fill" id="progressFill"></div>
+              </div>
+              <span class="progress-percent" id="progressPercent">33%</span>
+            </div>
+          </div>
+    
+          <div class="steps-list" id="stepsList">
+            <div class="connector-line"></div>
+    
+            <div class="step">
+              <div class="step-number active">1</div>
+              <div class="step-content">
+                <h2 class="step-title">Quotable Connections - "I sit with Shakespeare and he winces not." —W.E.B. DuBois</h2>
+                <div class="status-btn">In Progress</div>
+              </div>
+            </div>
+    
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h2 class="step-title">American Reception for Othello in the 19th and 20th Century</h2>
+                <div class="step-status not-started">Not Started</div>
+              </div>
+            </div>
+    
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h2 class="step-title">Primary Source Analysis</h2>
+                <div class="step-status not-started">Not Started</div>
+              </div>
+            </div>
+          </div>
+    
+          <div class="submit-container" id="submitContainer">
+            <button class="submit-button" id="submitButton">Submit Lesson</button>
+          </div>
         </section>
 
-        <!--PROGRESS AND STEPS-->
-        <section style="
-          width: 40%;
-          min-width: 300px;
-          background: white;
-          padding: 24px;
-          border-radius: 8px;
-          border: 1px solid #e2e8f0;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        ">
-            <div style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-          ">
-                <p style="
-              font-size: 12px;
-              font-weight: 600;
-              color: #64748b;
-              text-transform: uppercase;
-              letter-spacing: 0.5px;
-            ">
-                    Steps (3)
-                </p>
-                <div style="display: flex; align-items: center; gap: 8px; width: 80%">
-                    <div style="
-                width: 80%;
-                height: 6px;
-                background: #e2e8f0;
-                border-radius: 3px;
-                overflow: hidden;
-              ">
-                        <div class="progress-bar-fill" style="
-                  width: 0%;
-                  height: 100%;
-                  background: #3b82f6;
-                  transition: width 0.3s ease;
-                "></div>
-                    </div>
-                    <span class="progress-percent" style="font-size: 12px; color: #64748b; font-weight: 500">0%</span>
-                </div>
-            </div>
 
-            <div style="display: flex; flex-direction: column; position: relative">
-                <!-- Vertical connector line (connects only between steps) -->
-                <div style="
-              position: absolute;
-              left: 15px;
-              top: 20px;
-              bottom: 48px;
-              width: 2px;
-              background: #e2e8f0;
-              z-index: 1;
-              height: 80%;
-            "></div>
 
-                <!-- Step 1 -->
-                <div style="
-              display: flex;
-              align-items: flex-start;
-              gap: 16px;
-              position: relative;
-            ">
-                    <div style="position: relative; z-index: 2">
-                        <div style="
-                  width: 32px;
-                  height: 32px;
-                  border-radius: 50%;
-                  background: #e2e8f0;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 14px;
-                  font-weight: 600;
-                  color: #94a3b8;
-                ">
-                            1
-                        </div>
-                    </div>
-                    <div style="flex: 1">
-                        <h2 style="
-                  font-size: 15px;
-                  font-weight: 600;
-                  color: #1e293b;
-                  margin-bottom: 4px;
-                ">
-                            Quotable Connections
-                        </h2>
-                        <div id="step1Status" style="
-                  display: inline-block;
-                  font-size: 13px;
-                  font-weight: 600;
-                  color: #94a3b8;
-                  background-color: #f1f5f9;
-                  padding: 2px 12px;
-                  border-radius: 9999px;
-                  border: 1px solid #e2e8f0;
-                ">
-                            Not Started
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Step 2 -->
-                <div style="
-              display: flex;
-              align-items: flex-start;
-              gap: 16px;
-              position: relative;
-              padding: 24px 0;
-            ">
-                    <div style="position: relative; z-index: 2">
-                        <div style="
-                  width: 32px;
-                  height: 32px;
-                  border-radius: 50%;
-                  background: #e2e8f0;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 14px;
-                  font-weight: 600;
-                  color: #94a3b8;
-                ">
-                            2
-                        </div>
-                    </div>
-                    <div style="flex: 1">
-                        <h2 style="
-                  font-size: 15px;
-                  font-weight: 600;
-                  color: 1e293b;
-                  margin-bottom: 4px;
-                ">
-                            American Reception for Othello in the 19th and 20th Century
-                        </h2>
-                        <div id="step2Status" style="
-                  display: inline-block;
-                  font-size: 13px;
-                  font-weight: 600;
-                  color: #94a3b8;
-                  background-color: #f1f5f9;
-                  padding: 2px 12px;
-                  border-radius: 9999px;
-                  border: 1px solid #e2e8f0;
-                ">
-                            Not Started
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Step 3 -->
-                <div style="
-              display: flex;
-              align-items: center;
-              gap: 16px;
-              position: relative;
-            ">
-                    <div style="position: relative; z-index: 2">
-                        <div style="
-                  width: 32px;
-                  height: 32px;
-                  border-radius: 50%;
-                  background: #e2e8f0;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 14px;
-                  font-weight: 600;
-                  color: #94a3b8;
-                ">
-                            3
-                        </div>
-                    </div>
-                    <div style="flex: 1">
-                        <h2 style="
-                  font-size: 15px;
-                  font-weight: 600;
-                  color: #1e293b;
-                  margin-bottom: 4px;
-                ">
-                            Primary Source Analysis
-                        </h2>
-                        <div id="step3Status" style="
-                  display: inline-block;
-                  font-size: 13px;
-                  font-weight: 600;
-                  color: #94a3b8;
-                  background-color: #f1f5f9;
-                  padding: 2px 12px;
-                  border-radius: 9999px;
-                  border: 1px solid #e2e8f0;
-                ">
-                            Not Started
-                        </div>
-                    </div>
-                </div>
-                <!-- <div style="text-align: center; margin: 32px 0;">
-          <button style="
-                padding: 16px 44px;
-                background-color: #3b82f6;
-                color: white;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 15px;
-                font-weight: 600;
-              ">
-            Submit
-          </button>
-        </div> -->
-            </div>
-        </section>
-    </header>
+          <div  class="accordion-arrow" id="collapseToggle" aria-label="Toggle header" 
+          style="cursor: pointer; padding: 8px">
+          <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                  d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+                  stroke="#292D32" stroke-width="2.4" stroke-miterlimit="10"
+                  stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+      </div>
+
+      </header>
     <main class="container">
         <!-- Part 1 Card -->
         <section class="part-card">
@@ -916,7 +1066,7 @@
                                         Step 1 of 3
                                     </p>
                                     <button class="status-btn">
-                                        Not Started
+                                        In-Progress
                                     </button>
                                 </div>
                                 <div class="accordion-arrow" onclick="toggleAccordion(this)"
