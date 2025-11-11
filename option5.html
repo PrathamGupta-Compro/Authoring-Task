@@ -202,6 +202,7 @@
             padding: 40px 80px;
             position: relative;
             transition: padding 0.3s ease;
+            background-color: #FFFFFF;
         }
 
         .header.collapsed {
@@ -232,6 +233,7 @@
             display: flex;
             gap: 12px;
             margin-bottom: 20px;
+            
         }
 
         .tag {
@@ -241,6 +243,7 @@
             font-size: 14px;
             color: #4a5568;
             list-style: none;
+            background-color: #E7E7E7;
         }
 
         .expandable-content {
@@ -266,7 +269,7 @@
 
         .objectives-list,
         .questions-list {
-            margin-left: 20px;
+            margin-left: 40px;
             color: #4a5568;
             font-size: 14px;
             line-height: 1.8;
@@ -282,6 +285,7 @@
             border: 1px solid #e2e8f0;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
+            background-color: #FFF9F9;
         }
 
         .header.collapsed .steps-panel {
@@ -290,7 +294,7 @@
 
         .collapse-toggle {
             position: absolute;
-            right: 80px;
+            right: 40px;
             top: 40px;
             background: none;
             border: none;
@@ -353,7 +357,7 @@
         .progress-bar-fill {
             width: 33%;
             height: 100%;
-            background: #3b82f6;
+            background: #058746;
             transition: width 0.3s ease;
         }
 
@@ -412,19 +416,18 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: #e2e8f0;
+            background: #AAAAAA;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 14px;
             font-weight: 600;
-            color: #94a3b8;
+            color: white;
             flex-shrink: 0;
         }
 
         .step-number.active {
-            background: #3b82f6;
-            color: white;
+
         }
 
         .step-number.completed {
@@ -500,6 +503,23 @@
             transition: background-color 0.2s ease;
         }
 
+        .submit-lesson {
+            padding: 16px 44px;
+            /* border: none; */
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            background-color: #E7E7E7;
+            color: #94a3b8;
+
+        }
+
+
+
+
+
+
         .submit-button:hover {
             background-color: #2563eb;
         }
@@ -542,7 +562,7 @@
         .container {
             max-width: 1440px;
             margin: 0 auto;
-            margin-top: 24px;
+            margin-top: 48px;
             margin-bottom: 24px;
         }
 
@@ -1019,9 +1039,14 @@
             <p class="progress-label">Steps (3)</p>
             <div class="progress-container">
               <div class="progress-bar">
-                <div class="progress-bar-fill" id="progressFill"></div>
+                <div class="progress-bar-fill" id="progressFill" style="width: 100%"></div>
               </div>
-              <span class="progress-percent" id="progressPercent">33%</span>
+              <div class="progress-bar">
+                <div class="progress-bar-fill" style="width: 0%"></div>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-bar-fill" style="width: 0%"></div>
+              </div>
             </div>
           </div>
     
@@ -1054,10 +1079,10 @@
 
                         <!-- Submit step in header (extra) -->
                         <div class="step">
-                            <div class="step-number" style="border-radius: 0px;"></div>
+                            <div class="step-number" style="border-radius: 0px; width: 28px; height: 28px;"></div>
                             <div class="step-content">
                                 <div>
-                                    <button class="submit-button" id="headerSubmitButton" style="padding:8px 14px; font-size:13px;">Submit Lesson</button>
+                                    <button class="submit-lesson" id="headerSubmitButton" style="padding:8px 14px; font-size:13px;">Submit Lesson</button>
                                 </div>
                             </div>
                         </div>
