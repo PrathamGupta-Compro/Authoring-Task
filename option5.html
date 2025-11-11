@@ -383,7 +383,7 @@
     .connector-line {
       position: absolute;
       left: 15px;
-      top: 40px;
+      top: 45px;
       width: 2px;
       background: #e2e8f0;
       z-index: 1;
@@ -1046,10 +1046,16 @@
                 <div class="step-status not-started">Not Started</div>
               </div>
             </div>
-          </div>
-    
-          <div class="submit-container" id="submitContainer">
-            <button class="submit-button" id="submitButton">Submit Lesson</button>
+
+                        <!-- Submit step in header (extra) -->
+                        <div class="step">
+                            <div class="step-number" style="border-radius: 0px;"></div>
+                            <div class="step-content">
+                                <div>
+                                    <button class="submit-button" id="headerSubmitButton" style="padding:8px 14px; font-size:13px;">Submit Lesson</button>
+                                </div>
+                            </div>
+                        </div>
           </div>
         </section>
 
