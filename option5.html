@@ -19,37 +19,48 @@
 
 
 
-const header = document.getElementById('header');
-    const collapseToggle = document.getElementById('collapseToggle');
-    const expandableContent = document.getElementById('expandableContent');
+        document.addEventListener('DOMContentLoaded', function () {
+            const header = document.getElementById('header');
+            const collapseToggle = document.getElementById('collapseToggle');
+            const expandableContent = document.getElementById('expandableContent');
 
-    collapseToggle.addEventListener('click', () => {
-      header.classList.toggle('collapsed');
-      collapseToggle.classList.toggle('collapsed');
-      expandableContent.classList.toggle('hidden');
-    });
+            if (collapseToggle && header) {
+                collapseToggle.addEventListener('click', () => {
+                    const isCollapsed = header.classList.toggle('collapsed');
+                    collapseToggle.classList.toggle('collapsed', isCollapsed);
+                    if (expandableContent) expandableContent.classList.toggle('hidden', isCollapsed);
+                });
+            }
 
-    // Example: Update progress dynamically
-    function updateProgress(percentage) {
-      const progressFill = document.getElementById('progressFill');
-      const progressPercent = document.getElementById('progressPercent');
-      progressFill.style.width = percentage + '%';
-      progressPercent.textContent = percentage + '%';
-    }
+            // Example: Update progress dynamically
+            function updateProgress(percentage) {
+                const progressFill = document.getElementById('progressFill');
+                const progressPercent = document.getElementById('progressPercent');
+                if (progressFill) progressFill.style.width = percentage + '%';
+                if (progressPercent) progressPercent.textContent = percentage + '%';
+            }
 
-    // Example: Mark a step as completed
-    function markStepCompleted(stepIndex) {
-      const steps = document.querySelectorAll('.step');
-      const step = steps[stepIndex];
-      const stepNumber = step.querySelector('.step-number');
-      const stepStatus = step.querySelector('.step-status');
-      
-      stepNumber.classList.remove('active');
-      stepNumber.classList.add('completed');
-      stepStatus.textContent = 'Completed';
-      stepStatus.classList.remove('not-started', 'in-progress');
-      stepStatus.classList.add('completed');
-    }
+            // Example: Mark a step as completed
+            function markStepCompleted(stepIndex) {
+                const steps = document.querySelectorAll('.step');
+                const step = steps[stepIndex];
+                if (!step) return;
+                const stepNumber = step.querySelector('.step-number');
+                const stepStatus = step.querySelector('.step-status');
+                if (stepNumber) {
+                    stepNumber.classList.remove('active');
+                    stepNumber.classList.add('completed');
+                }
+                if (stepStatus) {
+                    stepStatus.textContent = 'Completed';
+                    stepStatus.classList.remove('not-started', 'in-progress');
+                    stepStatus.classList.add('completed');
+                }
+            }
+            // expose helpers for console/testing
+            window.updateProgress = updateProgress;
+            window.markStepCompleted = markStepCompleted;
+        });
 
 
 
@@ -298,9 +309,15 @@ const header = document.getElementById('header');
             color: #1a202c;
         }
 
-        .collapse-toggle.collapsed {
-            transform: rotate(180deg);
-        }
+    .collapse-toggle.collapsed {
+      transform: rotate(180deg);
+    }
+
+        /* support existing accordion-arrow element used in markup */
+        .accordion-arrow.collapsed { transform: rotate(180deg); }
+
+        /* hide expandable content when header is collapsed */
+        .header.collapsed .expandable-content { max-height: 0; opacity: 0; margin-top: 0; }
 
         .progress-header {
             display: flex;
@@ -996,65 +1013,65 @@ const header = document.getElementById('header');
                 </div>
             </div>
         </section>
-
-        <section class="steps-panel">
-            <div class="progress-header">
-                <p class="progress-label">Steps (3)</p>
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div class="progress-bar-fill" id="progressFill"></div>
-                    </div>
-                    <span class="progress-percent" id="progressPercent">33%</span>
-                </div>
+    
+        <section class="steps-panel" style="margin-right: 48px;">
+          <div class="progress-header">
+            <p class="progress-label">Steps (3)</p>
+            <div class="progress-container">
+              <div class="progress-bar">
+                <div class="progress-bar-fill" id="progressFill"></div>
+              </div>
+              <span class="progress-percent" id="progressPercent">33%</span>
             </div>
-
-            <div class="steps-list" id="stepsList">
-                <div class="connector-line"></div>
-
-                <div class="step">
-                    <div class="step-number active">1</div>
-                    <div class="step-content">
-                        <h2 class="step-title">Quotable Connections - "I sit with Shakespeare and he winces not."
-                            —W.E.B. DuBois</h2>
-                        <div class="status-btn">In Progress</div>
-                    </div>
-                </div>
-
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h2 class="step-title">American Reception for Othello in the 19th and 20th Century</h2>
-                        <div class="step-status not-started">Not Started</div>
-                    </div>
-                </div>
-
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h2 class="step-title">Primary Source Analysis</h2>
-                        <div class="step-status not-started">Not Started</div>
-                    </div>
-                </div>
+          </div>
+    
+          <div class="steps-list" id="stepsList">
+            <div class="connector-line"></div>
+    
+            <div class="step">
+              <div class="step-number active">1</div>
+              <div class="step-content">
+                <h2 class="step-title">Quotable Connections - "I sit with Shakespeare and he winces not." —W.E.B. DuBois</h2>
+                <div class="status-btn">In Progress</div>
+              </div>
             </div>
-
-            <div class="submit-container" id="submitContainer">
-                <button class="submit-button" id="submitButton">Submit Lesson</button>
+    
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h2 class="step-title">American Reception for Othello in the 19th and 20th Century</h2>
+                <div class="step-status not-started">Not Started</div>
+              </div>
             </div>
+    
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h2 class="step-title">Primary Source Analysis</h2>
+                <div class="step-status not-started">Not Started</div>
+              </div>
+            </div>
+          </div>
+    
+          <div class="submit-container" id="submitContainer">
+            <button class="submit-button" id="submitButton">Submit Lesson</button>
+          </div>
         </section>
 
 
 
 
 
-        <div class="accordion-arrow" id="collapseToggle" aria-label="Toggle header"
-            style="cursor: pointer; padding: 8px">
-            <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
-                    stroke="#292D32" stroke-width="2.4" stroke-miterlimit="10" stroke-linecap="round"
-                    stroke-linejoin="round" />
-            </svg>
-        </div>
+          <div  class="accordion-arrow collapse-toggle" id="collapseToggle" aria-label="Toggle header" 
+          style="cursor: pointer; padding: 8px">
+          <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                  d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+                  stroke="#292D32" stroke-width="2.4" stroke-miterlimit="10"
+                  stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+      </div>
 
     </header>
     <main class="container">
