@@ -203,13 +203,15 @@
         color: #718096;
         text-transform: uppercase;
         letter-spacing: 1px;
+        margin-bottom: 4px;
       }
 
       .main-title {
-        font-size: 36px;
-        font-weight: 700;
-        color: #1a202c;
-        margin-bottom: 12px;
+        font-size: 40px;
+        font-weight: 600;
+        color: #343434;
+        margin-bottom: 16px;
+        line-height: 30px;
       }
 
       .tags {
@@ -219,7 +221,11 @@
       }
 
       .tag {
-        padding: 6px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 146px;
+        height: 32px;
         border: 1.5px solid #cbd5e0;
         border-radius: 20px;
         font-size: 14px;
@@ -314,9 +320,9 @@
 
       .progress-header {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 24px;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 16px;
       }
 
       .progress-label {
@@ -332,7 +338,6 @@
         align-items: center;
         gap: 8px;
         flex: 1;
-        margin-left: 16px;
       }
 
       .progress-bar {
@@ -380,13 +385,13 @@
         width: 2px;
         background: #e2e8f0;
         z-index: 1;
-        height: calc(100% - 80px);
+        height: calc(100% - 72px);
       }
 
       .step {
         display: flex;
         align-items: flex-start;
-        gap: 16px;
+        gap: 32px;
         position: relative;
         padding: 12px 0;
       }
@@ -644,10 +649,16 @@
       }
 
       .section-quote-2 {
+        background: #f3f7ff; /* soft blue background */
+        border-left: 5px solid #1a5ac2; /* bold blue accent line */
         color: #1a5ac2;
         font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 32px;
+        font-weight: 600;
+        padding: 16px 24px;
+        margin: 24px 0;
+        border-radius: 6px;
+        line-height: 1.6;
+        font-style: italic;
       }
 
       /* .part-card:not(.collapsed) .section-quote {
@@ -907,8 +918,7 @@
       }
 
       .help-text {
-        margin: 16px;
-        margin-left: 0px;
+        margin-right: 16px;
         padding-left: 16px;
         font-size: 14px;
         font-weight: 600;
@@ -948,8 +958,8 @@
         <p class="unit-label">UNIT: Survey Course > ELA</p>
         <h1 class="main-title">Othello's Renaissance</h1>
         <ul class="tags">
-          <li class="tag">Think Critically</li>
-          <li class="tag">Communicate</li>
+          <li class="step-status not-started">Think Critically</li>
+          <li class="step-status not-started">Communicate</li>
         </ul>
 
         <div class="expandable-content" id="expandableContent">
@@ -1001,7 +1011,7 @@
         </div>
       </section>
 
-      <section class="steps-panel" style="margin-right: 48px">
+      <section class="steps-panel" style="margin-top: 16px; margin-right: 48px">
         <div class="progress-header">
           <p class="progress-label">Steps (3)</p>
           <div class="progress-container">
@@ -1054,7 +1064,7 @@
           <div class="step">
             <div
               class="step-number"
-              style="border-radius: 0px; width: 28px; height: 28px"
+              style="border-radius: 0px; width: 22px; height: 22px; margin-left: 5px; margin-top: 4px;"
             ></div>
             <div class="step-content" style="padding-top: 0px">
               <div>
@@ -1075,7 +1085,7 @@
         class="accordion-arrow collapse-toggle collapsed"
         id="collapseToggle"
         aria-label="Toggle header"
-        style="cursor: pointer; padding: 8px"
+        style="cursor: pointer; padding: 8px; margin-top: 32px"
       >
         <svg
           width="24px"
@@ -1329,7 +1339,7 @@
               display: flex;
               justify-content: center;
               align-items: center;
-              padding-left: 50px;
+              padding-left: 24px;
             "
           >
             <img
@@ -1420,7 +1430,7 @@
               </div>
 
               <!-- Historical Note -->
-              <div style="margin: 24px 0; padding: 0 0 0 16px">
+              <div style="margin: 24px 0;>
                 <p
                   style="
                     font-size: 15px;
@@ -1553,7 +1563,7 @@
               display: flex;
               justify-content: center;
               align-items: center;
-              padding-left: 50px;
+              padding-left: 24px;
             "
           >
             <img
@@ -1625,7 +1635,7 @@
               </div>
 
               <!-- Prior Knowledge Context -->
-              <div style="margin: 24px 0; padding: 0 0 0 16px">
+              <div style="margin: 24px 0;>
                 <h4
                   style="
                     font-size: 15px;
@@ -1748,7 +1758,7 @@
               display: flex;
               justify-content: center;
               align-items: center;
-              padding-left: 50px;
+              padding-left: 24px;
             "
           >
             <img
