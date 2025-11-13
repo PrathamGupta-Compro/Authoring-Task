@@ -22,14 +22,34 @@
         const collapseToggle = document.getElementById("collapseToggle");
         const expandableContent = document.getElementById("expandableContent");
 
+        let isHeaderCollapsed = true;
+
         if (collapseToggle && header) {
           collapseToggle.addEventListener("click", () => {
             const isCollapsed = header.classList.toggle("collapsed");
             collapseToggle.classList.toggle("collapsed", isCollapsed);
             if (expandableContent)
               expandableContent.classList.toggle("hidden", isCollapsed);
+            isHeaderCollapsed = !isHeaderCollapsed;
           });
+
         }
+
+        const onScroll = () => {
+            const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+            
+            if (scrollPosition > 160 && isHeaderCollapsed) {
+              header.classList.add("scrolled");
+              collapseToggle.classList.add("scrolled");
+
+            } else if (scrollPosition <= 80 && isHeaderCollapsed) {
+              header.classList.remove("scrolled");
+              collapseToggle.classList.remove("scrolled");
+
+            }
+        };
+
+        window.addEventListener("scroll", onScroll);
 
         // Example: Update progress dynamically
         function updateProgress(percentage) {
@@ -189,9 +209,20 @@
 
       .header.collapsed {
         padding: 24px 80px;
-        position: sticky;
+        position:sticky;
         top: 0;
       }
+
+.header.scrolled {
+  position:sticky;
+  top: 0;
+  z-index: 1000;
+  align-items: center;
+  background: #ffffff;
+  padding: 8px 80px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
 
       .title-section {
         width: 50%;
@@ -213,6 +244,17 @@
         margin-bottom: 16px;
         line-height: 30px;
       }
+      .header.scrolled .main-title{
+        margin-top: 24px;
+   
+  font-size: 32px;
+  transition: font-size 0.3s ease, margin 0.3s ease;
+  margin-bottom: 0;
+  line-height: 1.2;
+  transform: translateY(-2px);
+
+}
+      
 
       .tags {
         display: flex;
@@ -275,11 +317,19 @@
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         transition: all 0.3s ease;
         background-color: #fff9f9;
+        margin-top: 16px;
       }
 
       .header.collapsed .steps-panel {
         padding: 16px 24px;
       }
+
+      .header.scrolled .steps-panel {
+  margin-top: 0px; /* previously 16px or more */
+  padding: 12px 20px; /* smaller internal padding */
+  transition: margin 0.3s ease, padding 0.3s ease;
+}
+
 
       .collapse-toggle {
         position: absolute;
@@ -306,6 +356,11 @@
         transform: rotate(180deg);
       }
 
+      .header.scrolled .collapse-toggle {
+        position: relative;
+      display: none;
+      }
+
       /* support existing accordion-arrow element used in markup */
       .accordion-arrow.collapsed {
         transform: rotate(180deg);
@@ -316,6 +371,13 @@
         max-height: 0;
         opacity: 0;
         margin-top: 0;
+      }
+
+      .header.scrolled .unit-label,
+      .header.scrolled .tags,
+      .header.scrolled .expandable-content  {
+        opacity: 0;
+        max-height: 0;
       }
 
       .progress-header {
@@ -498,7 +560,7 @@
       }
 
       .submit-button:hover {
-        background-color: #000000;
+        background-color: #1a3563;
       }
 
       .submit-button:disabled {
@@ -687,7 +749,7 @@
       /* Author Quote Item */
       .quote-item {
         display: grid;
-        grid-template-columns: 2fr 2fr;
+        grid-template-columns: 1fr 16fr 16fr;
         /* gap: 32px; */
         /* padding-bottom: 60px; */
       }
@@ -700,11 +762,12 @@
       .quote-column {
         display: flex;
         flex-direction: column;
+        border: none;
+        padding-left: 0px;
       }
 
       .author-info {
-        margin-top: 8px;
-
+        margin-top: 16px;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -734,7 +797,6 @@
 
       .quote-box {
         background: white;
-        padding: 0 24px 0 0;
         border-radius: 12px;
         color: #2d3748;
       }
@@ -749,6 +811,7 @@
       .response-column {
         display: flex;
         align-items: stretch;
+        border: none;
       }
 
       .response-label {
@@ -955,7 +1018,7 @@
   <body>
     <header class="header collapsed" id="header">
       <section class="title-section">
-        <p class="unit-label">UNIT: Survey Course > ELA</p>
+        <p class="unit-label">Survey Course > ELA</p>
         <h1 class="main-title">Othello's Renaissance</h1>
         <ul class="tags">
           <li class="step-status not-started">Think Critically</li>
@@ -1011,7 +1074,7 @@
         </div>
       </section>
 
-      <section class="steps-panel" style="margin-top: 16px; margin-right: 48px">
+      <section class="steps-panel" style="margin-right: 48px">
         <div class="progress-header">
           <p class="progress-label">Steps (3)</p>
           <div class="progress-container">
@@ -1165,8 +1228,11 @@
               </p>
               <!-- W.E.B. DuBois -->
 
-              <table>
+              <table style="border: none;">
                 <tr class="quote-item">
+                  <td class="quote-column">
+                    1.
+                  </td>
                   <td class="quote-column">
                     <div class="quote-box">
                       <p class="quote-text">
@@ -1209,6 +1275,9 @@
                 <!-- Ralph Ellison -->
                 <tr class="quote-item">
                   <td class="quote-column">
+                    2.
+                  </td>
+                  <td class="quote-column">
                     <div class="quote-box">
                       <p class="quote-text">
                         I am an invisible man. . .
@@ -1247,6 +1316,9 @@
 
                 <!-- William Shakespeare -->
                 <tr class="quote-item">
+                  <td class="quote-column">
+                    3.
+                  </td>
                   <td class="quote-column">
                     <div class="quote-box">
                       <p class="quote-text">
@@ -1324,7 +1396,7 @@
         >
           <button
             class="request-button"
-            onmouseover="this.style.backgroundColor='#e0edfd';"
+            onmouseover="this.style.backgroundColor='#cbdeed';"
             onmouseout="this.style.backgroundColor='#F7F7F7';"
           >
             Request Help
@@ -1548,7 +1620,7 @@
         >
           <button
             class="request-button"
-            onmouseover="this.style.backgroundColor='#e0edfd';"
+            onmouseover="this.style.backgroundColor='#cbdeed';"
             onmouseout="this.style.backgroundColor='#F7F7F7';"
           >
             Request Help
@@ -1743,7 +1815,7 @@
         >
           <button
             class="request-button"
-            onmouseover="this.style.backgroundColor='#e0edfd';"
+            onmouseover="this.style.backgroundColor='#cbdeed';"
             onmouseout="this.style.backgroundColor='#F7F7F7';"
           >
             Request Help
