@@ -308,7 +308,7 @@
       }
 
       .steps-panel {
-        width: 40%;
+        width: 28%;
         min-width: 300px;
         background: white;
         padding: 24px;
@@ -317,7 +317,8 @@
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         transition: all 0.3s ease;
         background-color: #fff9f9;
-        margin-top: 16px;
+        margin-top: 10px;
+        margin-right: 48px
       }
 
       .header.collapsed .steps-panel {
@@ -388,11 +389,10 @@
       }
 
       .progress-label {
-        font-size: 12px;
-        font-weight: 600;
-        color: #64748b;
+        color: #343434;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        font-size: 14px;
+        font-weight: 600;
       }
 
       .progress-container {
@@ -400,13 +400,14 @@
         align-items: center;
         gap: 8px;
         flex: 1;
+        margin-top: 8px;
       }
 
       .progress-bar {
         flex: 1;
-        height: 6px;
+        height: 10px;
         background: #e2e8f0;
-        border-radius: 3px;
+        border-radius: 10px;
         overflow: hidden;
       }
 
@@ -418,7 +419,7 @@
       }
 
       .progress-percent {
-        font-size: 12px;
+        font-size: 16px;
         color: #64748b;
         font-weight: 500;
         min-width: 35px;
@@ -482,8 +483,6 @@
         flex-shrink: 0;
       }
 
-      .step-number.active {
-      }
 
       .step-number.completed {
         background: #10b981;
@@ -505,20 +504,20 @@
       .step-status {
         display: inline-block;
         font-size: 13px;
-        font-weight: 600;
+        font-weight: 500;
         padding: 2px 12px;
         border-radius: 9999px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid #A8A8A8;
       }
 
       .step-status.not-started {
-        color: #94a3b8;
-        background-color: #f1f5f9;
+        color: #5E5E5E;
+        background-color: #FFF;
       }
 
       .step-status.in-progress {
-        color: #3b82f6;
-        background-color: #eff6ff;
+        color: #343434;
+        background-color: #EAB308;
         border-color: #bfdbfe;
       }
 
@@ -555,7 +554,7 @@
         font-size: 15px;
         font-weight: 600;
         background-color: #e7e7e7;
-        color: #94a3b8;
+        color: #5E5E5E;
         border-width: 1px;
       }
 
@@ -667,6 +666,12 @@
         padding: 0;
       }
 
+      .step-count{
+        color: #343434;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
       .help-box {
         display: flex;
         padding: 16px;
@@ -736,23 +741,31 @@
       }
 
       .section-directions {
-        padding-bottom: 20px;
         margin-bottom: 40px;
         border-top: 1px solid #AEAEAE;
         padding-top: 28px;
-        color: #4b5563;
-        line-height: 1.6;
       }
 
       .section-directions p {
-        font-size: 15px;
-        color: #2d3748;
+        color: #343434;
+        margin-bottom: 6px;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 100%;
+      }
+
+      .section-directions span{
+        color: #343434;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
       }
 
       /* Author Quote Item */
       .quote-item {
         display: grid;
         grid-template-columns: 1fr 16fr 16fr;
+        margin-bottom: 48px;
         /* gap: 32px; */
         /* padding-bottom: 60px; */
       }
@@ -766,7 +779,7 @@
         display: flex;
         flex-direction: column;
         border: none;
-        padding-left: 0px;
+        padding: 0px 24px;
       }
 
       .author-info {
@@ -815,6 +828,7 @@
         display: flex;
         align-items: stretch;
         border: none;
+        padding: 0px 24px;
       }
 
       .response-label {
@@ -829,14 +843,15 @@
         width: 100%;
         height: 100%;
         padding: 16px;
-        border: 2px solid #e2e8f0;
-        border-radius: 8px;
         font-size: 14px;
         font-family: "Inter", sans-serif;
         line-height: 1.6;
         resize: vertical;
         transition: border-color 0.3s;
         margin: 0;
+        border-radius: 8px;
+        border: 1px solid #A6A6A6;
+        background: #FBFBFB;
       }
 
       .response-area:focus {
@@ -846,9 +861,10 @@
       }
 
       .response-area::placeholder {
-        color: #94a3b8;
-        font-size: 13px;
-        font-style: italic;
+        color: #343434;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 100%;
       }
 
       .word-count {
@@ -881,9 +897,6 @@
         min-height: 140px;
       }
 
-      .section-directions {
-        
-      }
 
       .status-message {
         background-color: #f8f9fa;
@@ -1022,8 +1035,8 @@
         <p class="unit-label">Survey Course > ELA</p>
         <h1 class="main-title">Othello's Renaissance</h1>
         <ul class="tags">
-          <li class="step-status not-started">Think Critically</li>
-          <li class="step-status not-started">Communicate</li>
+          <li class="step-status not-started" style="background-color: #E7E7E7; color: #343434;">Think Critically</li>
+          <li class="step-status not-started" style="background-color: #E7E7E7; color: #343434;">Communicate</li>
         </ul>
 
         <div class="expandable-content" id="expandableContent">
@@ -1075,7 +1088,7 @@
         </div>
       </section>
 
-      <section class="steps-panel" style="margin-right: 48px">
+      <section class="steps-panel">
         <div class="progress-header">
           <p class="progress-label">Steps (3)</p>
           <div class="progress-container">
@@ -1185,8 +1198,8 @@
                   "
                 >
                   <div style="display: flex; gap: 16px; align-items: center">
-                    <p style="font-size: 15px; color: #4a5568; margin: 0">
-                      Step 1 of 3
+                    <p class="step-count">
+                      STEP 1 of 3
                     </p>
                     <button class="step-status not-started">Not Started</button>
                   </div>
@@ -1222,16 +1235,18 @@
               <blockquote class="section-quote-2">
                 "I sit with Shakespeare and he winces not." —W.E.B. DuBois
               </blockquote>
-
-              <p class="section-directions">
-                PART A : Read each quote carefully. State the main idea of each
-                one in your own words using the response area provided.
-              </p>
+              <div class="section-directions">
+                <p>Part A :</p>
+                <span>
+                  Read each quote carefully. State the main idea of each
+                  one in your own words using the response area provided.
+                </span>
+              </div>
               <!-- W.E.B. DuBois -->
 
               <table style="border: none;">
                 <tr class="quote-item">
-                  <td class="quote-column">
+                  <td class="quote-column" style="padding-left: 0px;">
                     1.
                   </td>
                   <td class="quote-column">
@@ -1275,7 +1290,7 @@
 
                 <!-- Ralph Ellison -->
                 <tr class="quote-item">
-                  <td class="quote-column">
+                  <td class="quote-column" style="padding-left: 0px;">
                     2.
                   </td>
                   <td class="quote-column">
@@ -1317,7 +1332,7 @@
 
                 <!-- William Shakespeare -->
                 <tr class="quote-item">
-                  <td class="quote-column">
+                  <td class="quote-column" style="padding-left: 0px;">
                     3.
                   </td>
                   <td class="quote-column">
@@ -1363,10 +1378,11 @@
 
               <div class="connections-section">
                 <div class="section-directions">
-                  <p>
-                    PART B : Connect the main ideas stated by the authors above.
-                    How do their ideas compliment each other? Explain..
-                  </p>
+                  <p>Part B :</p>
+                  <span>
+                    Connect the main ideas stated by the authors above. How do
+                    their ideas compliment each other? Explain..
+                  </span>
                 </div>
                 <textarea
                   class="response-area"
@@ -1442,8 +1458,8 @@
                   "
                 >
                   <div style="display: flex; gap: 16px; align-items: center">
-                    <p style="font-size: 15px; color: #4a5568; margin: 0">
-                      Step 2 of 3
+                    <p class="step-count">
+                      STEP 2 of 3
                     </p>
 
                     <button class="step-status not-started">Not Started</button>
@@ -1666,8 +1682,8 @@
                   "
                 >
                   <div style="display: flex; gap: 16px; align-items: center">
-                    <p style="font-size: 15px; color: #4a5568; margin: 0">
-                      Step 3 of 3
+                    <p class="step-count">
+                      STEP 3 of 3
                     </p>
                     <button class="step-status not-started">Not Started</button>
                   </div>
@@ -1701,7 +1717,7 @@
             <div class="accordion-content">
               <h2 class="section-quote">Primary Source Analysis</h2>
               <div style="margin-bottom: 16px">
-                <p class="section-directions">
+                <p class="section-directions" style="margin-bottom: 20px;">
                   Examine the primary source below and answer the following
                   questions.
                 </p>
