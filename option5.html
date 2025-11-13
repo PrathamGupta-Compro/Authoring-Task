@@ -91,14 +91,14 @@
           content.classList.remove("collapsed");
           partCard.classList.remove("collapsed");
           arrow.style.transform = "rotate(0deg)";
-          if (helpSection && helpSection.querySelector(".help-text")) {
+          if (helpSection) {
             helpSection.classList.remove("collapsed");
           }
         } else {
           content.classList.add("collapsed");
           partCard.classList.add("collapsed");
           arrow.style.transform = "rotate(180deg)";
-          if (helpSection && helpSection.querySelector(".help-text")) {
+          if (helpSection) {
             helpSection.classList.add("collapsed");
           }
         }
@@ -202,6 +202,7 @@
         background-color: white;
         width: 100%;
         padding: 40px 80px;
+        padding-bottom: 8px;
         position: relative;
         transition: padding 0.3s ease;
         background-color: #ffffff;
@@ -638,7 +639,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 40px 50px 24px 50px;
+        padding: 24px 48px 8px 48px;
 
         border-radius: 16px;
       }
@@ -647,6 +648,11 @@
         transition: transform 0.3s ease;
         display: flex;
         align-items: center;
+      }
+
+      .accordion-arrow:hover{
+        border-radius: 8px;
+        background: #cbdeed;
       }
 
       .accordion-content {
@@ -861,6 +867,7 @@
 
       .response-area::placeholder {
         color: #343434;
+        padding-top: 5px;
         font-size: 14px;
         font-weight: 400;
         line-height: 100%;
@@ -1162,6 +1169,8 @@
         id="collapseToggle"
         aria-label="Toggle header"
         style="cursor: pointer; padding: 8px; margin-top: 32px"
+        onmouseenter="style.backgroundColor = '#E2E8F0'"
+        onmouseleave="style.backgroundColor = 'transparent'"
       >
         <svg
           width="24px"
@@ -1235,7 +1244,7 @@
                 "I sit with Shakespeare and he winces not." —W.E.B. DuBois
               </blockquote>
               <div class="section-directions">
-                <p>Part A :</p>
+                <p style="display: inline;">Part A :</p>
                 <span>
                   Read each quote carefully. State the main idea of each
                   one in your own words using the response area provided.
@@ -1377,7 +1386,7 @@
 
               <div class="connections-section">
                 <div class="section-directions">
-                  <p>Part B :</p>
+                  <p style="display: inline;">Part B :</p>
                   <span>
                     Connect the main ideas stated by the authors above. How do
                     their ideas compliment each other? Explain..
@@ -1418,28 +1427,6 @@
             Request Help
           </button>
           <button class="submit-button">Submit</button>
-        </div>
-
-        <div class="help-box">
-          <!-- INSERT_YOUR_CODE -->
-          <div
-            style="
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              padding-left: 24px;
-            "
-          >
-            <img
-              src="image9.svg"
-              alt="Discussion Icon"
-              width="24px"
-              height="90"
-              style="height: fit-content"
-            />
-
-            <p class="help-text">Help &amp; Discussion</p>
-          </div>
         </div>
       </section>
 
@@ -1643,28 +1630,6 @@
           </button>
           <button class="submit-button">Submit</button>
         </div>
-
-        <div class="help-box">
-          <!-- INSERT_YOUR_CODE -->
-          <div
-            style="
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              padding-left: 24px;
-            "
-          >
-            <img
-              src="image9.svg"
-              alt="Discussion Icon"
-              width="24px"
-              height="90"
-              style="height: fit-content"
-            />
-
-            <p class="help-text">Help &amp; Discussion</p>
-          </div>
-        </div>
       </section>
 
       <!-- Part 3 Card -->
@@ -1837,28 +1802,6 @@
             Request Help
           </button>
           <button class="submit-button">Submit</button>
-        </div>
-
-        <div class="help-box">
-          <!-- INSERT_YOUR_CODE -->
-          <div
-            style="
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              padding-left: 24px;
-            "
-          >
-            <img
-              src="image9.svg"
-              alt="Discussion Icon"
-              width="24px"
-              height="90"
-              style="height: fit-content"
-            />
-
-            <p class="help-text">Help &amp; Discussion</p>
-          </div>
         </div>
       </section>
     </main>
