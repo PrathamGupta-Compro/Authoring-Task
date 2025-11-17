@@ -21,7 +21,7 @@
            const collapseToggle = document.getElementById("collapseToggle");
            const expandableContent = document.getElementById("expandableContent");
            const stepElements = document.querySelectorAll(".steps-list .step");
-           let isHeaderCollapsed = true;
+           let isHeaderCollapsed = false;
            let scrolled = false;
          
            const onScroll = () => { 
@@ -201,6 +201,70 @@
            updateStatusMessage(2, "not-started");
            updateStatusMessage(3, "not-started");
          });
+         
+         function showSnackbar() {
+         const bar = document.getElementById("snackbar");
+         
+         // Reset if already visible
+         bar.classList.remove("show");
+         void bar.offsetWidth; // reflow hack to restart animation
+         
+         bar.classList.add("show");
+         
+         bar.focus();
+         
+         // Auto close after 3 seconds
+         bar.autoCloseTimeout = setTimeout(() => {
+         bar.classList.remove("show");
+         }, 5000);
+         }
+         
+         function closeSnackbar() {
+         const bar = document.getElementById("snackbar");
+         bar.classList.remove("show");
+         clearTimeout(bar.autoCloseTimeout);
+         }
+         
+         function beginStep(button) {
+         const section = button.closest(".help-section").previousElementSibling;
+         const textareas = section.querySelectorAll("textarea.response-area");
+         const progressBar = document.getElementById("progressFill");
+         
+         // Enable textareas
+         textareas.forEach(t => {
+         t.disabled = false;
+         t.style.background = "#ffffff";
+         });
+         
+         // Update small step box in the step panel
+         const stepCard = section.closest(".part-card");
+         const stepIndex = stepCard.id.replace("step", "");
+         const leftStep = document.querySelectorAll(".steps-list .step")[stepIndex - 1];
+         
+         const leftStatus = leftStep.querySelector(".step-status");
+         leftStatus.textContent = "In Progress";
+         leftStatus.classList.remove("not-started");
+         leftStatus.classList.add("in-progress");
+         
+         // Update step header badge
+         const headerBadge = section.querySelector(".step-status");
+         headerBadge.textContent = "In Progress";
+         headerBadge.classList.remove("not-started");
+         headerBadge.classList.add("in-progress");
+         
+         // Change Begin → Submit
+         button.textContent = "Submit";
+         button.classList.remove("begin-button");
+         button.classList.add("submit-button");
+         
+         progressFill.style.width="100%";
+         
+         // Change onclick to show snackbar
+         button.onclick = function() {
+         showSnackbar();
+         };
+         }
+         
       </script>
       <style>
          * {
@@ -545,6 +609,9 @@
          border-width: 1px;
          }
          .submit-button:hover {
+         background-color: #1a3563;
+         }
+         .begin-button:hover {
          background-color: #1a3563;
          }
          .submit-button:disabled {
@@ -900,6 +967,15 @@
          border-bottom: 3px solid #e2e8f0;
          padding-bottom: 40px;
          }
+         .begin-button {
+         padding: 10px 24px;
+         background-color: #2c2c2c;
+         color: white;
+         border-radius: 6px;
+         cursor: pointer;
+         font-size: 14px;
+         border: 1px solid #2c2c2c;
+         }
          .submit-button {
          padding: 10px 24px;
          background-color: #2c2c2c;
@@ -930,6 +1006,70 @@
          line-height: 1.2;
          font-family: "Inter", sans-serif;
          }
+         #snackbar {
+         visibility: hidden;
+         min-width: 280px;
+         max-width: 340px;
+         background-color: #333;
+         color: #fff;
+         border-radius: 6px;
+         padding: 14px 16px;
+         position: fixed;
+         z-index: 1000;
+         right: 20px;              /* <<< FIX: Always on right */
+         bottom: 20px;
+         font-size: 16px;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         opacity: 0;
+         }
+         #snackbar.show {
+         visibility: visible;
+         animation: fadein 0.4s forwards, fadeout 0.4s 4.6s forwards;
+         }
+         #snackbar.show:focus {
+         outline: 2px solid #fff;
+         }
+         .snackbar-close {
+         background: none;
+         border: none;
+         cursor: pointer;
+         padding: 6px;
+         border-radius: 6px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         transition: background 0.2s ease, color 0.2s ease;
+         outline: none;
+         }
+         .snackbar-close-icon {
+         width: 20px;
+         height: 20px;
+         color: #ffffff;
+         transition: color 0.2s ease;
+         }
+         /* Hover */
+         .snackbar-close:hover {
+         background: rgba(255, 255, 255, 0.15);
+         }
+         /* Focus (keyboard accessibility) */
+         .snackbar-close:focus-visible {
+         outline: 2px solid #fff;
+         outline-offset: 2px;
+         }
+         /* Active state */
+         .snackbar-close:active {
+         background: rgba(255, 255, 255, 0.25);
+         }
+         @keyframes fadein {
+         from { bottom: 0; opacity: 0; }
+         to { bottom: 20px; opacity: 1; }
+         }
+         @keyframes fadeout {
+         from { bottom: 20px; opacity: 1; }
+         to { bottom: 0; opacity: 0; }
+         }
          @media (max-width: 768px) {
          body {
          padding: 20px 12px;
@@ -951,7 +1091,7 @@
       </style>
    </head>
    <body>
-      <header class="header collapsed" id="header">
+      <header class="header" id="header">
          <section class="title-section">
             <p class="unit-label">Survey Course > ELA</p>
             <h1 class="main-title">Othello's Renaissance</h1>
@@ -1298,12 +1438,15 @@
                >
                <button
                   class="request-button"
+                  onclick="showSnackbar()"
                   onmouseover="this.style.backgroundColor='#cbdeed';"
                   onmouseout="this.style.backgroundColor='#F7F7F7';"
                   >
                Request Help
                </button>
-               <button class="submit-button">Submit</button>
+               <button class="begin-button" onclick="beginStep(this)">
+               Begin
+               </button>
             </div>
          </section>
          <!-- Part 2 Card -->
@@ -1490,12 +1633,15 @@
                >
                <button
                   class="request-button"
+                  onclick="showSnackbar()"
                   onmouseover="this.style.backgroundColor='#cbdeed';"
                   onmouseout="this.style.backgroundColor='#F7F7F7';"
                   >
                Request Help
                </button>
-               <button class="submit-button">Submit</button>
+               <button class="begin-button" onclick="showSnackbar()">
+               Begin
+               </button>
             </div>
          </section>
          <!-- Part 3 Card -->
@@ -1655,14 +1801,25 @@
                >
                <button
                   class="request-button"
+                  onclick="showSnackbar()"
                   onmouseover="this.style.backgroundColor='#cbdeed';"
                   onmouseout="this.style.backgroundColor='#F7F7F7';"
                   >
                Request Help
                </button>
-               <button class="submit-button">Submit</button>
+               <button class="begin-button" onclick="showSnackbar()">
+               Begin
+               </button>
             </div>
          </section>
+         <div id="snackbar" tabindex="0">
+            <span style="margin-left: 16px;">Feature coming soon!</span>
+            <button class="snackbar-close" onclick="closeSnackbar()" aria-label="Close notification">
+               <svg viewBox="0 0 24 24" class="snackbar-close-icon" aria-hidden="true">
+                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+               </svg>
+            </button>
+         </div>
       </main>
    </body>
 </html>
