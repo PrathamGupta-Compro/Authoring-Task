@@ -232,8 +232,9 @@
          
          // Enable textareas
          textareas.forEach(t => {
-         t.disabled = false;
          t.style.background = "#ffffff";
+         t.placeholder = "Please add your response here.";
+         t.style.cursor = "auto";
          });
          
          // Update small step box in the step panel
@@ -264,6 +265,17 @@
          showSnackbar();
          };
          }
+         
+         function textAreaClick(t) {
+         
+         const beginBtn = t
+          .closest(".part-card")
+          .nextElementSibling
+          .querySelector(".begin-button");
+         
+         if (beginBtn) beginBtn.click();
+         
+            }
          
       </script>
       <style>
@@ -866,7 +878,8 @@
          margin: 0;
          border-radius: 8px;
          border: 1px solid #A6A6A6;
-         background: #FBFBFB;
+         background: #f0f0f0;
+         cursor: pointer;
          }
          .response-area:focus {
          outline: none;
@@ -1312,8 +1325,9 @@
                               </div>
                            </td>
                            <td class="response-column">
-                              <textarea disabled
+                              <textarea
                                  class="response-area"
+                                 onclick="textAreaClick(this)"
                                  placeholder="Click here to Begin and add your response."
                                  ></textarea>
                            </td>
@@ -1352,8 +1366,9 @@
                               </div>
                            </td>
                            <td class="response-column">
-                              <textarea disabled
+                              <textarea
                                  class="response-area"
+                                 onclick="textAreaClick(this)"
                                  placeholder="Click here to Begin and add your response."
                                  ></textarea>
                            </td>
@@ -1394,8 +1409,9 @@
                               </div>
                            </td>
                            <td class="response-column">
-                              <textarea disabled
+                              <textarea
                                  class="response-area"
+                                 onclick="textAreaClick(this)"
                                  placeholder="Click here to Begin and add your response."
                                  ></textarea>
                            </td>
@@ -1409,11 +1425,10 @@
                            their ideas compliment each other? Explain..
                            </span>
                         </div>
-                        <textarea disabled
+                        <textarea
                            class="response-area"
-                           data-index="3"
+                           onclick="textAreaClick(this)"
                            placeholder="Click here to Begin and add your response."
-                           data-original-placeholder="Write your connections here..."
                            ></textarea>
                      </div>
                   </div>
@@ -1560,7 +1575,6 @@
                         class="response-area"
                         data-index="4"
                         placeholder="Click here to Begin and add your response."
-                        data-original-placeholder="Analyze whether the play supports this interpretation..."
                         ></textarea>
                   </div>
                   <!-- Question 2 -->
