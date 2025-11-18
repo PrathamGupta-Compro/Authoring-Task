@@ -24,6 +24,20 @@
         const progressBars = document.querySelectorAll(
           ".progress-container .progress-bar"
         );
+        const tooltip = document.getElementById("stepTooltip");
+        const stepLabel = document.getElementById("ttStep");
+        const descLabel = document.getElementById("ttDesc");
+
+        const steps = document.querySelectorAll(".steps-list .step");
+        const bars = document.querySelectorAll(
+          ".progress-container .progress-bar"
+        );
+
+        const titles = [
+          "Quotable Connections",
+          "American Reception for Othello in the 19th and 20th Century",
+          "Primary Source Analysis",
+        ];
         let isHeaderCollapsed = false;
         let scrolled = false;
 
@@ -71,6 +85,10 @@
 
             const targetId = `step${index + 1}`;
             const targetSection = document.getElementById(targetId);
+            const content = targetSection.querySelector(".accordion-content");
+            const partCard = targetSection.closest(".part-card");
+            const arrow = targetSection.querySelector("svg") || targetSection;
+            const helpSection = targetSection.nextElementSibling;
 
             if (!targetSection) return;
 
@@ -82,6 +100,15 @@
               yOffset;
 
             window.scrollTo({ top: y, behavior: "smooth" });
+
+            if (content.classList.contains("collapsed")) {
+              content.classList.remove("collapsed");
+              partCard.classList.remove("collapsed");
+              arrow.style.transform = "rotate(0deg)";
+              if (helpSection) {
+                helpSection.classList.remove("collapsed");
+              }
+            }
           });
         });
 
@@ -92,6 +119,10 @@
 
             const targetId = `step${index + 1}`;
             const targetSection = document.getElementById(targetId);
+            const content = targetSection.querySelector(".accordion-content");
+            const partCard = targetSection.closest(".part-card");
+            const arrow = targetSection.querySelector("svg") || targetSection;
+            const helpSection = targetSection.nextElementSibling;
 
             if (!targetSection) return;
 
@@ -103,6 +134,14 @@
               yOffset;
 
             window.scrollTo({ top: y, behavior: "smooth" });
+            if (content.classList.contains("collapsed")) {
+              content.classList.remove("collapsed");
+              partCard.classList.remove("collapsed");
+              arrow.style.transform = "rotate(0deg)";
+              if (helpSection) {
+                helpSection.classList.remove("collapsed");
+              }
+            }
           });
         });
 
@@ -134,6 +173,39 @@
         // expose helpers for console/testing
         window.updateProgress = updateProgress;
         window.markStepCompleted = markStepCompleted;
+
+        function updateTooltip(i) {
+          const status = steps[i]
+            .querySelector(".step-status")
+            .textContent.trim();
+          if (status === "In Progress") {
+            stepLabel.innerHTML = `STEP ${
+              i + 1
+            } <span style="background-color: #eab308">${status}</span>`;
+          } else {
+            stepLabel.innerHTML = `STEP ${i + 1} <span>${status}</span>`;
+          }
+          descLabel.textContent = titles[i];
+        }
+
+        bars.forEach((bar, i) => {
+          bar.addEventListener("mouseenter", () => {
+            updateTooltip(i);
+
+            const r = bar.getBoundingClientRect();
+            tooltip.style.display = "block";
+            tooltip.style.top = r.bottom + window.scrollY + 14 + "px";
+            tooltip.style.left =
+              r.left + window.scrollX + r.width / 2 - 130 + "px";
+          });
+
+          bar.addEventListener("mouseleave", () => {
+            tooltip.style.display = "none";
+          });
+        });
+
+        // Lightweight hook to refresh after status change
+        window.refreshTooltip = updateTooltip;
       });
 
       function toggleAccordion(button) {
@@ -281,6 +353,8 @@
         leftStatus.classList.remove("not-started");
         leftStatus.classList.add("in-progress");
 
+        refreshTooltip(stepIndex - 1);
+
         // Update header step badge
         const headerBadge = section.querySelector(".step-status");
         headerBadge.textContent = "In Progress";
@@ -298,10 +372,6 @@
         const progressBars = document.querySelectorAll(
           ".progress-container .progress-bar"
         );
-        const stepTitle = leftStep
-          .querySelector(".step-title")
-          .textContent.trim();
-        progressBars[stepIndex - 1].title = `${stepTitle} - In Progress`;
 
         // Change onclick to show snackbar
         button.onclick = function () {
@@ -485,7 +555,7 @@
       .collapse-toggle {
         position: absolute;
         right: 40px;
-        top: 40px;
+        top: 50px;
         background: none;
         border: none;
         cursor: pointer;
@@ -495,7 +565,7 @@
         transition: transform 0.3s ease, top 0.3s ease;
       }
       .header.collapsed .collapse-toggle {
-        top: 24px;
+        top: 36px;
       }
       .collapse-toggle:hover {
         color: #1a202c;
@@ -556,7 +626,7 @@
       .progress-bar-fill {
         width: 33%;
         height: 100%;
-        background: #058746;
+        background: #eab308;
         transition: width 0.3s ease;
       }
       .progress-percent {
@@ -1143,43 +1213,117 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.45);
+        background: rgba(0, 0, 0, 0.35);
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 2000;
       }
+
       .modal-box {
-        background: white;
-        width: 360px;
-        padding: 22px;
+        width: 660px;
+        background: #ffffff;
         border-radius: 12px;
-        text-align: center;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        font-family: "Inter", sans-serif;
+        overflow: hidden;
       }
+
+      /* Header (light blue, same as screenshot) */
       .modal-title {
-        font-size: 20px;
-        font-weight: 600;
-        margin-bottom: 8px;
+        background: #e8f2ff;
+        padding: 20px 24px;
+        font-size: 22px;
+        font-weight: 700;
+        color: #1a1a1a;
+        text-align: left;
+        border-bottom: 1px solid #d7e3f3;
+        margin: 0;
       }
+
+      /* Body text */
       .modal-text {
+        padding: 20px 24px;
         font-size: 15px;
-        color: #444;
-        margin-bottom: 20px;
+        color: #4a4a4a;
+        line-height: 1.55;
+        text-align: left;
+        margin: 0;
+        border-bottom: 1px solid #d7e3f3;
       }
+
+      /* Footer */
       .modal-actions {
+        padding: 16px 24px 24px 24px;
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
       }
+
+      /* OK button */
       .modal-ok {
         padding: 10px 28px;
+        background: #2c2c2c;
+        color: #ffffff;
+        border: none;
         border-radius: 6px;
         font-size: 15px;
-        background: #2c2c2c;
-        color: white;
+        font-weight: 500;
         cursor: pointer;
-        border: none;
       }
+
+      .modal-ok:hover {
+        background: #1a1a1a;
+      }
+
+      .tooltip-box-global {
+        position: absolute;
+        width: 260px;
+        background: #edf6ff;
+        border-radius: 8px;
+        padding: 18px 20px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+        display: none;
+        z-index: 5000;
+        font-family: "Inter", sans-serif;
+        pointer-events: none;
+      }
+
+      .tooltip-arrow-global {
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 11px solid transparent;
+        border-right: 11px solid transparent;
+        border-bottom: 11px solid #edf6ff;
+      }
+
+      .tooltip-step-text {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+      }
+
+      .tooltip-step-text span {
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        padding: 3px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-left: 10px;
+      }
+
+      .tooltip-desc-text {
+        font-size: 14px;
+        color: #374151;
+        margin-top: 4px;
+        line-height: 1.4;
+      }
+
       @keyframes fadein {
         from {
           bottom: 0;
@@ -1290,26 +1434,17 @@
         <div class="progress-header">
           <p class="progress-label">Steps (3)</p>
           <div class="progress-container">
-            <div
-              class="progress-bar"
-              title="Quotable Connections - Not Started"
-            >
+            <div class="progress-bar">
               <div
                 class="progress-bar-fill"
                 id="progressFill"
                 style="width: 0%"
               ></div>
             </div>
-            <div
-              class="progress-bar"
-              title="American Reception for Othello in the 19th and 20th Century - Not Started"
-            >
+            <div class="progress-bar">
               <div class="progress-bar-fill" style="width: 0%"></div>
             </div>
-            <div
-              class="progress-bar"
-              title="Primary Source Analysis - Not Started"
-            >
+            <div class="progress-bar">
               <div class="progress-bar-fill" style="width: 0%"></div>
             </div>
           </div>
@@ -1345,9 +1480,15 @@
         class="accordion-arrow collapse-toggle collapsed"
         id="collapseToggle"
         aria-label="Toggle header"
-        style="cursor: pointer; padding: 8px; margin-top: 32px"
+        style="
+          cursor: pointer;
+          padding: 8px;
+          background-color: #fff9f9;
+          border: 1px solid #e2e8f0;
+          border-radius: 5px;
+        "
         onmouseenter="style.backgroundColor = '#E2E8F0'"
-        onmouseleave="style.backgroundColor = 'transparent'"
+        onmouseleave="style.backgroundColor = '#fff9f9'"
       >
         <svg
           width="24px"
@@ -1985,15 +2126,25 @@
           </svg>
         </button>
       </div>
+      <div id="stepTooltip" class="tooltip-box-global">
+        <div class="tooltip-arrow-global"></div>
+        <p id="ttStep" class="tooltip-step-text"></p>
+        <p id="ttDesc" class="tooltip-desc-text"></p>
+      </div>
     </main>
     <div id="beginModal" class="modal-overlay" style="display: none">
       <div class="modal-box">
         <h3 class="modal-title">Ready to Start!</h3>
+
         <p class="modal-text">
-          The response areas for "Step #1: Quotable Connections" are now active.
+          The response areas for <b>Step #1: Quotable Connections</b> are now
+          active.
+          <br />
+          <br />
           Go ahead and type your answers. Everything saves automatically, so you
           can take a break anytime and come back later.
         </p>
+
         <div class="modal-actions">
           <button class="modal-ok">OK</button>
         </div>
