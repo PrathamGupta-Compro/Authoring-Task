@@ -21,11 +21,19 @@
            const collapseToggle = document.getElementById("collapseToggle");
            const expandableContent = document.getElementById("expandableContent");
            const stepElements = document.querySelectorAll(".steps-list .step");
+           const progressBars = document.querySelectorAll(".progress-container .progress-bar");
            let isHeaderCollapsed = false;
            let scrolled = false;
          
            const onScroll = () => { 
              const scrollPosition = window.scrollY || document.documentElement.scrollTop; 
+
+             if (!isHeaderCollapsed && scrollPosition > header.offsetHeight) {
+               header.classList.add("collapsed");
+               collapseToggle.classList.add("collapsed");
+               if (expandableContent) expandableContent.classList.add("hidden");
+               isHeaderCollapsed = true;
+             }
              if (scrollPosition > 160 && isHeaderCollapsed) { 
                header.classList.add("scrolled"); 
                collapseToggle.classList.add("scrolled"); 
@@ -69,6 +77,24 @@
            const y = targetSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
          
            window.scrollTo({ top: y, behavior: "smooth" });
+         });
+         });
+         
+         progressBars.forEach((bar, index) => {
+         bar.addEventListener("click", (event) => {
+         // stop header expand click
+         event.stopPropagation();
+         
+         const targetId = `step${index + 1}`;
+         const targetSection = document.getElementById(targetId);
+         
+         if (!targetSection) return;
+         
+         // smooth scroll - adjust for sticky header height
+         const yOffset = -120;
+         const y = targetSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+         
+         window.scrollTo({ top: y, behavior: "smooth" });
          });
          });
          
@@ -207,7 +233,7 @@
          
          // Reset if already visible
          bar.classList.remove("show");
-         void bar.offsetWidth; // reflow hack to restart animation
+         void bar.offsetWidth;
          
          bar.classList.add("show");
          
@@ -232,12 +258,13 @@
          
          // Enable textareas
          textareas.forEach(t => {
+         t.readOnly = false;
          t.style.background = "#ffffff";
          t.placeholder = "Please add your response here.";
          t.style.cursor = "auto";
          });
          
-         // Update small step box in the step panel
+         // Update left step status
          const stepCard = section.closest(".part-card");
          const stepIndex = stepCard.id.replace("step", "");
          const leftStep = document.querySelectorAll(".steps-list .step")[stepIndex - 1];
@@ -247,7 +274,7 @@
          leftStatus.classList.remove("not-started");
          leftStatus.classList.add("in-progress");
          
-         // Update step header badge
+         // Update header step badge
          const headerBadge = section.querySelector(".step-status");
          headerBadge.textContent = "In Progress";
          headerBadge.classList.remove("not-started");
@@ -258,15 +285,46 @@
          button.classList.remove("begin-button");
          button.classList.add("submit-button");
          
-         progressFill.style.width="100%";
+         progressFill.style.width = "100%";
+         
+         // Update progress bar title
+         const progressBars = document.querySelectorAll(".progress-container .progress-bar");
+         const stepTitle = leftStep.querySelector(".step-title").textContent.trim();
+         progressBars[stepIndex - 1].title = `${stepTitle} - In Progress`;
          
          // Change onclick to show snackbar
-         button.onclick = function() {
+         button.onclick = function () {
          showSnackbar();
          };
          }
+         let pendingBeginButton = null;
+         
+         function openBeginModal(button) {
+         pendingBeginButton = button;
+         document.getElementById("beginModal").style.display = "flex";
+         }
+         
+         function closeBeginModal() {
+         document.getElementById("beginModal").style.display = "none";
+         }
+         
+         document.addEventListener("DOMContentLoaded", () => {
+         const modal = document.getElementById("beginModal");
+         
+         modal.querySelector(".modal-ok").onclick = () => {
+         if (pendingBeginButton) {
+         beginStep(pendingBeginButton);
+         }
+         closeBeginModal();
+         };
+         });
+         
+         
          
          function textAreaClick(t) {
+            if(!t.readOnly){
+               return;
+            }
          
          const beginBtn = t
           .closest(".part-card")
@@ -487,6 +545,7 @@
          background: #e2e8f0;
          border-radius: 10px;
          overflow: hidden;
+         cursor: pointer;
          }
          .progress-bar-fill {
          width: 33%;
@@ -884,7 +943,6 @@
          .response-area:focus {
          outline: none;
          border-color: #667eea;
-         background: #fafbfc;
          }
          .response-area::placeholder {
          color: #343434;
@@ -1075,6 +1133,49 @@
          .snackbar-close:active {
          background: rgba(255, 255, 255, 0.25);
          }
+         .modal-overlay {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0,0,0,0.45);
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         z-index: 2000;
+         }
+         .modal-box {
+         background: white;
+         width: 360px;
+         padding: 22px;
+         border-radius: 12px;
+         text-align: center;
+         box-shadow: 0 6px 20px rgba(0,0,0,0.20);
+         }
+         .modal-title {
+         font-size: 20px;
+         font-weight: 600;
+         margin-bottom: 8px;
+         }
+         .modal-text {
+         font-size: 15px;
+         color: #444;
+         margin-bottom: 20px;
+         }
+         .modal-actions {
+         display: flex;
+         justify-content: center;
+         }
+         .modal-ok {
+         padding: 10px 28px;
+         border-radius: 6px;
+         font-size: 15px;
+         background: #2c2c2c;
+         color: white;
+         cursor: pointer;
+         border: none;
+         }
          @keyframes fadein {
          from { bottom: 0; opacity: 0; }
          to { bottom: 20px; opacity: 1; }
@@ -1163,17 +1264,17 @@
             <div class="progress-header">
                <p class="progress-label">Steps (3)</p>
                <div class="progress-container">
-                  <div class="progress-bar">
+                  <div class="progress-bar" title="Quotable Connections - Not Started">
                      <div
                         class="progress-bar-fill"
                         id="progressFill"
                         style="width: 0%"
                         ></div>
                   </div>
-                  <div class="progress-bar">
+                  <div class="progress-bar" title="American Reception for Othello in the 19th and 20th Century - Not Started">
                      <div class="progress-bar-fill" style="width: 0%"></div>
                   </div>
-                  <div class="progress-bar">
+                  <div class="progress-bar" title="Primary Source Analysis - Not Started">
                      <div class="progress-bar-fill" style="width: 0%"></div>
                   </div>
                </div>
@@ -1325,7 +1426,7 @@
                               </div>
                            </td>
                            <td class="response-column">
-                              <textarea
+                              <textarea readonly
                                  class="response-area"
                                  onclick="textAreaClick(this)"
                                  placeholder="Click here to Begin and add your response."
@@ -1366,7 +1467,7 @@
                               </div>
                            </td>
                            <td class="response-column">
-                              <textarea
+                              <textarea readonly
                                  class="response-area"
                                  onclick="textAreaClick(this)"
                                  placeholder="Click here to Begin and add your response."
@@ -1409,7 +1510,7 @@
                               </div>
                            </td>
                            <td class="response-column">
-                              <textarea
+                              <textarea readonly
                                  class="response-area"
                                  onclick="textAreaClick(this)"
                                  placeholder="Click here to Begin and add your response."
@@ -1425,7 +1526,7 @@
                            their ideas compliment each other? Explain..
                            </span>
                         </div>
-                        <textarea
+                        <textarea readonly
                            class="response-area"
                            onclick="textAreaClick(this)"
                            placeholder="Click here to Begin and add your response."
@@ -1459,9 +1560,7 @@
                   >
                Request Help
                </button>
-               <button class="begin-button" onclick="beginStep(this)">
-               Begin
-               </button>
+               <button class="begin-button" onclick="openBeginModal(this)">Begin</button>
             </div>
          </section>
          <!-- Part 2 Card -->
@@ -1571,9 +1670,10 @@
                      this idea supported by the text or existing analysis of the
                      text? Explain.</label
                         >
-                     <textarea disabled
+                     <textarea readonly
                         class="response-area"
                         data-index="4"
+                        onclick="showSnackbar()"
                         placeholder="Click here to Begin and add your response."
                         ></textarea>
                   </div>
@@ -1586,9 +1686,10 @@
                      have made audiences more sensitive to viewing this play with a
                      racial lens? Explain.</label
                         >
-                     <textarea disabled
+                     <textarea readonly
                         class="response-area"
                         data-index="5"
+                        onclick="showSnackbar()"
                         placeholder="Click here to Begin and add your response."
                         data-original-placeholder="Identify and explain relevant historical events..."
                         ></textarea>
@@ -1604,9 +1705,10 @@
                      performance be seen as threatening or unlawful at the
                      time?</label
                         >
-                     <textarea disabled
+                     <textarea readonly
                         class="response-area"
                         data-index="6"
+                        onclick="showSnackbar()"
                         placeholder="Click here to Begin and add your response."
                         data-original-placeholder="Explain why this performance was considered threatening..."
                         ></textarea>
@@ -1618,9 +1720,10 @@
                      Othello say about the audience and time period in which he
                      performed?</label
                         >
-                     <textarea disabled
+                     <textarea readonly
                         class="response-area"
                         data-index="7"
+                        onclick="showSnackbar()"
                         placeholder="Click here to Begin and add your response."
                         data-original-placeholder="Analyze what Robeson&#39;s popularity reveals about the era..."
                         ></textarea>
@@ -1760,9 +1863,10 @@
                         >What is DuBois' purpose in writing Robeson and what is his
                      tone?</label
                         >
-                     <textarea disabled
+                     <textarea readonly
                         class="response-area"
                         data-index="8"
+                        onclick="showSnackbar()"
                         placeholder="Click here to Begin and add your response."
                         data-original-placeholder="Identify DuBois&#39; purpose and describe his tone in the letter..."
                         ></textarea>
@@ -1773,9 +1877,10 @@
                         >How do we know what DuBois feels about Robeson and his work?
                      Explain.</label
                         >
-                     <textarea disabled
+                     <textarea readonly
                         class="response-area"
                         data-index="9"
+                        onclick="showSnackbar()"
                         placeholder="Click here to Begin and add your response."
                         data-original-placeholder="Explain what evidence reveals DuBois&#39; feelings..."
                         ></textarea>
@@ -1786,9 +1891,10 @@
                         >What makes Robeson's work during this time period significant
                      to DuBois? Explain.</label
                         >
-                     <textarea disabled
+                     <textarea readonly
                         class="response-area"
                         data-index="10"
+                        onclick="showSnackbar()"
                         placeholder="Click here to Begin and add your response."
                         data-original-placeholder="Analyze the significance of Robeson&#39;s work to DuBois..."
                         ></textarea>
@@ -1835,5 +1941,14 @@
             </button>
          </div>
       </main>
+      <div id="beginModal" class="modal-overlay" style="display:none;">
+         <div class="modal-box">
+            <h3 class="modal-title">Starting Step</h3>
+            <p class="modal-text">You are now beginning this step.</p>
+            <div class="modal-actions">
+               <button class="modal-ok">OK</button>
+            </div>
+         </div>
+      </div>
    </body>
 </html>
