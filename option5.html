@@ -206,6 +206,63 @@
 
         // Lightweight hook to refresh after status change
         window.refreshTooltip = updateTooltip;
+
+        const headerTags = document.querySelectorAll(".header .tags li");
+        const tooltipBox = document.getElementById("stepTooltip");
+        const ttStep = document.getElementById("ttStep");
+        const ttDesc = document.getElementById("ttDesc");
+        const objectivesList = document
+          .querySelector(".objectives-list")
+          .innerText.trim();
+
+        const essentialQuestions = [
+          ...document.querySelectorAll(".questions-list li"),
+        ]
+          .map((li) => "• " + li.innerText.trim())
+          .join("\n");
+
+        const competenciesList = [
+          ...document.querySelectorAll("[class='objectives-list'] li"),
+        ]
+          .filter(
+            (li) =>
+              li.innerText.trim() === "Think Critically" ||
+              li.innerText.trim() === "Communicate"
+          )
+          .map((li) => "• " + li.innerText.trim())
+          .join("\n");
+
+        const tagTooltipContent = {
+          0: { title: "Competencies", text: competenciesList },
+          1: { title: "Objectives", text: objectivesList },
+          2: { title: "Essential Questions", text: essentialQuestions },
+        };
+
+        headerTags.forEach((tag, index) => {
+          tag.addEventListener("mouseenter", () => {
+            const { title, text } = tagTooltipContent[index];
+
+            ttStep.innerHTML = title;
+            ttDesc.innerText = text;
+
+            const r = tag.getBoundingClientRect();
+            if (title == "Competencies") {
+              tooltipBox.style.width = "180px";
+              tooltipBox.style.left =
+                r.left + window.scrollX + r.width / 2 - 90 + "px";
+            } else {
+              tooltipBox.style.width = "400px";
+              tooltipBox.style.left =
+                r.left + window.scrollX + r.width / 2 - 200 + "px";
+            }
+            tooltipBox.style.display = "block";
+            tooltipBox.style.top = r.bottom + window.scrollY + 12 + "px";
+          });
+
+          tag.addEventListener("mouseleave", () => {
+            tooltipBox.style.display = "none";
+          });
+        });
       });
 
       function toggleAccordion(button) {
@@ -486,10 +543,14 @@
         margin-bottom: 0;
         transform: translateY(-2px);
       }
-      .tags {
+      .header .tags {
+        display: none;
+      }
+      .header.collapsed .tags {
         display: flex;
         gap: 12px;
         margin-bottom: 20px;
+        cursor: default;
       }
       .tag {
         display: flex;
@@ -628,6 +689,12 @@
         height: 100%;
         background: #eab308;
         transition: width 0.3s ease;
+      }
+      .progress-bar:hover {
+        background-color: #c1c6cf;
+      }
+      .progress-bar-fill:hover {
+        background-color: #d3a313;
       }
       .progress-percent {
         font-size: 16px;
@@ -951,11 +1018,10 @@
         padding: 0px 24px;
       }
       .author-info {
-        margin-top: 16px;
+        margin-top: 24px;
         display: flex;
         align-items: center;
         gap: 8px;
-        margin-left: auto;
       }
       .author-portrait {
         width: 60px;
@@ -1374,59 +1440,76 @@
             class="step-status not-started"
             style="background-color: #e7e7e7; color: #343434"
           >
-            Think Critically
+            Competencies (2)
           </li>
           <li
             class="step-status not-started"
             style="background-color: #e7e7e7; color: #343434"
           >
-            Communicate
+            Objectives (1)
+          </li>
+          <li
+            class="step-status not-started"
+            style="background-color: #e7e7e7; color: #343434"
+          >
+            Essential Questions (8)
           </li>
         </ul>
         <div class="expandable-content" id="expandableContent">
-          <div>
-            <h3 class="section-heading">Objectives</h3>
-            <ul class="objectives-list">
-              <li>
-                In this task you will use your prior knowledge of the Harlem
-                Renaissance and Shakespearean tragedy, and your analysis of
-                primary and secondary sources, to make connections between
-                Othello and the writings of W.E.B. DuBois and Ralph Ellison. You
-                will draw insights that will allow you to answer the essential
-                questions for this unit.
-              </li>
-            </ul>
-            <h3 class="section-heading">Essential Questions (8)</h3>
-            <ul class="questions-list">
-              <li>
-                What are the sources of political and cultural differences in
-                the modern United States?
-              </li>
-              <li>
-                How did the United States respond to new ideas about society?
-              </li>
-              <li>
-                How can I draw connections between different subjects to deepen
-                my understanding?
-              </li>
-              <li>What enduring issues can be seen reflected in literature?</li>
-              <li>
-                How much does the author's intent matter when interpreting
-                literature for a modern audience?
-              </li>
-              <li>
-                Why is Othello relevant when discussing the Harlem Renaissance
-                era?
-              </li>
-              <li>
-                What thematic parallels can be drawn between Othello and
-                Invisible Man by Ralph Ellison?
-              </li>
-              <li>
-                How do historical reactions to performances of Othello in
-                America show Du Bois' idea of Double Consciousness?
-              </li>
-            </ul>
+          <div style="display: flex; gap: 64px">
+            <div>
+              <h3 class="section-heading">Objectives</h3>
+              <ul class="objectives-list">
+                <li>
+                  In this task you will use your prior knowledge of the Harlem
+                  Renaissance and Shakespearean tragedy, and your analysis of
+                  primary and secondary sources, to make connections between
+                  Othello and the writings of W.E.B. DuBois and Ralph Ellison.
+                  You will draw insights that will allow you to answer the
+                  essential questions for this unit.
+                </li>
+              </ul>
+              <h3 class="section-heading">Essential Questions (8)</h3>
+              <ul class="questions-list">
+                <li>
+                  What are the sources of political and cultural differences in
+                  the modern United States?
+                </li>
+                <li>
+                  How did the United States respond to new ideas about society?
+                </li>
+                <li>
+                  How can I draw connections between different subjects to
+                  deepen my understanding?
+                </li>
+                <li>
+                  What enduring issues can be seen reflected in literature?
+                </li>
+                <li>
+                  How much does the author's intent matter when interpreting
+                  literature for a modern audience?
+                </li>
+                <li>
+                  Why is Othello relevant when discussing the Harlem Renaissance
+                  era?
+                </li>
+                <li>
+                  What thematic parallels can be drawn between Othello and
+                  Invisible Man by Ralph Ellison?
+                </li>
+                <li>
+                  How do historical reactions to performances of Othello in
+                  America show Du Bois' idea of Double Consciousness?
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="section-heading">Competencies</h3>
+              <ul class="objectives-list">
+                <li style="white-space: nowrap">Think Critically</li>
+                <li style="white-space: nowrap">Communicate</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -1477,7 +1560,7 @@
         </div>
       </section>
       <div
-        class="accordion-arrow collapse-toggle collapsed"
+        class="accordion-arrow collapse-toggle"
         id="collapseToggle"
         aria-label="Toggle header"
         style="
@@ -1592,8 +1675,8 @@
                         class="author-portrait"
                       />
                       <div class="author-details">
-                        <h4>W.E.B. DuBois</h4>
                         <div class="work-title">The Souls of Black Folk</div>
+                        <h4>W.E.B. DuBois</h4>
                       </div>
                     </div>
                   </td>
@@ -1632,8 +1715,8 @@
                         class="author-portrait"
                       />
                       <div class="author-details">
-                        <h4>Ralph Ellison</h4>
                         <div class="work-title">Invisible Man</div>
+                        <h4>Ralph Ellison</h4>
                       </div>
                     </div>
                   </td>
@@ -1674,8 +1757,8 @@
                         class="author-portrait"
                       />
                       <div class="author-details">
-                        <h4>William Shakespeare</h4>
                         <div class="work-title">Othello</div>
+                        <h4>William Shakespeare</h4>
                       </div>
                     </div>
                   </td>
