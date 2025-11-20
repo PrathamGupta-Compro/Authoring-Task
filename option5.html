@@ -16,56 +16,180 @@
       rel="stylesheet"
     />
     <script>
+      // Helper function to update the status and progress bar for a single step in all relevant places
+      function updateStepState(stepIndex, status, progressPercentage) {
+        const stepNumber = stepIndex + 1; // 1-indexed
+        const statusClass = status.toLowerCase().replace(" ", "-");
+
+        // === 1. Update Main Steps List Status (Left sidebar) ===
+        const leftStep =
+          document.querySelectorAll(".steps-list .step")[stepIndex];
+        if (leftStep) {
+          const leftStatus = leftStep.querySelector(".step-status");
+          leftStatus.textContent = status;
+          leftStatus.className = `step-status ${statusClass}`;
+
+          // Also update the step number indicator for 'Completed'
+          const stepNumberElement = leftStep.querySelector(".step-number");
+          if (stepNumberElement) {
+            stepNumberElement.classList.toggle(
+              "completed",
+              status === "Completed"
+            );
+          }
+        }
+
+        // === 2. Update Main Accordion Header Status ===
+        const stepCard = document.getElementById(`step${stepNumber}`);
+        if (stepCard) {
+          const headerBadge = stepCard.querySelector(
+            ".accordion-header .step-status"
+          );
+          if (headerBadge) {
+            headerBadge.textContent = status;
+            headerBadge.className = `step-status ${statusClass}`;
+          }
+        }
+
+        // === 3. Update Progress Bar Fills (Main Header) ===
+        const mainProgressFills = document.querySelectorAll(
+          "#header .progress-container .progress-bar-fill"
+        );
+        if (mainProgressFills[stepIndex]) {
+          mainProgressFills[stepIndex].style.width = progressPercentage + "%";
+        }
+
+        // === 4. Update Progress Bar Fills (Scrolled Header) - SYNCHRONIZATION POINT ===
+        const scrolledProgressFills = document.querySelectorAll(
+          "#scrolledHeader .progress-container .progress-bar-fill"
+        );
+        if (scrolledProgressFills[stepIndex]) {
+          scrolledProgressFills[stepIndex].style.width =
+            progressPercentage + "%";
+        }
+
+        // Optional: Refresh the tooltip if it's visible for the current step
+        if (window.refreshTooltip) {
+          window.refreshTooltip(stepIndex);
+        }
+      }
+
+      // Function to handle the 'Begin' action
+      function beginStep(button) {
+        const section = button.closest(".help-section").previousElementSibling;
+        const textareas = section.querySelectorAll("textarea.response-area");
+
+        const stepCard = section.closest(".part-card");
+        const stepIndex = parseInt(stepCard.id.replace("step", "")) - 1; // 0-indexed
+
+        // 1. Enable textareas
+        textareas.forEach((t) => {
+          t.readOnly = false;
+          t.style.background = "#ffffff";
+          t.placeholder = "Please add your response here.";
+          t.style.cursor = "auto";
+        });
+
+        // 2. Update step status to 'In Progress' and fill the corresponding progress bar
+        updateStepState(stepIndex, "In Progress", 100);
+
+        // 3. Change 'Begin' → 'Submit'
+        button.textContent = "Submit";
+        button.classList.remove("begin-button");
+        button.classList.add("submit-button");
+
+        // 4. Change onclick to show snackbar
+        button.onclick = function () {
+          showSnackbar();
+        };
+      }
+
+      // Function to handle manually completing a step
+      function markStepCompleted(stepIndex) {
+        updateStepState(stepIndex, "Completed", 100);
+      }
+
+      // Exposed helper functions
+      window.markStepCompleted = markStepCompleted;
+      window.beginStep = beginStep;
+
+      // --- DOMContentLoaded Initialization ---
       document.addEventListener("DOMContentLoaded", function () {
         const header = document.getElementById("header");
         const collapseToggle = document.getElementById("collapseToggle");
         const expandableContent = document.getElementById("expandableContent");
         const stepElements = document.querySelectorAll(".steps-list .step");
-        const progressBars = document.querySelectorAll(
-          ".progress-container .progress-bar"
+
+        // Progress bars for Main Header (for click/tooltip)
+        const mainProgressBars = document.querySelectorAll(
+          "#header .progress-container .progress-bar"
         );
+        // Progress bars for Scrolled Header (NEW)
+        const scrolledProgressBars = document.querySelectorAll(
+          "#scrolledHeader .progress-container .progress-bar"
+        );
+
         const tooltip = document.getElementById("stepTooltip");
         const stepLabel = document.getElementById("ttStep");
         const descLabel = document.getElementById("ttDesc");
 
         const steps = document.querySelectorAll(".steps-list .step");
-        const bars = document.querySelectorAll(
-          ".progress-container .progress-bar"
-        );
 
         const titles = [
           "Quotable Connections",
           "American Reception for Othello in the 19th and 20th Century",
           "Primary Source Analysis",
         ];
-        let isHeaderCollapsed = false;
-        let scrolled = false;
+
+        const scrolledHeader = document.getElementById("scrolledHeader");
+        const mainTitle = document.querySelector("#header .main-title");
+        const scrolledHeaderTitle = document.getElementById(
+          "scrolledHeaderTitle"
+        );
+
+        // Synchronize static title on load
+        if (scrolledHeaderTitle && mainTitle) {
+          scrolledHeaderTitle.textContent = mainTitle.textContent;
+        }
 
         const onScroll = () => {
-          const scrollPosition =
-            window.scrollY || document.documentElement.scrollTop;
+          const scrollY = window.scrollY;
 
-          if (!isHeaderCollapsed && scrollPosition > header.offsetHeight) {
-            header.classList.add("collapsed");
-            collapseToggle.classList.add("collapsed");
-            if (expandableContent) expandableContent.classList.add("hidden");
-            isHeaderCollapsed = true;
-          }
-          if (scrollPosition > 160 && isHeaderCollapsed) {
-            header.classList.add("scrolled");
-            collapseToggle.classList.add("scrolled");
-            scrolled = true;
-          } else if (scrollPosition <= 80 && isHeaderCollapsed) {
-            header.classList.remove("scrolled");
-            collapseToggle.classList.remove("scrolled");
-            scrolled = false;
+          const shouldShowScrolledHeader =
+            (!header.classList.contains("collapsed") &&
+              scrollY > header.offsetHeight) ||
+            (header.classList.contains("collapsed") && scrollY > 140);
+
+          if (shouldShowScrolledHeader) {
+            scrolledHeader.style.display = "flex";
+            scrolledHeader.style.justifyContent = "space-between";
+            header.style.visibility = "hidden";
+          } else {
+            scrolledHeader.style.display = "none";
+            header.style.visibility = "visible";
           }
         };
+
+        scrolledHeader.addEventListener("click", () => {
+          // 1. Scroll page to the very top
+          window.scrollTo({ top: 0, behavior: "smooth" });
+
+          // 2. Expand main header
+          header.classList.remove("collapsed");
+          collapseToggle.classList.remove("collapsed");
+          expandableContent.classList.remove("hidden");
+
+          // 3. Hide scrolled header
+          scrolledHeader.style.display = "none";
+
+          // 4. Restore main header visibility
+          header.style.visibility = "visible";
+        });
 
         window.addEventListener("scroll", onScroll);
 
         header.addEventListener("click", () => {
-          if (scrolled) return;
+          if (scrolledHeader.style.display === "flex") return;
 
           const isCollapsed = header.classList.toggle("collapsed");
           collapseToggle.classList.toggle("collapsed", isCollapsed);
@@ -73,124 +197,82 @@
           if (expandableContent)
             expandableContent.classList.toggle("hidden", isCollapsed);
 
-          isHeaderCollapsed = !isHeaderCollapsed;
+          // isHeaderCollapsed is implicitly managed by the 'collapsed' class
         });
 
-        // STEP CLICK TO SCROLL
+        // Helper function for scrolling to a step and expanding its accordion
+        function scrollToStep(index) {
+          const targetId = `step${index + 1}`;
+          const targetSection = document.getElementById(targetId);
+          const content = targetSection.querySelector(".accordion-content");
+          const partCard = targetSection.closest(".part-card");
+          const arrow = targetSection.querySelector("svg") || targetSection;
+          const helpSection = targetSection.nextElementSibling;
 
+          if (!targetSection) return;
+
+          // smooth scroll - adjust for sticky header height
+          const yOffset = -120;
+          const y =
+            targetSection.getBoundingClientRect().top +
+            window.pageYOffset +
+            yOffset;
+
+          window.scrollTo({ top: y, behavior: "smooth" });
+
+          // Also ensure the accordion for the step is expanded
+          if (content.classList.contains("collapsed")) {
+            content.classList.remove("collapsed");
+            partCard.classList.remove("collapsed");
+            arrow.style.transform = "rotate(0deg)";
+            if (helpSection) {
+              helpSection.classList.remove("collapsed");
+            }
+          }
+        }
+
+        // Attaches scroll-on-click logic to the steps list on the left
         stepElements.forEach((step, index) => {
           step.addEventListener("click", (event) => {
-            // stop header expand click
             event.stopPropagation();
-
-            const targetId = `step${index + 1}`;
-            const targetSection = document.getElementById(targetId);
-            const content = targetSection.querySelector(".accordion-content");
-            const partCard = targetSection.closest(".part-card");
-            const arrow = targetSection.querySelector("svg") || targetSection;
-            const helpSection = targetSection.nextElementSibling;
-
-            if (!targetSection) return;
-
-            // smooth scroll - adjust for sticky header height
-            const yOffset = -120;
-            const y =
-              targetSection.getBoundingClientRect().top +
-              window.pageYOffset +
-              yOffset;
-
-            window.scrollTo({ top: y, behavior: "smooth" });
-
-            if (content.classList.contains("collapsed")) {
-              content.classList.remove("collapsed");
-              partCard.classList.remove("collapsed");
-              arrow.style.transform = "rotate(0deg)";
-              if (helpSection) {
-                helpSection.classList.remove("collapsed");
-              }
-            }
+            scrollToStep(index);
           });
         });
 
-        progressBars.forEach((bar, index) => {
-          bar.addEventListener("click", (event) => {
-            // stop header expand click
-            event.stopPropagation();
-
-            const targetId = `step${index + 1}`;
-            const targetSection = document.getElementById(targetId);
-            const content = targetSection.querySelector(".accordion-content");
-            const partCard = targetSection.closest(".part-card");
-            const arrow = targetSection.querySelector("svg") || targetSection;
-            const helpSection = targetSection.nextElementSibling;
-
-            if (!targetSection) return;
-
-            // smooth scroll - adjust for sticky header height
-            const yOffset = -120;
-            const y =
-              targetSection.getBoundingClientRect().top +
-              window.pageYOffset +
-              yOffset;
-
-            window.scrollTo({ top: y, behavior: "smooth" });
-            if (content.classList.contains("collapsed")) {
-              content.classList.remove("collapsed");
-              partCard.classList.remove("collapsed");
-              arrow.style.transform = "rotate(0deg)";
-              if (helpSection) {
-                helpSection.classList.remove("collapsed");
-              }
-            }
-          });
-        });
-
-        // Example: Update progress dynamically
-        function updateProgress(percentage) {
-          const progressFill = document.getElementById("progressFill");
-          const progressPercent = document.getElementById("progressPercent");
-          if (progressFill) progressFill.style.width = percentage + "%";
-          if (progressPercent) progressPercent.textContent = percentage + "%";
-        }
-
-        // Example: Mark a step as completed
-        function markStepCompleted(stepIndex) {
-          const steps = document.querySelectorAll(".step");
-          const step = steps[stepIndex];
-          if (!step) return;
-          const stepNumber = step.querySelector(".step-number");
-          const stepStatus = step.querySelector(".step-status");
-          if (stepNumber) {
-            stepNumber.classList.remove("active");
-            stepNumber.classList.add("completed");
-          }
-          if (stepStatus) {
-            stepStatus.textContent = "Completed";
-            stepStatus.classList.remove("not-started", "in-progress");
-            stepStatus.classList.add("completed");
-          }
-        }
-        // expose helpers for console/testing
-        window.updateProgress = updateProgress;
-        window.markStepCompleted = markStepCompleted;
-
+        // Tooltip logic
         function updateTooltip(i) {
           const status = steps[i]
             .querySelector(".step-status")
             .textContent.trim();
-          if (status === "In Progress") {
-            stepLabel.innerHTML = `STEP ${
-              i + 1
-            } <span style="background-color: #eab308">${status}</span>`;
+
+          // Check for progress status to set color
+          const statusText = status;
+          let statusStyle = "";
+          if (statusText === "In Progress") {
+            statusStyle = `style="background-color: #eab308"`;
+          } else if (statusText === "Completed") {
+            statusStyle = `style="background-color: #10b981"`;
           } else {
-            stepLabel.innerHTML = `STEP ${i + 1} <span>${status}</span>`;
+            statusStyle = `style="background-color: #fff"`;
           }
+
+          stepLabel.innerHTML = `STEP ${
+            i + 1
+          } <span ${statusStyle}>${statusText}</span>`;
           descLabel.textContent = titles[i];
         }
 
-        bars.forEach((bar, i) => {
+        // Helper function to set up both click (scroll) and hover (tooltip) events
+        function setupProgressBarEvents(bar, index) {
+          // 1. Scroll-on-click (FIXED: Uses 'index' passed into this function)
+          bar.addEventListener("click", (event) => {
+            event.stopPropagation();
+            scrollToStep(index);
+          });
+
+          // 2. Tooltip on hover (mouseenter)
           bar.addEventListener("mouseenter", () => {
-            updateTooltip(i);
+            updateTooltip(index);
 
             const r = bar.getBoundingClientRect();
             tooltip.style.display = "block";
@@ -199,21 +281,37 @@
               r.left + window.scrollX + r.width / 2 - 130 + "px";
           });
 
+          // 3. Tooltip on hover (mouseleave)
           bar.addEventListener("mouseleave", () => {
             tooltip.style.display = "none";
           });
+        }
+
+        // APPLY EVENTS TO MAIN HEADER BARS
+        mainProgressBars.forEach((bar, i) => {
+          setupProgressBarEvents(bar, i);
+        });
+
+        // APPLY EVENTS TO SCROLLED HEADER BARS
+        scrolledProgressBars.forEach((bar, i) => {
+          setupProgressBarEvents(bar, i);
         });
 
         // Lightweight hook to refresh after status change
         window.refreshTooltip = updateTooltip;
 
+        // ... [Rest of the existing DOMContentLoaded code for tags/tooltips] ...
         const headerTags = document.querySelectorAll(".header .tags li");
         const tooltipBox = document.getElementById("stepTooltip");
         const ttStep = document.getElementById("ttStep");
         const ttDesc = document.getElementById("ttDesc");
-        const objectivesList = document
-          .querySelector(".objectives-list")
-          .innerText.trim();
+
+        // Safety check: ensure these elements exist before trying to get their content
+        const objectivesListElement =
+          document.querySelector(".objectives-list");
+        const objectivesList = objectivesListElement
+          ? objectivesListElement.innerText.trim()
+          : "";
 
         const essentialQuestions = [
           ...document.querySelectorAll(".questions-list li"),
@@ -264,7 +362,15 @@
             tooltipBox.style.width = "260px";
           });
         });
+
+        // Initializing status messages is still valid
+        updateStatusMessage(1, "not-started");
+        updateStatusMessage(2, "not-started");
+        updateStatusMessage(3, "not-started");
       });
+      // --- End DOMContentLoaded Initialization ---
+
+      // The rest of the global functions
 
       function toggleAccordion(button) {
         const partCard = button.closest(".part-card");
@@ -289,33 +395,24 @@
         }
       }
 
+      // Function maintained for completeness, but not used for per-step logic
       function updateProgressBar() {
         const totalSteps = 3;
         let completedSteps = 0;
 
-        // Count completed steps
         for (let i = 1; i <= totalSteps; i++) {
-          const status = document.getElementById(`step${i}Status`);
-          if (status && status.textContent === "In Progress") {
+          const stepElement =
+            document.querySelectorAll(".steps-list .step")[i - 1];
+          const status = stepElement
+            ? stepElement.querySelector(".step-status").textContent.trim()
+            : "";
+          if (status === "Completed") {
             completedSteps++;
           }
         }
-
-        // Update progress bar
-        const progressPercent = (completedSteps / totalSteps) * 100;
-        const progressBar = document.querySelector(".progress-bar-fill");
-        const progressPercentText = document.querySelector(".progress-percent");
-
-        if (progressBar) {
-          progressBar.style.width = `${progressPercent}%`;
-        }
-        if (progressPercentText) {
-          progressPercentText.textContent = `${Math.round(progressPercent)}%`;
-        }
       }
 
-      // Initialize the page
-      // Status messages for different states
+      // Status messages and message update functions (no changes)
       const statusMessages = {
         "not-started": {
           text: "This activity has not been started yet. Click Begin to get started.",
@@ -337,7 +434,6 @@
         },
       };
 
-      // Function to update status message
       function updateStatusMessage(sectionId, status) {
         const messageElement = document.getElementById(
           `statusMessage${sectionId}`
@@ -356,18 +452,10 @@
            `;
       }
 
-      // Initialize status messages
-      document.addEventListener("DOMContentLoaded", function () {
-        // Set initial status for all sections
-        updateStatusMessage(1, "not-started");
-        updateStatusMessage(2, "not-started");
-        updateStatusMessage(3, "not-started");
-      });
-
+      // Snackbar functions (no changes)
       function showSnackbar() {
         const bar = document.getElementById("snackbar");
 
-        // Reset if already visible
         bar.classList.remove("show");
         void bar.offsetWidth;
 
@@ -375,7 +463,6 @@
 
         bar.focus();
 
-        // Auto close after 3 seconds
         bar.autoCloseTimeout = setTimeout(() => {
           bar.classList.remove("show");
         }, 5000);
@@ -387,55 +474,7 @@
         clearTimeout(bar.autoCloseTimeout);
       }
 
-      function beginStep(button) {
-        const section = button.closest(".help-section").previousElementSibling;
-        const textareas = section.querySelectorAll("textarea.response-area");
-        const progressBar = document.getElementById("progressFill");
-
-        // Enable textareas
-        textareas.forEach((t) => {
-          t.readOnly = false;
-          t.style.background = "#ffffff";
-          t.placeholder = "Please add your response here.";
-          t.style.cursor = "auto";
-        });
-
-        // Update left step status
-        const stepCard = section.closest(".part-card");
-        const stepIndex = stepCard.id.replace("step", "");
-        const leftStep =
-          document.querySelectorAll(".steps-list .step")[stepIndex - 1];
-
-        const leftStatus = leftStep.querySelector(".step-status");
-        leftStatus.textContent = "In Progress";
-        leftStatus.classList.remove("not-started");
-        leftStatus.classList.add("in-progress");
-
-        refreshTooltip(stepIndex - 1);
-
-        // Update header step badge
-        const headerBadge = section.querySelector(".step-status");
-        headerBadge.textContent = "In Progress";
-        headerBadge.classList.remove("not-started");
-        headerBadge.classList.add("in-progress");
-
-        // Change Begin → Submit
-        button.textContent = "Submit";
-        button.classList.remove("begin-button");
-        button.classList.add("submit-button");
-
-        progressFill.style.width = "100%";
-
-        // Update progress bar title
-        const progressBars = document.querySelectorAll(
-          ".progress-container .progress-bar"
-        );
-
-        // Change onclick to show snackbar
-        button.onclick = function () {
-          showSnackbar();
-        };
-      }
+      // Modal functions (no changes)
       let pendingBeginButton = null;
 
       function openBeginModal(button) {
@@ -449,13 +488,14 @@
 
       document.addEventListener("DOMContentLoaded", () => {
         const modal = document.getElementById("beginModal");
-
-        modal.querySelector(".modal-ok").onclick = () => {
-          if (pendingBeginButton) {
-            beginStep(pendingBeginButton);
-          }
-          closeBeginModal();
-        };
+        if (modal) {
+          modal.querySelector(".modal-ok").onclick = () => {
+            if (pendingBeginButton) {
+              beginStep(pendingBeginButton);
+            }
+            closeBeginModal();
+          };
+        }
       });
 
       function textAreaClick(t) {
@@ -467,7 +507,7 @@
           .closest(".part-card")
           .nextElementSibling.querySelector(".begin-button");
 
-        if (beginBtn) beginBtn.click();
+        if (beginBtn) openBeginModal(beginBtn);
       }
     </script>
     <style>
@@ -494,7 +534,6 @@
         padding-left: 40px;
         padding-bottom: 8px;
         position: relative;
-        transition: padding 0.3s ease;
         background-color: #ffffff;
         z-index: 1000;
       }
@@ -518,9 +557,36 @@
         padding-left: 40px;
         border-bottom: 2px solid #e2e8f0;
       }
+      /* NEW SCROLLED HEADER COMPONENT */
+      .scrolled-header-component {
+        display: none;
+        position: sticky;
+        top: 0;
+        z-index: 1200;
+        background: #ffffff;
+        padding: 8px 120px 8px 40px;
+        border-bottom: 2px solid #e2e8f0;
+        align-items: center;
+      }
+
+      /* Title shrink in scrolled header */
+      .scrolled-header-component .main-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0;
+        padding: 0;
+        line-height: 1.2;
+      }
+
+      /* Steps panel compact */
+      .scrolled-header-component .steps-panel {
+        margin: 0;
+        padding: 12px 20px;
+        background-color: #fff9f9;
+      }
+
       .title-section {
-        width: 50%;
-        transition: all 0.3s ease;
+        width: 60%;
       }
       .unit-label {
         font-size: 13px;
@@ -534,6 +600,7 @@
         font-weight: 600;
         color: #343434;
         margin-bottom: 16px;
+        transition: 0.3s ease;
         line-height: 30px;
       }
       .header.scrolled .main-title {
@@ -543,6 +610,9 @@
         margin-top: 16px;
         margin-bottom: 0;
         transform: translateY(-2px);
+      }
+      .tags {
+        display: none;
       }
       .header.scrolled .tags {
         visibility: hidden;
@@ -572,7 +642,6 @@
         overflow: hidden;
         transition: max-height 0.3s ease, opacity 0.3s ease,
           margin-top 0.3s ease;
-        margin-top: 24px;
       }
       .expandable-content.hidden {
         max-height: 0;
@@ -587,7 +656,7 @@
       }
       .objectives-list,
       .questions-list {
-        margin-left: 40px;
+        margin-left: 28px;
         color: #4a5568;
         font-size: 14px;
         line-height: 1.8;
@@ -608,6 +677,7 @@
       }
       .header.collapsed .steps-panel {
         padding: 16px 24px;
+        transition: none;
       }
       .header.scrolled .steps-panel {
         margin-top: 0px; /* previously 16px or more */
@@ -1457,7 +1527,7 @@
           </li>
         </ul>
         <div class="expandable-content" id="expandableContent">
-          <div style="display: flex; gap: 64px">
+          <div style="display: flex; gap: 40px">
             <div>
               <h3 class="section-heading">Objectives</h3>
               <ul class="objectives-list">
@@ -1570,6 +1640,71 @@
           background-color: #fff9f9;
           border: 1px solid #e2e8f0;
           border-radius: 5px;
+        "
+        onmouseenter="style.backgroundColor = '#E2E8F0'"
+        onmouseleave="style.backgroundColor = '#fff9f9'"
+      >
+        <svg
+          width="24px"
+          height="24px"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+            stroke="#292D32"
+            stroke-width="2.4"
+            stroke-miterlimit="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+    </header>
+    <header id="scrolledHeader" class="scrolled-header-component">
+      <section class="title-section">
+        <h1 class="main-title">Othello's Renaissance</h1>
+      </section>
+      <section
+        class="steps-panel"
+        style="
+          margin-top: 0px;
+          padding: 12px 20px;
+          transition: margin 0.3s ease, padding 0.3s ease;
+        "
+      >
+        <div class="progress-header">
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div
+                class="progress-bar-fill"
+                id="progressFill"
+                style="width: 0%"
+              ></div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-bar-fill" style="width: 0%"></div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-bar-fill" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div
+        class="accordion-arrow collapse-toggle collapsed"
+        id="collapseToggle"
+        aria-label="Toggle header"
+        style="
+          cursor: pointer;
+          padding: 8px;
+          background-color: #fff9f9;
+          border: 1px solid #e2e8f0;
+          border-radius: 5px;
+          top: 8px;
+          left: auto;
+          right: 48px;
         "
         onmouseenter="style.backgroundColor = '#E2E8F0'"
         onmouseleave="style.backgroundColor = '#fff9f9'"
