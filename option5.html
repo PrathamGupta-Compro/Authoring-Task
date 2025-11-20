@@ -1416,6 +1416,7 @@
         position: absolute;
         width: 260px;
         background: #edf6ff;
+        border: 1px solid #cbd5e1;
         border-radius: 8px;
         padding: 18px 20px;
         box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
@@ -1427,13 +1428,33 @@
 
       .tooltip-arrow-global {
         position: absolute;
-        top: -10px;
+        top: -12px;
         left: 50%;
         transform: translateX(-50%);
         width: 0;
         height: 0;
-        border-left: 11px solid transparent;
-        border-right: 11px solid transparent;
+      }
+
+      .tooltip-arrow-global::before,
+      .tooltip-arrow-global::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 12px solid transparent;
+        border-right: 12px solid transparent;
+      }
+
+      .tooltip-arrow-global::before {
+        border-bottom: 12px solid #cbd5e1;
+      }
+
+      .tooltip-arrow-global::after {
+        top: 1px;
+        border-left-width: 11px;
+        border-right-width: 11px;
         border-bottom: 11px solid #edf6ff;
       }
 
