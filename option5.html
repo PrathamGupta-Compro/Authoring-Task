@@ -261,6 +261,7 @@
 
           tag.addEventListener("mouseleave", () => {
             tooltipBox.style.display = "none";
+            tooltipBox.style.width = "260px";
           });
         });
       });
@@ -543,8 +544,8 @@
         margin-bottom: 0;
         transform: translateY(-2px);
       }
-      .header .tags {
-        display: none;
+      .header.scrolled .tags {
+        visibility: hidden;
       }
       .header.collapsed .tags {
         display: flex;
