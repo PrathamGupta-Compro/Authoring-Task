@@ -191,6 +191,8 @@
         header.addEventListener("click", () => {
           if (scrolledHeader.style.display === "flex") return;
 
+          window.scrollTo({ top: 0, behavior: "smooth" });
+
           const isCollapsed = header.classList.toggle("collapsed");
           collapseToggle.classList.toggle("collapsed", isCollapsed);
 
