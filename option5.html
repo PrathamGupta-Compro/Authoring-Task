@@ -154,12 +154,8 @@
         ];
 
         const toggleBarHighlight = (barIndex, activate) => {
-          const mainBar = mainProgressBars[barIndex];
           const scrolledBar = scrolledProgressBars[barIndex];
-
-          if (mainBar) mainBar.classList.toggle("highlighted", activate);
-          if (scrolledBar)
-            scrolledBar.classList.toggle("highlighted", activate);
+          scrolledBar.classList.toggle("highlighted", activate);
         };
 
         const clearBarHighlights = () => {
