@@ -380,69 +380,6 @@
         // Lightweight hook to refresh after status change
         window.refreshTooltip = updateTooltip;
 
-        // ... [Rest of the existing DOMContentLoaded code for tags/tooltips] ...
-        const headerTags = document.querySelectorAll(".header .tags li");
-        const tooltipBox = document.getElementById("stepTooltip");
-        const ttStep = document.getElementById("ttStep");
-        const ttDesc = document.getElementById("ttDesc");
-
-        // Safety check: ensure these elements exist before trying to get their content
-        const objectivesListElement =
-          document.querySelector(".objectives-list");
-        const objectivesList = objectivesListElement
-          ? objectivesListElement.innerText.trim()
-          : "";
-
-        const essentialQuestions = [
-          ...document.querySelectorAll(".questions-list li"),
-        ]
-          .map((li) => "• " + li.innerText.trim())
-          .join("\n");
-
-        const competenciesList = [
-          ...document.querySelectorAll("[class='objectives-list'] li"),
-        ]
-          .filter(
-            (li) =>
-              li.innerText.trim() === "Think Critically" ||
-              li.innerText.trim() === "Communicate"
-          )
-          .map((li) => "• " + li.innerText.trim())
-          .join("\n");
-
-        const tagTooltipContent = {
-          0: { title: "Competencies", text: competenciesList },
-          1: { title: "Objectives", text: objectivesList },
-          2: { title: "Essential Questions", text: essentialQuestions },
-        };
-
-        headerTags.forEach((tag, index) => {
-          tag.addEventListener("mouseenter", () => {
-            const { title, text } = tagTooltipContent[index];
-
-            ttStep.innerHTML = title;
-            ttDesc.innerText = text;
-
-            const r = tag.getBoundingClientRect();
-            if (title == "Competencies") {
-              tooltipBox.style.width = "180px";
-              tooltipBox.style.left =
-                r.left + window.scrollX + r.width / 2 - 90 + "px";
-            } else {
-              tooltipBox.style.width = "400px";
-              tooltipBox.style.left =
-                r.left + window.scrollX + r.width / 2 - 200 + "px";
-            }
-            tooltipBox.style.display = "block";
-            tooltipBox.style.top = r.bottom + window.scrollY + 12 + "px";
-          });
-
-          tag.addEventListener("mouseleave", () => {
-            tooltipBox.style.display = "none";
-            tooltipBox.style.width = "260px";
-          });
-        });
-
         // Initializing status messages is still valid
         updateStatusMessage(1, "not-started");
         updateStatusMessage(2, "not-started");
