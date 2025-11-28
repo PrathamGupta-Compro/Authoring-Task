@@ -152,6 +152,7 @@
           { id: "step1", barIndex: 0 },
           { id: "step2", barIndex: 1 },
           { id: "step3", barIndex: 2 },
+          { id: "step4", barIndex: 3 },
         ];
 
         const toggleBarHighlight = (barIndex, activate) => {
@@ -834,11 +835,6 @@
         flex-direction: column;
       }
 
-      .quote-item-new {
-        background: #ffffff;
-        padding: 20px 0;
-      }
-
       .author-row {
         display: flex;
         align-items: center;
@@ -1223,7 +1219,7 @@
       }
       .response-area {
         width: 100%;
-        height: 100%;
+        height: 200px;
         min-height: 140px;
         padding: 16px;
         font-size: 14px;
@@ -1724,7 +1720,9 @@
           <div class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <h2 class="step-title">Overview of Circulatory System with Guided Notes</h2>
+              <h2 class="step-title">
+                Overview of Circulatory System with Guided Notes
+              </h2>
               <div class="step-status not-started">Not Started</div>
             </div>
           </div>
@@ -1894,11 +1892,37 @@
                     </svg>
                   </div>
                 </div>
-                <p class="section-quote-small">Overview of Circulatory System with Guided Notes</p>
+                <p class="section-quote-small">
+                  Overview of Circulatory System with Guided Notes
+                </p>
               </div>
             </div>
             <div class="accordion-content">
-              <h2 class="section-quote">Overview of Circulatory System with Guided Notes</h2>
+              <h2 class="section-quote">
+                Overview of Circulatory System with Guided Notes
+              </h2>
+              <div
+                class="response-area"
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin-bottom: 40px;
+                  margin-top: 24px;
+                "
+              >
+                <span style="font-size: 16px">Video</span>
+              </div>
+              <div
+                class="response-area"
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                "
+              >
+                <span style="font-size: 16px">Quiz</span>
+              </div>
             </div>
           </section>
         </div>
@@ -1980,6 +2004,17 @@
               <h2 class="section-quote">
                 Vocabulary Practice to Build Understanding
               </h2>
+              <div
+                class="response-area"
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin-top: 24px;
+                "
+              >
+                <span style="font-size: 16px">Quiz</span>
+              </div>
             </div>
           </section>
         </div>
@@ -2055,6 +2090,17 @@
             </div>
             <div class="accordion-content">
               <h2 class="section-quote">Creating a Model</h2>
+              <div
+                class="response-area"
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin-top: 24px;
+                "
+              >
+                <span style="font-size: 16px">Quiz</span>
+              </div>
             </div>
           </section>
         </div>
@@ -2131,6 +2177,22 @@
             </div>
             <div class="accordion-content">
               <h2 class="section-quote">Demonstrate Understanding</h2>
+
+              <div class="quote-text-box" style="margin-top: 8px;">
+                <p>
+                  Answer the <strong>Essential Questions</strong> of this lesson. Write at least one paragraph.
+                </p>
+              </div>
+
+              <textarea
+                readonly
+                class="response-area"
+                placeholder="Click here to Begin and add your response."
+                onclick="showSnackbar()"
+                style="
+                  margin-top: 16px;
+                "
+              ></textarea>
             </div>
           </section>
         </div>
