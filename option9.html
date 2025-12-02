@@ -1158,7 +1158,7 @@
       /* Author Quote Item */
       .quote-item {
         display: grid;
-        grid-template-columns: 2fr ;
+        grid-template-columns: 2fr;
         margin-bottom: 40px;
         /* gap: 32px; */
         /* padding-bottom: 60px; */
@@ -1203,8 +1203,8 @@
         color: #2d3748;
       }
       .question-block-container {
-        background: #f0f9ff;
-        border-left: 4px solid #3b82f6;
+        background: #f9fafb;
+        border-left: 4px solid #187406;
         padding: 24px;
         border-radius: 8px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -1255,7 +1255,7 @@
       }
       .response-field {
         width: 18%;
-        padding: 16px;
+        padding: 16px 8px;
         font-size: 14px;
         height: 14px;
         border-left: none;
@@ -1267,7 +1267,7 @@
         transition: border-color 0.3s;
         margin: 16px 0;
         border-radius: 4x;
-        background: #f0f0f0;
+        background: #e6e5e5;
         cursor: pointer;
       }
       .response-field:focus {
@@ -1940,14 +1940,26 @@
                 </div>
               </div>
 
-              <div class="lesson-subsection">
+              <div>
                 <p class="lesson-subsection-title"></p>
-                <div style="padding-left: 8px">
+
+                <span
+                  style="
+                    color: #343434;
+                    font-size: 16px;
+                    font-weight: 400;
+                    line-height: 24px;
+                    padding-left: 8px;
+                  "
+                  >Question Block -
+                </span>
+
+                <div style="padding: 0px 48px; margin-top: 24px">
                   <table>
                     <tr class="quote-item question-block-container">
-                      <td class="quote-column ">
-                        <div class="quote-box" style="background: #f0f9ff;">
-                          <p class="quote-text ">
+                      <td class="quote-column">
+                        <div class="quote-box" style="background: #f9fafb">
+                          <p class="quote-text">
                             This is an example of a line with positive slope.
                             The cost goes up at a steady rate as the weight
                             increases:
@@ -2003,103 +2015,160 @@
                 </div>
               </div>
 
-              <div class="lesson-subsection">
+              <div>
                 <p class="lesson-subsection-title"></p>
-                <div style="padding-left: 8px">
+
+                <span
+                  style="
+                    color: #343434;
+                    font-size: 16px;
+                    font-weight: 400;
+                    line-height: 24px;
+                    padding-left: 8px;
+                  "
+                  >Question Block -
+                </span>
+
+                <div style="padding: 0px 48px; margin-top: 24px">
                   <table>
-                    <tr class="quote-item">
+                    <tr class="quote-item question-block-container">
                       <td class="quote-column">
-                        <div class="quote-box">
+                        <div class="quote-box" style="background: #f9fafb">
                           <p class="quote-text">
                             This is an example of a line with negative slope.
                             The candle length gets smaller as time goes by.
                           </p>
-                          <p class="quote-text" style="margin-top: 24px">
-                            What is the approximate y-intercept of this line?
-                          </p>
+                          <div style="margin-top: 24px">
+                            <img
+                              src="./Linear Graphs - Files/graph-4.png"
+                              alt="graph-4"
+                              class="graph-image"
+                            />
+                          </div>
+                          <span class="quote-text" style="margin-top: 24px">
+                            1. What is the approximate y-intercept of this line?
+                          </span>
                           <input
                             readonly
                             onclick="textAreaClick(this)"
                             type="text"
                             class="response-field"
-                            style="margin-bottom: 20px"
+                            style="margin-left: 16px"
                           />
+                          <div>
+                            <span class="quote-text">
+                              2. What is the approximate slope? (Remember
+                              <strong> m = rise / run)</strong>
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
 
-                          <p class="quote-text">
-                            What is the slope of this line? (Remember m =
-                            rise/run)
-                          </p>
-                          <input
-                            readonly
-                            onclick="textAreaClick(this)"
-                            type="text"
-                            class="response-field"
-                            style="margin-bottom: 20px"
-                          />
-
-                          <p class="quote-text">
-                            Write the equation of the line in y = mx + b format.
-                          </p>
-                          <input
-                            readonly
-                            onclick="textAreaClick(this)"
-                            type="text"
-                            class="response-field"
-                          />
+                          <div>
+                            <span class="quote-text">
+                              3. Write the equation of the line in y = mx + b
+                              format.
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
                         </div>
-                      </td>
-                      <td class="response-column">
-                        <img
-                          src="./Linear Graphs - Files/graph-4.png"
-                          alt="graph-4"
-                          class="graph-image"
-                        />
                       </td>
                     </tr>
                   </table>
                 </div>
               </div>
-
-              <div class="lesson-subsection">
+              <div>
                 <p class="lesson-subsection-title"></p>
-                <div style="padding-left: 8px">
+
+                <span
+                  style="
+                    color: #343434;
+                    font-size: 16px;
+                    font-weight: 400;
+                    line-height: 24px;
+                    padding-left: 8px;
+                  "
+                  >Question Block -
+                </span>
+
+                <div style="padding: 0px 48px; margin-top: 24px">
                   <table>
-                    <tr class="quote-item">
+                    <tr class="quote-item question-block-container">
                       <td class="quote-column">
-                        <div class="quote-box">
+                        <div class="quote-box" style="background: #f9fafb">
                           <p class="quote-text">
                             In the graph below we have a graph of two companies
                             that rent copy machines to schools.
                           </p>
-                          <p class="quote-text">
+                          <div style="margin-top: 24px">
+                            <img
+                              src="./Linear Graphs - Files/graph-5.png"
+                              alt="graph-5"
+                              class="graph-image"
+                            />
+                          </div>
+                          <p
+                            class="quote-text"
+                            style="margin-top: 16px; margin-bottom: 8px"
+                          >
                             The first company charges a $40 flat fee and then
                             $120 for each month you rent the machine.
                           </p>
-                          <p class="quote-text">
+
+                          <span class="quote-text">
+                            1. Next to this line on the graph, write “Company A”
+                          </span>
+                          <p class="quote-text" style="margin-top: 16px">
                             The second company charges a flat fee of $160.
                           </p>
+
+                          <div>
+                            <span class="quote-text">
+                              2. What is its charge per month (the slope)?
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
+                          <p class="quote-text">
+                            3. Next to this line on the graph, write “Company B
+                          </p>
+
                           <p class="quote-text" style="margin-top: 16px">
-                            What is its charge per month (the slope)?
+                            The rate per month is also the slope of the line.
                           </p>
-                          <input
-                            readonly
-                            onclick="textAreaClick(this)"
-                            type="text"
-                            class="response-field"
-                          />
+
+                          <div>
+                            <span class="quote-text">
+                              4. Which company charges more per month? (You can
+                              figure that out simply by seeing which line is
+                              steeper.)
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
                           <p class="quote-text">
-                            Which company charges more per month? (You can
-                            figure that out simply by seeing which line is
-                            steeper.)
-                          </p>
-                          <input
-                            readonly
-                            onclick="textAreaClick(this)"
-                            type="text"
-                            class="response-field"
-                          />
-                          <p class="quote-text">
-                            Which plan is better for a one-month rental?
+                            5. Which plan is better for a one-month rental?
                             Explain.
                           </p>
                           <textarea
@@ -2107,50 +2176,54 @@
                             class="response-area"
                             onclick="textAreaClick(this)"
                             placeholder="Click here to Begin and add your response."
-                            style="height: 64px"
+                            style="height: 64px; margin-top: 16px"
                           ></textarea>
-                          <p class="quote-text" style="margin-top: 16px">
-                            Which plan is better for a 4 month rental? Explain.
+                          <p
+                            class="quote-text"
+                            style="margin-top: 16px; margin-bottom: 16px"
+                          >
+                            6. Which plan is better for a 4 month rental?
+                            Explain.
                           </p>
                           <textarea
                             readonly
                             class="response-area"
                             onclick="textAreaClick(this)"
                             placeholder="Click here to Begin and add your response."
-                            style="height: 64px"
+                            style="height: 64px; margin-bottom: 8px"
                           ></textarea>
-                          <p class="quote-text" style="margin-top: 16px">
-                            For approximately how many months will the companies
-                            charge the same amount for a copier rental? (In
-                            other words, find the x-value for where the lines
-                            cross.)
-                          </p>
-                          <input
-                            type="text"
-                            readonly
-                            onclick="textAreaClick(this)"
-                            class="response-field"
-                          />
-                          <p class="quote-text">
-                            How much is the cost when the companies will charge
-                            the same amount? (In other words, find the y-value
-                            where the lines cross.)
-                          </p>
-                          <input
-                            readonly
-                            onclick="textAreaClick(this)"
-                            type="text"
-                            class="response-field"
-                          />
+
+                          <div>
+                            <span class="quote-text">
+                              7. For approximately how many months will the
+                              companies charge the same amount for a copier
+                              rental? (In other words, find the x-value for
+                              where the lines cross.)
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
+
+                          <div>
+                            <span class="quote-text">
+                              8. How much is the cost when the companies will
+                              charge the same amount? (In other words, find the
+                              y-value where the lines cross.)
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
                         </div>
-                      </td>
-                      <td class="response-column">
-                        <img
-                          src="./Linear Graphs - Files/graph-5.png"
-                          alt="graph-5"
-                          class="graph-image"
-                          style="width: auto; height: 40%"
-                        />
                       </td>
                     </tr>
                   </table>
