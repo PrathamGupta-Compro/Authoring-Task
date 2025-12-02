@@ -535,20 +535,6 @@
 
         if (beginBtn) openBeginModal(beginBtn);
       }
-
-      // Nested accordion toggle function
-      function toggleNestedAccordion(header) {
-        const content = header.nextElementSibling;
-        const arrow = header.querySelector(".nested-accordion-arrow svg");
-
-        if (content.classList.contains("nested-collapsed")) {
-          content.classList.remove("nested-collapsed");
-          if (arrow) arrow.style.transform = "rotate(0deg)";
-        } else {
-          content.classList.add("nested-collapsed");
-          if (arrow) arrow.style.transform = "rotate(180deg)";
-        }
-      }
     </script>
     <style>
       * {
@@ -1157,7 +1143,7 @@
       }
       .section-directions {
         margin-bottom: 32px;
-        border-top: 1px solid #aeaeae;
+        
         padding-top: 28px;
       }
       .section-directions p {
@@ -1189,7 +1175,7 @@
         display: flex;
         flex-direction: column;
         border: none;
-        padding: 0px 24px;
+        padding: 0px 0px;
       }
       .author-info {
         margin-top: 24px;
@@ -1676,66 +1662,17 @@
         }
       }
 
-      /* Nested Accordion Styles */
-      .nested-accordion {
-        background: #f8fafc;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        overflow: hidden;
-        border: 1px solid #e2e8f0;
+      .lesson-subsection-title {
+        color: #343434;
+        margin-bottom: 24px;
+        border-top: 1px solid #aeaeae;
+        padding-top: 32px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
       }
 
-      .nested-accordion-header {
-        padding: 16px 24px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: white;
-        transition: background-color 0.2s ease;
-      }
-
-      .nested-accordion-header:hover {
-        background: #f8fafc;
-      }
-
-      .nested-accordion-title {
-        font-size: 17px;
-        font-weight: 600;
-        color: #1a202c;
-      }
-
-      .nested-accordion-arrow {
-        transition: transform 0.3s ease;
-        display: flex;
-        align-items: center;
-      }
-
-      .nested-accordion-arrow svg {
-        width: 20px;
-        height: 20px;
-      }
-
-      .nested-accordion-arrow:hover {
-        border-radius: 8px;
-        background: #cbdeed;
-        padding: 4px;
-      }
-
-      .nested-accordion-content {
-        padding: 24px;
-        background: white;
-        max-height: 10000px;
-        overflow: hidden;
-        transition: max-height 0.5s ease, opacity 0.3s ease, padding 0.3s ease;
-        opacity: 1;
-      }
-
-      .nested-accordion-content.nested-collapsed {
-        max-height: 0;
-        opacity: 0;
-        padding: 0;
-      }
+      
     </style>
   </head>
   <body>
@@ -1985,37 +1922,14 @@
             <div class="accordion-content">
               <h2 class="section-quote">Understanding Linear Graphs</h2>
               <div class="section-directions">
-                <p style="display: inline">Part A :</p>
                 <span>Read the info and then answer the questions.</span>
               </div>
 
-              <!-- Nested Accordion 1: Understanding Slope & Line Intersections -->
-              <div class="nested-accordion">
-                <div
-                  class="nested-accordion-header"
-                  onclick="toggleNestedAccordion(this)"
-                >
-                  <span class="nested-accordion-title"
-                    >Part 1: Understanding Slope & Line Intersections</span
-                  >
-                  <div class="nested-accordion-arrow">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
-                        stroke="#292D32"
-                        stroke-width="2.4"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div class="nested-accordion-content">
+              <div class="lesson-subsection">
+                <p class="lesson-subsection-title">
+                  Part 1: Understanding Slope & Line Intersections
+                </p>
+                <div style="padding-left: 8px">
                   <table>
                     <tr class="quote-item">
                       <td class="quote-column">
@@ -2065,33 +1979,11 @@
                 </div>
               </div>
 
-              <!-- Nested Accordion 2: Positive Slope Analysis -->
-              <div class="nested-accordion">
-                <div
-                  class="nested-accordion-header"
-                  onclick="toggleNestedAccordion(this)"
-                >
-                  <span class="nested-accordion-title"
-                    >Part 2: Analyzing Lines with Positive Slope</span
-                  >
-                  <div class="nested-accordion-arrow">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
-                        stroke="#292D32"
-                        stroke-width="2.4"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div class="nested-accordion-content">
+              <div class="lesson-subsection">
+                <p class="lesson-subsection-title">
+                  Part 2: Analyzing Lines with Positive Slope
+                </p>
+                <div style="padding-left: 8px">
                   <table>
                     <tr class="quote-item">
                       <td class="quote-column">
@@ -2101,6 +1993,42 @@
                             The cost goes up at a steady rate as the weight
                             increases:
                           </p>
+                          <p class="quote-text" style="margin-top: 24px">
+                            What is the approximate y-intercept of this line?
+                          </p>
+                          <input
+                            readonly
+                            onclick="textAreaClick(this)"
+                            type="text"
+                            placeholder="Click here to Begin and add your response."
+                            class="response-field"
+                            style="height: 40px; margin-bottom: 20px"
+                          />
+
+                          <p class="quote-text">
+                            What is the approximate slope? (Remember m =
+                            rise/run)
+                          </p>
+                          <input
+                            readonly
+                            onclick="textAreaClick(this)"
+                            type="text"
+                            placeholder="Click here to Begin and add your response."
+                            class="response-field"
+                            style="height: 40px; margin-bottom: 20px"
+                          />
+
+                          <p class="quote-text">
+                            Write the equation of the line in y = mx + b format.
+                          </p>
+                          <input
+                            readonly
+                            onclick="textAreaClick(this)"
+                            type="text"
+                            placeholder="Click here to Begin and add your response."
+                            class="response-field"
+                            style="height: 40px"
+                          />
                         </div>
                       </td>
                       <td class="response-column">
@@ -2112,72 +2040,14 @@
                       </td>
                     </tr>
                   </table>
-
-                  <p class="quote-text" style="margin-top: 24px">
-                    What is the approximate y-intercept of this line?
-                  </p>
-                  <input
-                    readonly
-                    onclick="textAreaClick(this)"
-                    type="text"
-                    placeholder="Click here to Begin and add your response."
-                    class="response-field"
-                    style="height: 40px; margin-bottom: 20px"
-                  />
-
-                  <p class="quote-text">
-                    What is the approximate slope? (Remember m = rise/run)
-                  </p>
-                  <input
-                    readonly
-                    onclick="textAreaClick(this)"
-                    type="text"
-                    placeholder="Click here to Begin and add your response."
-                    class="response-field"
-                    style="height: 40px; margin-bottom: 20px"
-                  />
-
-                  <p class="quote-text">
-                    Write the equation of the line in y = mx + b format.
-                  </p>
-                  <input
-                    readonly
-                    onclick="textAreaClick(this)"
-                    type="text"
-                    placeholder="Click here to Begin and add your response."
-                    class="response-field"
-                    style="height: 40px"
-                  />
                 </div>
               </div>
 
-              <!-- Nested Accordion 3: Negative Slope Analysis -->
-              <div class="nested-accordion">
-                <div
-                  class="nested-accordion-header"
-                  onclick="toggleNestedAccordion(this)"
-                >
-                  <span class="nested-accordion-title"
-                    >Part 3: Analyzing Lines with Negative Slope</span
-                  >
-                  <div class="nested-accordion-arrow">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
-                        stroke="#292D32"
-                        stroke-width="2.4"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div class="nested-accordion-content">
+              <div class="lesson-subsection">
+                <p class="lesson-subsection-title">
+                  Part 3: Analyzing Lines with Negative Slope
+                </p>
+                <div style="padding-left: 8px">
                   <table>
                     <tr class="quote-item">
                       <td class="quote-column">
@@ -2186,6 +2056,42 @@
                             This is an example of a line with negative slope.
                             The candle length gets smaller as time goes by.
                           </p>
+                          <p class="quote-text" style="margin-top: 24px">
+                            What is the approximate y-intercept of this line?
+                          </p>
+                          <input
+                            readonly
+                            onclick="textAreaClick(this)"
+                            type="text"
+                            placeholder="Click here to Begin and add your response."
+                            class="response-field"
+                            style="height: 40px; margin-bottom: 20px"
+                          />
+
+                          <p class="quote-text">
+                            What is the slope of this line? (Remember m =
+                            rise/run)
+                          </p>
+                          <input
+                            readonly
+                            onclick="textAreaClick(this)"
+                            type="text"
+                            placeholder="Click here to Begin and add your response."
+                            class="response-field"
+                            style="height: 40px; margin-bottom: 20px"
+                          />
+
+                          <p class="quote-text">
+                            Write the equation of the line in y = mx + b format.
+                          </p>
+                          <input
+                            readonly
+                            onclick="textAreaClick(this)"
+                            type="text"
+                            placeholder="Click here to Begin and add your response."
+                            class="response-field"
+                            style="height: 40px"
+                          />
                         </div>
                       </td>
                       <td class="response-column">
@@ -2197,76 +2103,17 @@
                       </td>
                     </tr>
                   </table>
-
-                  <p class="quote-text" style="margin-top: 24px">
-                    What is the approximate y-intercept of this line?
-                  </p>
-                  <input
-                    readonly
-                    onclick="textAreaClick(this)"
-                    type="text"
-                    placeholder="Click here to Begin and add your response."
-                    class="response-field"
-                    style="height: 40px; margin-bottom: 20px"
-                  />
-
-                  <p class="quote-text">
-                    What is the slope of this line? (Remember m = rise/run)
-                  </p>
-                  <input
-                    readonly
-                    onclick="textAreaClick(this)"
-                    type="text"
-                    placeholder="Click here to Begin and add your response."
-                    class="response-field"
-                    style="height: 40px; margin-bottom: 20px"
-                  />
-
-                  <p class="quote-text">
-                    Write the equation of the line in y = mx + b format.
-                  </p>
-                  <input
-                    readonly
-                    onclick="textAreaClick(this)"
-                    type="text"
-                    placeholder="Click here to Begin and add your response."
-                    class="response-field"
-                    style="height: 40px"
-                  />
                 </div>
               </div>
 
-              <!-- Nested Accordion 4: Real-World Application -->
-              <div class="nested-accordion">
-                <div
-                  class="nested-accordion-header"
-                  onclick="toggleNestedAccordion(this)"
-                >
-                  <span class="nested-accordion-title"
-                    >Part 4: Real-World Application - Comparing Rental
-                    Plans</span
-                  >
-                  <div class="nested-accordion-arrow">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
-                        stroke="#292D32"
-                        stroke-width="2.4"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div class="nested-accordion-content">
+              <div class="lesson-subsection">
+                <p class="lesson-subsection-title">
+                  Part 4: Real-World Application - Comparing Rental Plans
+                </p>
+                <div style="padding-left: 8px">
                   <table>
                     <tr class="quote-item">
-                      <td class="text-column">
+                      <td class="quote-column">
                         <div class="quote-box">
                           <p class="quote-text">
                             In the graph below we have a graph of two companies
