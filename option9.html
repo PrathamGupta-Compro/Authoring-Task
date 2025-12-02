@@ -1248,17 +1248,19 @@
         line-height: 100%;
       }
       .response-field {
-        width: 50%;
-        height: 10%;
+        width: 32%;
         padding: 16px;
         font-size: 14px;
+        height: 16px;
+        border-left: none;
+        border-top: none;
+        border-right: none;
         font-family: "Inter", sans-serif;
         line-height: 1.6;
         resize: vertical;
         transition: border-color 0.3s;
         margin: 16px 0;
-        border-radius: 6px;
-        border: 1px solid #a6a6a6;
+        border-radius: 4x;
         background: #f0f0f0;
         cursor: pointer;
       }
@@ -1660,7 +1662,7 @@
 
       .lesson-subsection-title {
         color: #343434;
-        margin-bottom: 24px;
+        margin-bottom: 8px;
         border-top: 1px solid #aeaeae;
         padding-top: 32px;
         font-size: 16px;
@@ -1895,63 +1897,52 @@
               </div>
 
               <div class="lesson-subsection">
-                <p class="lesson-subsection-title">
-                  Part 1: Understanding Slope & Line Intersections
-                </p>
+                <p class="lesson-subsection-title"></p>
                 <div style="padding-left: 8px">
-                  <table>
-                    <tr class="quote-item">
-                      <td class="quote-column">
-                        <div class="quote-box">
-                          <p class="quote-text">
-                            The steeper the line, the higher the rate of change.
-                            The lines in the adjacent graph show this.
-                          </p>
-                        </div>
-                      </td>
-                      <td class="response-column">
-                        <img
-                          src="./Linear Graphs - Files/graph-1.png"
-                          alt="graph-1"
-                          class="graph-image"
-                        />
-                      </td>
-                    </tr>
+                  <div style="margin-bottom: 32px">
+                    <div class="quote-box">
+                      <p class="quote-text">
+                        The steeper the line, the higher the rate of change. The
+                        lines below show this.
+                      </p>
+                    </div>
+                    <div style="margin-top: 24px">
+                      <img
+                        src="./Linear Graphs - Files/graph-1.png"
+                        alt="graph-1"
+                        class="graph-image"
+                      />
+                    </div>
+                  </div>
 
-                    <tr class="quote-item">
-                      <td class="quote-column">
-                        <div class="quote-box">
-                          <p class="quote-text">
-                            At the point where two lines cross, they will have
-                            the SAME x and y values. In the adjacent graph, at
-                            what x-value do the lines cross?
-                          </p>
-                        </div>
-                        <input
-                          readonly
-                          onclick="textAreaClick(this)"
-                          type="text"
-                          placeholder="Click here to Begin and add your response."
-                          class="response-field"
-                          style="height: 40px"
-                        />
-                      </td>
-                      <td class="response-column">
-                        <img
-                          src="./Linear Graphs - Files/graph-2.png"
-                          alt="graph-2"
-                          class="graph-image"
-                        />
-                      </td>
-                    </tr>
-                  </table>
+                  <div style="margin-bottom: 32px">
+                    <div class="quote-box">
+                      <p class="quote-text">
+                        At the point where two lines cross, they will have the
+                        SAME x and y values. In the graph below, at what x-value
+                        do the lines cross?
+                      </p>
+                    </div>
+                    <div style="margin-top: 24px">
+                      <img
+                        src="./Linear Graphs - Files/graph-2.png"
+                        alt="graph-2"
+                        class="graph-image"
+                      />
+                    </div>
+                    <input
+                      readonly
+                      onclick="textAreaClick(this)"
+                      type="text"
+                      class="response-field"
+                      style="width: 24%"
+                    />
+                  </div>
                 </div>
               </div>
 
               <div class="lesson-subsection">
-                <p class="lesson-subsection-title">
-                  Part 2: Analyzing Lines with Positive Slope
-                </p>
+                <p class="lesson-subsection-title"></p>
                 <div style="padding-left: 8px">
                   <table>
                     <tr class="quote-item">
@@ -1962,6 +1953,13 @@
                             The cost goes up at a steady rate as the weight
                             increases:
                           </p>
+                          <div style="margin-top: 24px">
+                            <img
+                              src="./Linear Graphs - Files/graph-3.png"
+                              alt="graph-3"
+                              class="graph-image"
+                            />
+                          </div>
                           <p class="quote-text" style="margin-top: 24px">
                             What is the approximate y-intercept of this line?
                           </p>
@@ -1969,9 +1967,8 @@
                             readonly
                             onclick="textAreaClick(this)"
                             type="text"
-                            placeholder="Click here to Begin and add your response."
                             class="response-field"
-                            style="height: 40px; margin-bottom: 20px"
+                            style="margin-bottom: 20px"
                           />
 
                           <p class="quote-text">
@@ -1982,9 +1979,8 @@
                             readonly
                             onclick="textAreaClick(this)"
                             type="text"
-                            placeholder="Click here to Begin and add your response."
                             class="response-field"
-                            style="height: 40px; margin-bottom: 20px"
+                            style="margin-bottom: 20px"
                           />
 
                           <p class="quote-text">
@@ -1994,18 +1990,9 @@
                             readonly
                             onclick="textAreaClick(this)"
                             type="text"
-                            placeholder="Click here to Begin and add your response."
                             class="response-field"
-                            style="height: 40px"
                           />
                         </div>
-                      </td>
-                      <td class="response-column">
-                        <img
-                          src="./Linear Graphs - Files/graph-3.png"
-                          alt="graph-3"
-                          class="graph-image"
-                        />
                       </td>
                     </tr>
                   </table>
@@ -2013,9 +2000,7 @@
               </div>
 
               <div class="lesson-subsection">
-                <p class="lesson-subsection-title">
-                  Part 3: Analyzing Lines with Negative Slope
-                </p>
+                <p class="lesson-subsection-title"></p>
                 <div style="padding-left: 8px">
                   <table>
                     <tr class="quote-item">
@@ -2032,9 +2017,8 @@
                             readonly
                             onclick="textAreaClick(this)"
                             type="text"
-                            placeholder="Click here to Begin and add your response."
                             class="response-field"
-                            style="height: 40px; margin-bottom: 20px"
+                            style="margin-bottom: 20px"
                           />
 
                           <p class="quote-text">
@@ -2045,9 +2029,8 @@
                             readonly
                             onclick="textAreaClick(this)"
                             type="text"
-                            placeholder="Click here to Begin and add your response."
                             class="response-field"
-                            style="height: 40px; margin-bottom: 20px"
+                            style="margin-bottom: 20px"
                           />
 
                           <p class="quote-text">
@@ -2057,9 +2040,7 @@
                             readonly
                             onclick="textAreaClick(this)"
                             type="text"
-                            placeholder="Click here to Begin and add your response."
                             class="response-field"
-                            style="height: 40px"
                           />
                         </div>
                       </td>
@@ -2076,9 +2057,7 @@
               </div>
 
               <div class="lesson-subsection">
-                <p class="lesson-subsection-title">
-                  Part 4: Real-World Application - Comparing Rental Plans
-                </p>
+                <p class="lesson-subsection-title"></p>
                 <div style="padding-left: 8px">
                   <table>
                     <tr class="quote-item">
@@ -2102,9 +2081,7 @@
                             readonly
                             onclick="textAreaClick(this)"
                             type="text"
-                            placeholder="Click here to Begin and add your response."
                             class="response-field"
-                            style="height: 40px"
                           />
                           <p class="quote-text">
                             Which company charges more per month? (You can
@@ -2115,9 +2092,7 @@
                             readonly
                             onclick="textAreaClick(this)"
                             type="text"
-                            placeholder="Click here to Begin and add your response."
                             class="response-field"
-                            style="height: 40px"
                           />
                           <p class="quote-text">
                             Which plan is better for a one-month rental?
@@ -2150,9 +2125,7 @@
                             type="text"
                             readonly
                             onclick="textAreaClick(this)"
-                            placeholder="Click here to Begin and add your response."
                             class="response-field"
-                            style="height: 40px"
                           />
                           <p class="quote-text">
                             How much is the cost when the companies will charge
@@ -2163,9 +2136,7 @@
                             readonly
                             onclick="textAreaClick(this)"
                             type="text"
-                            placeholder="Click here to Begin and add your response."
                             class="response-field"
-                            style="height: 40px"
                           />
                         </div>
                       </td>
