@@ -78,6 +78,7 @@
       function beginStep(button) {
         const section = button.closest(".help-section").previousElementSibling;
         const textareas = section.querySelectorAll("textarea.response-area");
+        const inputs = section.querySelectorAll("input.response-field");
 
         const stepCard = section.closest(".part-card");
         const stepIndex = parseInt(stepCard.id.replace("step", "")) - 1; // 0-indexed
@@ -88,6 +89,12 @@
           t.style.background = "#ffffff";
           t.placeholder = "Please add your response here.";
           t.style.cursor = "auto";
+        });
+        inputs.forEach((i) => {
+          i.readOnly = false;
+          i.style.background = "#ffffff";
+          i.placeholder = "Please add your response here.";
+          i.style.cursor = "auto";
         });
 
         // 2. Update step status to 'In Progress' and fill the corresponding progress bar
@@ -527,6 +534,20 @@
           .nextElementSibling.querySelector(".begin-button");
 
         if (beginBtn) openBeginModal(beginBtn);
+      }
+
+      // Nested accordion toggle function
+      function toggleNestedAccordion(header) {
+        const content = header.nextElementSibling;
+        const arrow = header.querySelector(".nested-accordion-arrow svg");
+
+        if (content.classList.contains("nested-collapsed")) {
+          content.classList.remove("nested-collapsed");
+          if (arrow) arrow.style.transform = "rotate(0deg)";
+        } else {
+          content.classList.add("nested-collapsed");
+          if (arrow) arrow.style.transform = "rotate(180deg)";
+        }
       }
     </script>
     <style>
@@ -1257,7 +1278,18 @@
         border-radius: 6px;
         border: 1px solid #a6a6a6;
         background: #f0f0f0;
-        cursor: auto;
+        cursor: pointer;
+      }
+      .response-field:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+      .response-field::placeholder {
+        color: #343434;
+        padding-top: 5px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 100%;
       }
       .word-count {
         text-align: right;
@@ -1643,6 +1675,67 @@
           text-align: center;
         }
       }
+
+      /* Nested Accordion Styles */
+      .nested-accordion {
+        background: #f8fafc;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+      }
+
+      .nested-accordion-header {
+        padding: 16px 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: white;
+        transition: background-color 0.2s ease;
+      }
+
+      .nested-accordion-header:hover {
+        background: #f8fafc;
+      }
+
+      .nested-accordion-title {
+        font-size: 17px;
+        font-weight: 600;
+        color: #1a202c;
+      }
+
+      .nested-accordion-arrow {
+        transition: transform 0.3s ease;
+        display: flex;
+        align-items: center;
+      }
+
+      .nested-accordion-arrow svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .nested-accordion-arrow:hover {
+        border-radius: 8px;
+        background: #cbdeed;
+        padding: 4px;
+      }
+
+      .nested-accordion-content {
+        padding: 24px;
+        background: white;
+        max-height: 10000px;
+        overflow: hidden;
+        transition: max-height 0.5s ease, opacity 0.3s ease, padding 0.3s ease;
+        opacity: 1;
+      }
+
+      .nested-accordion-content.nested-collapsed {
+        max-height: 0;
+        opacity: 0;
+        padding: 0;
+      }
     </style>
   </head>
   <body>
@@ -1896,232 +1989,382 @@
                 <span>Read the info and then answer the questions.</span>
               </div>
 
-              <table>
-                <tr class="quote-item">
-                  <td class="quote-column">
-                    <div class="quote-box">
-                      <p class="quote-text">
-                        The steeper the line, the higher the rate of change. The
-                        lines in the adjacent graph show this.
-                      </p>
-                    </div>
-                  </td>
-                  <td class="response-column">
-                    <img
-                      src="./Linear Graphs - Files/graph-1.png"
-                      alt="graph-1"
-                      class="graph-image"
-                    />
-                  </td>
-                </tr>
+              <!-- Nested Accordion 1: Understanding Slope & Line Intersections -->
+              <div class="nested-accordion">
+                <div
+                  class="nested-accordion-header"
+                  onclick="toggleNestedAccordion(this)"
+                >
+                  <span class="nested-accordion-title"
+                    >Part 1: Understanding Slope & Line Intersections</span
+                  >
+                  <div class="nested-accordion-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+                        stroke="#292D32"
+                        stroke-width="2.4"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div class="nested-accordion-content">
+                  <table>
+                    <tr class="quote-item">
+                      <td class="quote-column">
+                        <div class="quote-box">
+                          <p class="quote-text">
+                            The steeper the line, the higher the rate of change.
+                            The lines in the adjacent graph show this.
+                          </p>
+                        </div>
+                      </td>
+                      <td class="response-column">
+                        <img
+                          src="./Linear Graphs - Files/graph-1.png"
+                          alt="graph-1"
+                          class="graph-image"
+                        />
+                      </td>
+                    </tr>
 
-                <tr class="quote-item">
-                  <td class="quote-column">
-                    <div class="quote-box">
-                      <p class="quote-text">
-                        At the point where two lines cross, they will have the
-                        SAME x and y values. In the adjacent graph, at what
-                        x-value do the lines cross?
-                      </p>
-                      <input
-                        type="text"
-                        placeholder="Enter your answer here"
-                        class="response-field"
-                      />
-                    </div>
-                  </td>
-                  <td class="response-column">
-                    <img
-                      src="./Linear Graphs - Files/graph-2.png"
-                      alt="graph-2"
-                      class="graph-image"
-                    />
-                  </td>
-                </tr>
+                    <tr class="quote-item">
+                      <td class="quote-column">
+                        <div class="quote-box">
+                          <p class="quote-text">
+                            At the point where two lines cross, they will have
+                            the SAME x and y values. In the adjacent graph, at
+                            what x-value do the lines cross?
+                          </p>
+                        </div>
+                        <input
+                          readonly
+                          onclick="textAreaClick(this)"
+                          type="text"
+                          placeholder="Click here to Begin and add your response."
+                          class="response-field"
+                          style="height: 40px"
+                        />
+                      </td>
+                      <td class="response-column">
+                        <img
+                          src="./Linear Graphs - Files/graph-2.png"
+                          alt="graph-2"
+                          class="graph-image"
+                        />
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
 
-                <tr class="quote-item">
-                  <td class="quote-column">
-                    <div class="quote-box">
-                      <p class="quote-text">
-                        The adjacent graph is an example of a line with positive
-                        slope. The cost goes up at a steady rate as the weight
-                        increases:
-                      </p>
-                      <p class="quote-text" style="margin-top: 16px">
-                        1. What is the approximate y-intercept of this line?
-                      </p>
-                      <input
-                        type="text"
-                        placeholder="Enter your answer here"
-                        class="response-field"
+              <!-- Nested Accordion 2: Positive Slope Analysis -->
+              <div class="nested-accordion">
+                <div
+                  class="nested-accordion-header"
+                  onclick="toggleNestedAccordion(this)"
+                >
+                  <span class="nested-accordion-title"
+                    >Part 2: Analyzing Lines with Positive Slope</span
+                  >
+                  <div class="nested-accordion-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+                        stroke="#292D32"
+                        stroke-width="2.4"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
                       />
-                      <p class="quote-text">
-                        2. What is the approximate slope?
-                        <strong>(Remember m = rise / run)</strong>
-                      </p>
-                      <input
-                        type="text"
-                        placeholder="Enter your answer here"
-                        class="response-field"
-                      />
-                      <p class="quote-text">
-                        3. Write the equation of the line in y = mx + b format.
-                      </p>
-                      <input
-                        type="text"
-                        placeholder="Enter your answer here"
-                        class="response-field"
-                      />
-                    </div>
-                  </td>
-                  <td class="response-column">
-                    <img
-                      src="./Linear Graphs - Files/graph-3.png"
-                      alt="graph-3"
-                      class="graph-image"
-                    />
-                  </td>
-                </tr>
+                    </svg>
+                  </div>
+                </div>
+                <div class="nested-accordion-content">
+                  <table>
+                    <tr class="quote-item">
+                      <td class="quote-column">
+                        <div class="quote-box">
+                          <p class="quote-text">
+                            This is an example of a line with positive slope.
+                            The cost goes up at a steady rate as the weight
+                            increases:
+                          </p>
+                        </div>
+                      </td>
+                      <td class="response-column">
+                        <img
+                          src="./Linear Graphs - Files/graph-3.png"
+                          alt="graph-3"
+                          class="graph-image"
+                        />
+                      </td>
+                    </tr>
+                  </table>
 
-                <tr class="quote-item">
-                  <td class="quote-column">
-                    <div class="quote-box">
-                      <p class="quote-text">
-                        The adjacent graph is an example of a line with negative
-                        slope. The candle length gets smaller as time goes by.
-                      </p>
-                      <p class="quote-text" style="margin-top: 6px">
-                        1. What is the approximate y-intercept of this line?
-                      </p>
-                      <input
-                        type="text"
-                        placeholder="Enter your answer here"
-                        class="response-field"
-                      />
-                      <p class="quote-text">
-                        2. What is the approximate slope?
-                        <strong>(Remember m = rise / run)</strong>
-                      </p>
-                      <input
-                        type="text"
-                        placeholder="Enter your answer here"
-                        class="response-field"
-                      />
-                      <p class="quote-text" style="margin-top: 8px">
-                        3. Write the equation of the line in y = mx + b format.
-                      </p>
-                      <input
-                        type="text"
-                        placeholder="Enter your answer here"
-                        class="response-field"
-                      />
-                    </div>
-                  </td>
-                  <td class="response-column">
-                    <img
-                      src="./Linear Graphs - Files/graph-4.png"
-                      alt="graph-4"
-                      class="graph-image"
-                    />
-                  </td>
-                </tr>
+                  <p class="quote-text" style="margin-top: 24px">
+                    What is the approximate y-intercept of this line?
+                  </p>
+                  <input
+                    readonly
+                    onclick="textAreaClick(this)"
+                    type="text"
+                    placeholder="Click here to Begin and add your response."
+                    class="response-field"
+                    style="height: 40px; margin-bottom: 20px"
+                  />
 
-                <tr class="quote-item">
-                  <td class="quote-column">
-                    <div class="quote-box">
-                      <p class="quote-text">
-                        In the adjacent graph we have a graph of two companies
-                        that rent copy machines to schools.
-                      </p>
-                      <p class="quote-text">
-                        The first company charges a $40 flat fee and then $120
-                        for each month you rent the machine.
-                      </p>
-                      <p class="quote-text" style="margin: 16px 0px">
-                        1. Next to this line on the graph, write “Company A”.
-                      </p>
-                      <p class="quote-text">
-                        The second company charges a flat fee of $160.
-                      </p>
-                      <p class="quote-text" style="margin-top: 16px">
-                        2. What is its charge per month (the slope)?
-                      </p>
-                      <input
-                        type="text"
-                        placeholder="Enter your answer here"
-                        class="response-field"
-                        style="height: 40px"
+                  <p class="quote-text">
+                    What is the approximate slope? (Remember m = rise/run)
+                  </p>
+                  <input
+                    readonly
+                    onclick="textAreaClick(this)"
+                    type="text"
+                    placeholder="Click here to Begin and add your response."
+                    class="response-field"
+                    style="height: 40px; margin-bottom: 20px"
+                  />
+
+                  <p class="quote-text">
+                    Write the equation of the line in y = mx + b format.
+                  </p>
+                  <input
+                    readonly
+                    onclick="textAreaClick(this)"
+                    type="text"
+                    placeholder="Click here to Begin and add your response."
+                    class="response-field"
+                    style="height: 40px"
+                  />
+                </div>
+              </div>
+
+              <!-- Nested Accordion 3: Negative Slope Analysis -->
+              <div class="nested-accordion">
+                <div
+                  class="nested-accordion-header"
+                  onclick="toggleNestedAccordion(this)"
+                >
+                  <span class="nested-accordion-title"
+                    >Part 3: Analyzing Lines with Negative Slope</span
+                  >
+                  <div class="nested-accordion-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+                        stroke="#292D32"
+                        stroke-width="2.4"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
                       />
-                      <p class="quote-text" style="margin-bottom: 16px">
-                        3. Next to this line on the graph, write “Company B”.
-                      </p>
-                      <p class="quote-text">
-                        The rate per month is also the slope of the line.
-                      </p>
-                      <p class="quote-text" style="margin-top: 16px">
-                        4. Which company charges more per month? (You can figure
-                        that out simply by seeing which line is steeper.)
-                      </p>
-                      <input
-                        type="text"
-                        placeholder="Enter your answer here"
-                        class="response-field"
-                        style="height: 40px"
+                    </svg>
+                  </div>
+                </div>
+                <div class="nested-accordion-content">
+                  <table>
+                    <tr class="quote-item">
+                      <td class="quote-column">
+                        <div class="quote-box">
+                          <p class="quote-text">
+                            This is an example of a line with negative slope.
+                            The candle length gets smaller as time goes by.
+                          </p>
+                        </div>
+                      </td>
+                      <td class="response-column">
+                        <img
+                          src="./Linear Graphs - Files/graph-4.png"
+                          alt="graph-4"
+                          class="graph-image"
+                        />
+                      </td>
+                    </tr>
+                  </table>
+
+                  <p class="quote-text" style="margin-top: 24px">
+                    What is the approximate y-intercept of this line?
+                  </p>
+                  <input
+                    readonly
+                    onclick="textAreaClick(this)"
+                    type="text"
+                    placeholder="Click here to Begin and add your response."
+                    class="response-field"
+                    style="height: 40px; margin-bottom: 20px"
+                  />
+
+                  <p class="quote-text">
+                    What is the slope of this line? (Remember m = rise/run)
+                  </p>
+                  <input
+                    readonly
+                    onclick="textAreaClick(this)"
+                    type="text"
+                    placeholder="Click here to Begin and add your response."
+                    class="response-field"
+                    style="height: 40px; margin-bottom: 20px"
+                  />
+
+                  <p class="quote-text">
+                    Write the equation of the line in y = mx + b format.
+                  </p>
+                  <input
+                    readonly
+                    onclick="textAreaClick(this)"
+                    type="text"
+                    placeholder="Click here to Begin and add your response."
+                    class="response-field"
+                    style="height: 40px"
+                  />
+                </div>
+              </div>
+
+              <!-- Nested Accordion 4: Real-World Application -->
+              <div class="nested-accordion">
+                <div
+                  class="nested-accordion-header"
+                  onclick="toggleNestedAccordion(this)"
+                >
+                  <span class="nested-accordion-title"
+                    >Part 4: Real-World Application - Comparing Rental
+                    Plans</span
+                  >
+                  <div class="nested-accordion-arrow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+                        stroke="#292D32"
+                        stroke-width="2.4"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
                       />
-                      <p class="quote-text" style="margin-bottom: 16px">
-                        5. Which plan is better for a one-month rental? Explain.
-                      </p>
-                      <textarea
-                        readonly
-                        class="response-area"
-                        onclick="textAreaClick(this)"
-                        placeholder="Click here to Begin and add your response."
-                        style="height: 64px"
-                      ></textarea>
-                      <p class="quote-text" style="margin: 16px 0px">
-                        6. Which plan is better for a 4 month rental? Explain.
-                      </p>
-                      <textarea
-                        readonly
-                        class="response-area"
-                        onclick="textAreaClick(this)"
-                        placeholder="Click here to Begin and add your response."
-                        style="height: 64px"
-                      ></textarea>
-                      <p class="quote-text" style="margin-top: 16px">
-                        7. For approximately how many months will the companies
-                        charge the same amount for a copier rental? (In other
-                        words, find the x-value for where the lines cross.)
-                      </p>
-                      <input
-                        type="text"
-                        placeholder="Enter your answer here"
-                        class="response-field"
-                        style="height: 40px"
-                      />
-                      <p class="quote-text">
-                        8. How much is the cost when the companies will charge
-                        the same amount? (In other words, find the y-value where
-                        the lines cross.)
-                      </p>
-                      <input
-                        type="text"
-                        placeholder="Enter your answer here"
-                        class="response-field"
-                        style="height: 40px"
-                      />
-                    </div>
-                  </td>
-                  <td class="response-column">
-                    <img
-                      src="./Linear Graphs - Files/graph-5.png"
-                      alt="graph-5"
-                      class="graph-image"
-                      style="width: auto; height: 40%"
-                    />
-                  </td>
-                </tr>
-              </table>
+                    </svg>
+                  </div>
+                </div>
+                <div class="nested-accordion-content">
+                  <table>
+                    <tr class="quote-item">
+                      <td class="text-column">
+                        <div class="quote-box">
+                          <p class="quote-text">
+                            In the graph below we have a graph of two companies
+                            that rent copy machines to schools.
+                          </p>
+                          <p class="quote-text">
+                            The first company charges a $40 flat fee and then
+                            $120 for each month you rent the machine.
+                          </p>
+                          <p class="quote-text">
+                            The second company charges a flat fee of $160.
+                          </p>
+                          <p class="quote-text" style="margin-top: 16px">
+                            What is its charge per month (the slope)?
+                          </p>
+                          <input
+                            readonly
+                            onclick="textAreaClick(this)"
+                            type="text"
+                            placeholder="Click here to Begin and add your response."
+                            class="response-field"
+                            style="height: 40px"
+                          />
+                          <p class="quote-text">
+                            Which company charges more per month? (You can
+                            figure that out simply by seeing which line is
+                            steeper.)
+                          </p>
+                          <input
+                            readonly
+                            onclick="textAreaClick(this)"
+                            type="text"
+                            placeholder="Click here to Begin and add your response."
+                            class="response-field"
+                            style="height: 40px"
+                          />
+                          <p class="quote-text">
+                            Which plan is better for a one-month rental?
+                            Explain.
+                          </p>
+                          <textarea
+                            readonly
+                            class="response-area"
+                            onclick="textAreaClick(this)"
+                            placeholder="Click here to Begin and add your response."
+                            style="height: 64px"
+                          ></textarea>
+                          <p class="quote-text" style="margin-top: 16px">
+                            Which plan is better for a 4 month rental? Explain.
+                          </p>
+                          <textarea
+                            readonly
+                            class="response-area"
+                            onclick="textAreaClick(this)"
+                            placeholder="Click here to Begin and add your response."
+                            style="height: 64px"
+                          ></textarea>
+                          <p class="quote-text" style="margin-top: 16px">
+                            For approximately how many months will the companies
+                            charge the same amount for a copier rental? (In
+                            other words, find the x-value for where the lines
+                            cross.)
+                          </p>
+                          <input
+                            type="text"
+                            readonly
+                            onclick="textAreaClick(this)"
+                            placeholder="Click here to Begin and add your response."
+                            class="response-field"
+                            style="height: 40px"
+                          />
+                          <p class="quote-text">
+                            How much is the cost when the companies will charge
+                            the same amount? (In other words, find the y-value
+                            where the lines cross.)
+                          </p>
+                          <input
+                            readonly
+                            onclick="textAreaClick(this)"
+                            type="text"
+                            placeholder="Click here to Begin and add your response."
+                            class="response-field"
+                            style="height: 40px"
+                          />
+                        </div>
+                      </td>
+                      <td class="response-column">
+                        <img
+                          src="./Linear Graphs - Files/graph-5.png"
+                          alt="graph-5"
+                          class="graph-image"
+                          style="width: auto; height: 40%"
+                        />
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
             </div>
           </section>
         </div>
