@@ -1139,7 +1139,7 @@
         margin: 0px 0 16px 0;
       }
       .section-directions {
-        margin-bottom: 32px;
+        margin-bottom: 24px;
       }
       .section-directions p {
         color: #343434;
@@ -1200,7 +1200,7 @@
       }
       .question-block-container {
         background: #f0f0f0;
-        border: 2px solid #18740666;
+        border: 2px solid #6b9bd1;
         padding: 24px;
         border-radius: 8px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -1898,8 +1898,7 @@
               </div>
 
               <div class="lesson-subsection">
-                <p class="lesson-subsection-title"></p>
-                <div style="padding-left: 8px">
+                <div>
                   <div style="margin-bottom: 16px">
                     <div class="quote-box" style="background: white">
                       <p class="quote-text">
@@ -1964,6 +1963,80 @@
                             class="graph-image"
                           />
                         </div>
+                        <div style="padding-left: 24px">
+                          <span class="quote-text" style="margin-top: 24px">
+                            1. What is the approximate y-intercept of this line?
+                          </span>
+                          <input
+                            readonly
+                            onclick="textAreaClick(this)"
+                            type="text"
+                            class="response-field"
+                            style="margin-left: 16px"
+                          />
+                          <div>
+                            <span class="quote-text">
+                              2. What is the approximate slope? (Remember
+                              <strong> m = rise / run)</strong>
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
+
+                          <div>
+                            <span class="quote-text">
+                              3. Write the equation of the line in y = mx + b
+                              format.
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p class="lesson-subsection-title"></p>
+
+              <span
+                style="
+                  color: #343434;
+                  font-size: 16px;
+                  font-weight: 800;
+                  line-height: 24px;
+                  padding-left: 8px;
+                "
+                >Question #2
+              </span>
+
+              <div style="padding: 0px 48px; margin-top: 24px">
+                <div class="quote-item question-block-container">
+                  <div class="quote-column">
+                    <div class="quote-box">
+                      <p class="quote-text">
+                        This is an example of a line with negative slope. The
+                        candle length gets smaller as time goes by.
+                      </p>
+                      <div style="margin-top: 24px">
+                        <img
+                          src="./Linear Graphs - Files/graph-4.png"
+                          alt="graph-4"
+                          class="graph-image"
+                        />
+                      </div>
+                      <div style="padding-left: 24px">
                         <span class="quote-text" style="margin-top: 24px">
                           1. What is the approximate y-intercept of this line?
                         </span>
@@ -2006,76 +2079,6 @@
                   </div>
                 </div>
               </div>
-
-              <p class="lesson-subsection-title"></p>
-
-              <span
-                style="
-                  color: #343434;
-                  font-size: 16px;
-                  font-weight: 800;
-                  line-height: 24px;
-                  padding-left: 8px;
-                "
-                >Question #2
-              </span>
-
-              <div style="padding: 0px 48px; margin-top: 24px">
-                <div class="quote-item question-block-container">
-                  <div class="quote-column">
-                    <div class="quote-box">
-                      <p class="quote-text">
-                        This is an example of a line with negative slope. The
-                        candle length gets smaller as time goes by.
-                      </p>
-                      <div style="margin-top: 24px">
-                        <img
-                          src="./Linear Graphs - Files/graph-4.png"
-                          alt="graph-4"
-                          class="graph-image"
-                        />
-                      </div>
-                      <span class="quote-text" style="margin-top: 24px">
-                        1. What is the approximate y-intercept of this line?
-                      </span>
-                      <input
-                        readonly
-                        onclick="textAreaClick(this)"
-                        type="text"
-                        class="response-field"
-                        style="margin-left: 16px"
-                      />
-                      <div>
-                        <span class="quote-text">
-                          2. What is the approximate slope? (Remember
-                          <strong> m = rise / run)</strong>
-                        </span>
-                        <input
-                          readonly
-                          onclick="textAreaClick(this)"
-                          type="text"
-                          class="response-field"
-                          style="margin-left: 16px"
-                        />
-                      </div>
-
-                      <div>
-                        <span class="quote-text">
-                          3. Write the equation of the line in y = mx + b
-                          format.
-                        </span>
-                        <input
-                          readonly
-                          onclick="textAreaClick(this)"
-                          type="text"
-                          class="response-field"
-                          style="margin-left: 16px"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div>
                 <p class="lesson-subsection-title"></p>
 
@@ -2096,118 +2099,110 @@
                       <div class="quote-box">
                         <p class="quote-text">
                           In the graph below we have a graph of two companies
-                          that rent copy machines to schools.
+                          that rent copy machines to schools. The first company
+                          charges a $40 flat fee and then $120 for each month
+                          you rent the machine.
                         </p>
-                        <div style="margin-top: 24px">
+                        <div style="margin-top: 16px; margin-bottom: 8px">
                           <img
                             src="./Linear Graphs - Files/graph-5.png"
                             alt="graph-5"
                             class="graph-image"
                           />
                         </div>
-                        <p
-                          class="quote-text"
-                          style="margin-top: 16px; margin-bottom: 8px"
-                        >
-                          The first company charges a $40 flat fee and then $120
-                          for each month you rent the machine.
-                        </p>
-
-                        <span class="quote-text">
-                          1. Next to this line on the graph, write “Company A”
-                        </span>
-                        <p class="quote-text" style="margin-top: 16px">
-                          The second company charges a flat fee of $160.
-                        </p>
-
-                        <div>
+                        <div style="padding-left: 24px">
                           <span class="quote-text">
-                            2. What is its charge per month (the slope)?
+                            1. Next to this line on the graph, write “Company A”
                           </span>
-                          <input
-                            readonly
-                            onclick="textAreaClick(this)"
-                            type="text"
-                            class="response-field"
-                            style="margin-left: 16px"
-                          />
-                        </div>
-                        <p class="quote-text">
-                          3. Next to this line on the graph, write “Company B
-                        </p>
 
-                        <p class="quote-text" style="margin-top: 16px">
-                          The rate per month is also the slope of the line.
-                        </p>
+                          <div>
+                            <span class="quote-text">
+                              2. The second company charges a flat fee of $160.
+                              What is its charge per month (the slope)?
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
+                          <p class="quote-text" style="margin-bottom: 16px">
+                            3. Next to this line on the graph, write “Company B
+                          </p>
 
-                        <div>
-                          <span class="quote-text">
-                            4. Which company charges more per month? (You can
-                            figure that out simply by seeing which line is
-                            steeper.)
-                          </span>
-                          <input
+                          <div>
+                            <span class="quote-text">
+                              4. The rate per month is also the slope of the
+                              line. Which company charges more per month? (You
+                              can figure that out simply by seeing which line is
+                              steeper.)
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
+                          <p class="quote-text">
+                            5. Which plan is better for a one-month rental?
+                            Explain.
+                          </p>
+                          <textarea
                             readonly
+                            class="response-area"
                             onclick="textAreaClick(this)"
-                            type="text"
-                            class="response-field"
-                            style="margin-left: 16px"
-                          />
-                        </div>
-                        <p class="quote-text">
-                          5. Which plan is better for a one-month rental?
-                          Explain.
-                        </p>
-                        <textarea
-                          readonly
-                          class="response-area"
-                          onclick="textAreaClick(this)"
-                          placeholder="Click here to Begin and add your response."
-                          style="height: 64px; margin-top: 16px"
-                        ></textarea>
-                        <p
-                          class="quote-text"
-                          style="margin-top: 16px; margin-bottom: 16px"
-                        >
-                          6. Which plan is better for a 4 month rental? Explain.
-                        </p>
-                        <textarea
-                          readonly
-                          class="response-area"
-                          onclick="textAreaClick(this)"
-                          placeholder="Click here to Begin and add your response."
-                          style="height: 64px; margin-bottom: 8px"
-                        ></textarea>
+                            placeholder="Click here to Begin and add your response."
+                            style="height: 64px; margin-top: 16px"
+                          ></textarea>
+                          <p
+                            class="quote-text"
+                            style="margin-top: 16px; margin-bottom: 16px"
+                          >
+                            6. Which plan is better for a 4 month rental?
+                            Explain.
+                          </p>
+                          <textarea
+                            readonly
+                            class="response-area"
+                            onclick="textAreaClick(this)"
+                            placeholder="Click here to Begin and add your response."
+                            style="height: 64px; margin-bottom: 8px"
+                          ></textarea>
 
-                        <div>
-                          <span class="quote-text">
-                            7. For approximately how many months will the
-                            companies charge the same amount for a copier
-                            rental? (In other words, find the x-value for where
-                            the lines cross.)
-                          </span>
-                          <input
-                            readonly
-                            onclick="textAreaClick(this)"
-                            type="text"
-                            class="response-field"
-                            style="margin-left: 16px"
-                          />
-                        </div>
+                          <div>
+                            <span class="quote-text">
+                              7. For approximately how many months will the
+                              companies charge the same amount for a copier
+                              rental? (In other words, find the x-value for
+                              where the lines cross.)
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
 
-                        <div>
-                          <span class="quote-text">
-                            8. How much is the cost when the companies will
-                            charge the same amount? (In other words, find the
-                            y-value where the lines cross.)
-                          </span>
-                          <input
-                            readonly
-                            onclick="textAreaClick(this)"
-                            type="text"
-                            class="response-field"
-                            style="margin-left: 16px"
-                          />
+                          <div>
+                            <span class="quote-text">
+                              8. How much is the cost when the companies will
+                              charge the same amount? (In other words, find the
+                              y-value where the lines cross.)
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -2291,51 +2286,143 @@
               </div>
             </div>
             <div class="accordion-content">
-              <h2 class="section-quote">The Race</h2>
-              <p class="lesson-subsection-title" style="margin: 0;"></p>
-
               <div>
                 <div class="quote-column">
                   <div class="quote-box">
-                    <p class="quote-text">
-                      Maggie and Emma race each other along a straight running
-                      track.
-                    </p>
-                    <p class="quote-text">
-                      Maggie starts some distance ahead of Emma.
-                    </p>
-                    <p class="quote-text">The graph describes the race.</p>
-                    <div style="margin-top: 24px; margin-bottom: 8px">
+                    <div class="section-directions">
+                      <span style="display: block">
+                        Maggie and Emma race each other along a straight running
+                        track.
+                      </span>
+                      <span style="display: block">
+                        Maggie starts some distance ahead of Emma.
+                      </span>
+                      <span> The graph describes the race. </span>
+                    </div>
+
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: center;
+                        margin-top: 16px;
+                        margin-bottom: 16px;
+                      "
+                    >
                       <img
                         src="./Linear Graphs - Files/graph-6.png"
                         alt="graph-6"
                         class="graph-image"
                       />
                     </div>
-                    <span class="quote-text">
-                      1. After five seconds, who is running the fastest? Explain
-                      your answer.
-                    </span>
-                    <textarea
-                      readonly
-                      class="response-area"
-                      onclick="showSnackbar()"
-                      placeholder="Click here to Begin and add your response."
-                      style="height: 64px; margin-top: 16px"
-                    ></textarea>
-                    <div>
+                    <div style="padding-left: 16px">
+                      <span class="quote-text">
+                        1. After five seconds, who is running the fastest?
+                        Explain your answer.
+                      </span>
+                      <textarea
+                        readonly
+                        class="response-area"
+                        onclick="showSnackbar()"
+                        placeholder="Click here to Begin and add your response."
+                        style="height: 64px; margin-top: 16px"
+                      ></textarea>
+                      <div>
+                        <p class="quote-text" style="margin: 16px 0px">
+                          2. Emma's line can be represented by the equation:
+                        </p>
+                        <p class="quote-text" style="margin-left: 18px">
+                          <math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><mi>s</mi><mo>&#xA0;</mo><mo>=</mo><mo>&#xA0;</mo
+                            ><mn>5</mn><mi>t</mi><mo>&#xA0;</mo></math
+                          >
+                        </p>
+                        <p class="quote-text" style="margin-left: 18px">
+                          <math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><mi>s</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
+                            ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
+                            ><mo>&#xA0;</mo><mi>d</mi><mi>i</mi><mi>s</mi
+                            ><mi>tan</mi><mi>c</mi><mi>e</mi><mo>,</mo
+                            ><mo>&#xA0;</mo><mi>i</mi><mi>n</mi><mo>&#xA0;</mo
+                            ><mi>y</mi><mi>a</mi><mi>r</mi><mi>d</mi><mi>s</mi
+                            ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
+                            ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
+                            ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>S</mi
+                            ><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mi>i</mi
+                            ><mi>n</mi><mi>g</mi><mo>&#xA0;</mo><mi>P</mi
+                            ><mi>l</mi><mi>a</mi><mi>c</mi><mi>e</mi
+                            ><mo>.</mo></math
+                          >
+                        </p>
+                        <p class="quote-text" style="margin-left: 18px">
+                          <math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><mi>t</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
+                            ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
+                            ><mo>&#xA0;</mo><mi>t</mi><mi>i</mi><mi>m</mi
+                            ><mi>e</mi><mo>,</mo><mo>&#xA0;</mo><mi>i</mi
+                            ><mi>n</mi><mo>&#xA0;</mo><mi>s</mi><mi>e</mi
+                            ><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi><mi>s</mi
+                            ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
+                            ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
+                            ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>s</mi
+                            ><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi
+                            ><mo>&#xA0;</mo><mi>o</mi><mi>f</mi><mo>&#xA0;</mo
+                            ><mi>t</mi><mi>h</mi><mi>e</mi><mo>&#xA0;</mo
+                            ><mi>r</mi><mi>a</mi><mi>c</mi><mi>e</mi
+                            ><mo>.</mo></math
+                          >
+                        </p>
+                        <p
+                          class="quote-text"
+                          style="display: inline; margin-left: 18px"
+                        >
+                          What is the equation that represents Maggie's line?
+                        </p>
+                        <input
+                          readonly
+                          onclick="showSnackbar()"
+                          type="text"
+                          class="response-field"
+                          style="margin-left: 16px"
+                        />
+                      </div>
+                      <span class="quote-text" style="margin-top: 24px">
+                        3. Describe what happens in the race.
+                      </span>
+                      <textarea
+                        readonly
+                        class="response-area"
+                        onclick="showSnackbar()"
+                        placeholder="Click here to Begin and add your response."
+                        style="height: 64px; margin-top: 16px"
+                      ></textarea>
+                    </div>
+
+                    <p class="quote-text" style="margin-top: 16px">
+                      The diagram below shows the distance a runners is from the
+                      Starting Place and from the Finishing Line.
+                    </p>
+                    <div style="margin-top: 16px">
+                      <img
+                        src="./Linear Graphs - Files/graph-7.png"
+                        alt="graph-7"
+                        class="graph-image"
+                      />
+                    </div>
+                    <div style="padding-left: 24px">
                       <p class="quote-text" style="margin: 16px 0px">
-                        2. Emma's line can be represented by the equation:
+                        4. The following equation can also be used to describe
+                        Emma's race:
                       </p>
                       <p class="quote-text" style="margin-left: 18px">
                         <math xmlns="http://www.w3.org/1998/Math/MathML"
-                          ><mi>s</mi><mo>&#xA0;</mo><mo>=</mo><mo>&#xA0;</mo
-                          ><mn>5</mn><mi>t</mi><mo>&#xA0;</mo></math
+                          ><mi>f</mi><mo>&#xA0;</mo><mo>=</mo><mo>&#xA0;</mo
+                          ><mo>-</mo><mn>5</mn><mi>t</mi><mo>&#xA0;</mo
+                          ><mo>+</mo><mo>&#xA0;</mo><mn>70</mn></math
                         >
                       </p>
                       <p class="quote-text" style="margin-left: 18px">
                         <math xmlns="http://www.w3.org/1998/Math/MathML"
-                          ><mi>s</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
+                          ><mi>f</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
                           ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
                           ><mo>&#xA0;</mo><mi>d</mi><mi>i</mi><mi>s</mi
                           ><mi>tan</mi><mi>c</mi><mi>e</mi><mo>,</mo
@@ -2343,10 +2430,10 @@
                           ><mi>y</mi><mi>a</mi><mi>r</mi><mi>d</mi><mi>s</mi
                           ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
                           ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
-                          ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>S</mi
-                          ><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mi>i</mi
-                          ><mi>n</mi><mi>g</mi><mo>&#xA0;</mo><mi>P</mi
-                          ><mi>l</mi><mi>a</mi><mi>c</mi><mi>e</mi
+                          ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>F</mi
+                          ><mi>i</mi><mi>n</mi><mi>i</mi><mi>s</mi><mi>h</mi
+                          ><mi>i</mi><mi>n</mi><mi>g</mi><mo>&#xA0;</mo
+                          ><mi>L</mi><mi>i</mi><mi>n</mi><mi>e</mi
                           ><mo>.</mo></math
                         >
                       </p>
@@ -2360,122 +2447,45 @@
                           ><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi><mi>s</mi
                           ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
                           ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
-                          ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>s</mi
-                          ><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi
-                          ><mo>&#xA0;</mo><mi>o</mi><mi>f</mi><mo>&#xA0;</mo
-                          ><mi>t</mi><mi>h</mi><mi>e</mi><mo>&#xA0;</mo
-                          ><mi>r</mi><mi>a</mi><mi>c</mi><mi>e</mi
-                          ><mo>.</mo></math
+                          ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>b</mi
+                          ><mi>e</mi><mi>g</mi><mi>i</mi><mi>n</mi><mi>n</mi
+                          ><mi>i</mi><mi>n</mi><mi>g</mi><mo>&#xA0;</mo
+                          ><mi>o</mi><mi>f</mi><mo>&#xA0;</mo><mi>t</mi
+                          ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>r</mi
+                          ><mi>a</mi><mi>c</mi><mi>e</mi><mo>.</mo></math
                         >
                       </p>
-                      <p
-                        class="quote-text"
-                        style="display: inline; margin-left: 18px"
-                      >
-                        What is the equation that represents Maggie's line?
-                      </p>
-                      <input
-                        readonly
-                        onclick="showSnackbar()"
-                        type="text"
-                        class="response-field"
-                        style="margin-left: 16px"
-                      />
-                    </div>
-                    <span class="quote-text" style="margin-top: 24px">
-                      3. Describe what happens in the race.
-                    </span>
-                    <textarea
-                      readonly
-                      class="response-area"
-                      onclick="showSnackbar()"
-                      placeholder="Click here to Begin and add your response."
-                      style="height: 64px; margin-top: 16px"
-                    ></textarea>
+                      <div style="padding-left: 40px">
+                        <p class="quote-text" style="margin-top: 16px">
+                          a. Plot this line on the graph.
+                        </p>
 
-                    <p class="quote-text" style="margin-top: 16px">
-                      The diagram below shows the distance a runners is from the
-                      Starting Place and from the Finishing Line.
-                    </p>
-                    <div style="margin-top: 16px">
-                      <img
-                        src="./Linear Graphs - Files/graph-7.png"
-                        alt="graph-7"
-                        class="graph-image"
-                      />
-                    </div>
-                    <p class="quote-text" style="margin: 16px 0px">
-                      4. The following equation can also be used to describe
-                      Emma's race:
-                    </p>
-                    <p class="quote-text" style="margin-left: 18px">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML"
-                        ><mi>f</mi><mo>&#xA0;</mo><mo>=</mo><mo>&#xA0;</mo
-                        ><mo>-</mo><mn>5</mn><mi>t</mi><mo>&#xA0;</mo><mo>+</mo
-                        ><mo>&#xA0;</mo><mn>70</mn></math
-                      >
-                    </p>
-                    <p class="quote-text" style="margin-left: 18px">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML"
-                        ><mi>f</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
-                        ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
-                        ><mo>&#xA0;</mo><mi>d</mi><mi>i</mi><mi>s</mi
-                        ><mi>tan</mi><mi>c</mi><mi>e</mi><mo>,</mo
-                        ><mo>&#xA0;</mo><mi>i</mi><mi>n</mi><mo>&#xA0;</mo
-                        ><mi>y</mi><mi>a</mi><mi>r</mi><mi>d</mi><mi>s</mi
-                        ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi><mi>o</mi
-                        ><mi>m</mi><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
-                        ><mo>&#xA0;</mo><mi>F</mi><mi>i</mi><mi>n</mi><mi>i</mi
-                        ><mi>s</mi><mi>h</mi><mi>i</mi><mi>n</mi><mi>g</mi
-                        ><mo>&#xA0;</mo><mi>L</mi><mi>i</mi><mi>n</mi><mi>e</mi
-                        ><mo>.</mo></math
-                      >
-                    </p>
-                    <p class="quote-text" style="margin-left: 18px">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML"
-                        ><mi>t</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
-                        ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
-                        ><mo>&#xA0;</mo><mi>t</mi><mi>i</mi><mi>m</mi><mi>e</mi
-                        ><mo>,</mo><mo>&#xA0;</mo><mi>i</mi><mi>n</mi
-                        ><mo>&#xA0;</mo><mi>s</mi><mi>e</mi><mi>c</mi><mi>o</mi
-                        ><mi>n</mi><mi>d</mi><mi>s</mi><mo>,</mo><mo>&#xA0;</mo
-                        ><mi>f</mi><mi>r</mi><mi>o</mi><mi>m</mi><mo>&#xA0;</mo
-                        ><mi>t</mi><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>b</mi
-                        ><mi>e</mi><mi>g</mi><mi>i</mi><mi>n</mi><mi>n</mi
-                        ><mi>i</mi><mi>n</mi><mi>g</mi><mo>&#xA0;</mo><mi>o</mi
-                        ><mi>f</mi><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
-                        ><mo>&#xA0;</mo><mi>r</mi><mi>a</mi><mi>c</mi><mi>e</mi
-                        ><mo>.</mo></math
-                      >
-                    </p>
+                        <div style="margin-top: 24px">
+                          <img
+                            src="./Linear Graphs - Files/graph-8.png"
+                            alt="graph-8"
+                            class="graph-image"
+                          />
+                        </div>
 
-                    <p class="quote-text" style="margin-top: 16px">
-                      a. Plot this line on the graph.
-                    </p>
+                        <p class="quote-text" style="margin-top: 16px">
+                          b. Add a line to the graph that represents Maggie's
+                          race.
+                        </p>
 
-                    <div style="margin-top: 24px">
-                      <img
-                        src="./Linear Graphs - Files/graph-8.png"
-                        alt="graph-8"
-                        class="graph-image"
-                      />
-                    </div>
-
-                    <p class="quote-text" style="margin-top: 16px">
-                      b. Add a line to the graph that represents Maggie's race.
-                    </p>
-
-                    <div>
-                      <span class="quote-text">
-                        c. What is the equation of this second line?
-                      </span>
-                      <input
-                        readonly
-                        onclick="showSnackbar()"
-                        type="text"
-                        class="response-field"
-                        style="margin-left: 16px"
-                      />
+                        <div>
+                          <span class="quote-text">
+                            c. What is the equation of this second line?
+                          </span>
+                          <input
+                            readonly
+                            onclick="showSnackbar()"
+                            type="text"
+                            class="response-field"
+                            style="margin-left: 16px"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
