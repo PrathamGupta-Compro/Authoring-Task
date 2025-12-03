@@ -1162,9 +1162,7 @@
         /* gap: 32px; */
         /* padding-bottom: 60px; */
       }
-      .quote-item:last-of-type {
-        border-bottom: none;
-      }
+      
       /* Left column wrapper */
       .quote-column {
         display: flex;
@@ -1197,13 +1195,12 @@
         color: #718096;
       }
       .quote-box {
-        background: white;
         border-radius: 12px;
         color: #2d3748;
       }
       .question-block-container {
-        background: #f9fafb;
-        border-left: 4px solid #187406;
+        background: #f0f0f0;
+        border: 2px solid #18740666;
         padding: 24px;
         border-radius: 8px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -1238,7 +1235,7 @@
         margin: 0;
         border-radius: 8px;
         border: 1px solid #a6a6a6;
-        background: #f0f0f0;
+        background: #dedede;
         cursor: pointer;
       }
       .response-area:focus {
@@ -1266,7 +1263,7 @@
         transition: border-color 0.3s;
         margin: 16px 0;
         border-radius: 4x;
-        background: #e6e5e5;
+        background: #dedede;
         cursor: pointer;
       }
       .response-field:focus {
@@ -1904,7 +1901,7 @@
                 <p class="lesson-subsection-title"></p>
                 <div style="padding-left: 8px">
                   <div style="margin-bottom: 16px">
-                    <div class="quote-box">
+                    <div class="quote-box" style="background: white">
                       <p class="quote-text">
                         The steeper the line, the higher the rate of change. The
                         lines below show this.
@@ -1920,7 +1917,7 @@
                   </div>
 
                   <div style="margin-bottom: 32px">
-                    <div class="quote-box">
+                    <div class="quote-box" style="background: white">
                       <p class="quote-text">
                         At the point where two lines cross, they will have the
                         SAME x and y values. In the graph below, at what x-value
@@ -1945,18 +1942,17 @@
                   style="
                     color: #343434;
                     font-size: 16px;
-                    font-weight: 400;
+                    font-weight: 800;
                     line-height: 24px;
                     padding-left: 8px;
                   "
-                  >Question Block -
+                  >Question 1 -
                 </span>
 
                 <div style="padding: 0px 48px; margin-top: 24px">
-                  <table>
-                    <tr class="quote-item question-block-container">
-                      <td class="quote-column">
-                        <div class="quote-box" style="background: #f9fafb">
+                  <div class="quote-item question-block-container">
+                    <div class="quote-column">
+                        <div class="quote-box" >
                           <p class="quote-text">
                             This is an example of a line with positive slope.
                             The cost goes up at a steady rate as the weight
@@ -2007,9 +2003,8 @@
                             />
                           </div>
                         </div>
-                      </td>
-                    </tr>
-                  </table>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -2020,18 +2015,17 @@
                   style="
                     color: #343434;
                     font-size: 16px;
-                    font-weight: 400;
+                    font-weight: 800;
                     line-height: 24px;
                     padding-left: 8px;
                   "
-                  >Question Block -
+                  >Question 2 -
                 </span>
 
                 <div style="padding: 0px 48px; margin-top: 24px">
-                  <table>
-                    <tr class="quote-item question-block-container">
-                      <td class="quote-column">
-                        <div class="quote-box" style="background: #f9fafb">
+                  <div class="quote-item question-block-container">
+                    <div class="quote-column">
+                        <div class="quote-box">
                           <p class="quote-text">
                             This is an example of a line with negative slope.
                             The candle length gets smaller as time goes by.
@@ -2093,18 +2087,17 @@
                   style="
                     color: #343434;
                     font-size: 16px;
-                    font-weight: 400;
+                    font-weight: 800;
                     line-height: 24px;
                     padding-left: 8px;
                   "
-                  >Question Block -
+                  >Question 3 -
                 </span>
 
-                <div style="padding: 0px 48px; margin-top: 24px">
-                  <table>
-                    <tr class="quote-item question-block-container">
-                      <td class="quote-column">
-                        <div class="quote-box" style="background: #f9fafb">
+                <div style="margin-top: 24px">
+                  <div class="quote-item question-block-container">
+                    <div class="quote-column">
+                        <div class="quote-box">
                           <p class="quote-text">
                             In the graph below we have a graph of two companies
                             that rent copy machines to schools.
@@ -2222,9 +2215,8 @@
                             />
                           </div>
                         </div>
-                      </td>
-                    </tr>
-                  </table>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
