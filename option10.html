@@ -135,40 +135,40 @@
           zoomButtons: false,
           expressionsCollapsed: true,
           border: false,
-          xAxisArrowMode: Desmos.AxisArrowModes.POSITIVE, // arrow only to the right
-          yAxisArrowMode: Desmos.AxisArrowModes.POSITIVE, // arrow only up
           xAxisStep: 1,
           yAxisStep: 1,
           showGrid: false, // remove grid
         });
 
         // keep the lines
-        calculator.setExpression({ id: "line1", latex: "y=2x\\{x>=0\\}" });
-        calculator.setExpression({ id: "line2", latex: "y=0.5x\\{x>=0\\}" });
+        calculator.setExpression({
+          id: "line1",
+          latex: "y=2x\\{0<=x \\}\\{y<=8\\}",
+        });
+        calculator.setExpression({ id: "line2", latex: "y=0.5x\\{0<=x<=8\\}" });
 
-        // add labeled points (choose x where label should sit)
         calculator.setExpression({
           id: "labelQ1_point",
-          latex: "(3,6)",
+          latex: "(4,8)",
           label: "Q",
           showLabel: true,
         });
         calculator.setExpression({
           id: "labelQ2_point",
-          latex: "(1.5,3)",
+          latex: "(2,4)",
           label: "Slope = 2",
           showLabel: true,
         });
 
         calculator.setExpression({
           id: "labelP1_point",
-          latex: "(7,3.5)", // point on y=0.5x
+          latex: "(8,4)", // point on y=0.5x
           label: "P",
           showLabel: true,
         });
         calculator.setExpression({
           id: "labelP2_point",
-          latex: "(3,1.5)", // point on y=0.5x
+          latex: "(4,2)", // point on y=0.5x
           label: "Slope = 1/2",
           showLabel: true,
         });
@@ -176,14 +176,16 @@
         // lock the viewport to first quadrant
         calculator.setMathBounds({
           left: -0.8,
-          right: 7.2,
+          right: 10,
           bottom: -0.8,
-          top: 6.2,
+          top: 10,
         });
 
         // freeze zoom + pan
         calculator.updateSettings({
           lockViewport: true,
+          xAxisLabel: "X",
+          yAxisLabel: "Y",
         });
 
         // Progress bars for Main Header (for click/tooltip)
@@ -1967,10 +1969,10 @@
                         lines below show this.
                       </p>
                     </div>
-                    <div style="margin-top: 24px">
+                    <div style="margin-top: 24px; margin-bottom: 24px;">
                       <div
                         id="calculator"
-                        style="width: 300px; height: 202px"
+                        style="width: 300px; height: 300px;"
                       ></div>
                     </div>
                   </div>
