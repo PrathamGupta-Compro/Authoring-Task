@@ -127,6 +127,65 @@
         const expandableContent = document.getElementById("expandableContent");
         const stepElements = document.querySelectorAll(".steps-list .step");
 
+        var elt = document.getElementById("calculator");
+
+        var calculator = Desmos.GraphingCalculator(elt, {
+          expressions: false,
+          settingsMenu: false,
+          zoomButtons: false,
+          expressionsCollapsed: true,
+          border: false,
+          xAxisArrowMode: Desmos.AxisArrowModes.POSITIVE, // arrow only to the right
+          yAxisArrowMode: Desmos.AxisArrowModes.POSITIVE, // arrow only up
+          xAxisStep: 1,
+          yAxisStep: 1,
+          showGrid: false, // remove grid
+        });
+
+        // keep the lines
+        calculator.setExpression({ id: "line1", latex: "y=2x\\{x>=0\\}" });
+        calculator.setExpression({ id: "line2", latex: "y=0.5x\\{x>=0\\}" });
+
+        // add labeled points (choose x where label should sit)
+        calculator.setExpression({
+          id: "labelQ1_point",
+          latex: "(3,6)",
+          label: "Q",
+          showLabel: true,
+        });
+        calculator.setExpression({
+          id: "labelQ2_point",
+          latex: "(1.5,3)",
+          label: "Slope = 2",
+          showLabel: true,
+        });
+
+        calculator.setExpression({
+          id: "labelP1_point",
+          latex: "(7,3.5)", // point on y=0.5x
+          label: "P",
+          showLabel: true,
+        });
+        calculator.setExpression({
+          id: "labelP2_point",
+          latex: "(3,1.5)", // point on y=0.5x
+          label: "Slope = 1/2",
+          showLabel: true,
+        });
+
+        // lock the viewport to first quadrant
+        calculator.setMathBounds({
+          left: -0.8,
+          right: 7.2,
+          bottom: -0.8,
+          top: 6.2,
+        });
+
+        // freeze zoom + pan
+        calculator.updateSettings({
+          lockViewport: true,
+        });
+
         // Progress bars for Main Header (for click/tooltip)
         const mainProgressBars = document.querySelectorAll(
           "#header .progress-container .progress-bar"
@@ -1909,11 +1968,10 @@
                       </p>
                     </div>
                     <div style="margin-top: 24px">
-                      <img
-                        src="./Linear Graphs - Files/graph-1.png"
-                        alt="graph-1"
-                        class="graph-image"
-                      />
+                      <div
+                        id="calculator"
+                        style="width: 300px; height: 202px"
+                      ></div>
                     </div>
                   </div>
 
@@ -2588,5 +2646,6 @@
         </div>
       </div>
     </div>
+    <script src="https://www.desmos.com/api/v1.11/calculator.js?apiKey=a2df334415d748b497c6e2c4e19a08ec"></script>
   </body>
 </html>
