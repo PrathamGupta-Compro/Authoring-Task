@@ -185,6 +185,48 @@
           yAxisLabel: "Y",
         });
 
+        // =====================
+        // SECOND GRAPH (replace graph-2)
+        // =====================
+
+        var elt2 = document.getElementById("calculator2");
+
+        var calculator2 = Desmos.GraphingCalculator(elt2, {
+          expressions: false,
+          settingsMenu: false,
+          zoomButtons: false,
+          expressionsCollapsed: true,
+          border: false,
+          xAxisStep: 1,
+          yAxisStep: 2,
+          showGrid: false,
+        });
+
+        // Lines y = 2x + 4 and y = 3x + 2
+        calculator2.setExpression({
+          id: "lineA",
+          latex: "y=2x+4\\{0<=x \\}\\{y<=18\\}",
+        });
+
+        calculator2.setExpression({
+          id: "lineB",
+          latex: "y=3x+2\\{0<=x \\}\\{y<=20\\}",
+        });
+
+        // Match the viewport of the first graph
+        calculator2.setMathBounds({
+          left: -0.8,
+          right: 7.5,
+          bottom: -1.2,
+          top: 24,
+        });
+
+        calculator2.updateSettings({
+          lockViewport: true,
+          xAxisLabel: "X",
+          yAxisLabel: "Y",
+        });
+
         // Progress bars for Main Header (for click/tooltip)
         const mainProgressBars = document.querySelectorAll(
           "#header .progress-container .progress-bar"
@@ -1966,7 +2008,7 @@
                         lines below show this.
                       </p>
                     </div>
-                    <div style="margin-top: 24px; margin-bottom: 24px">
+                    <div style="margin: 24px 0px">
                       <div
                         id="calculator"
                         style="width: 300px; height: 300px"
@@ -1983,12 +2025,11 @@
                       </p>
                     </div>
 
-                    <div style="margin-top: 24px">
-                      <img
-                        src="./Linear Graphs - Files/graph-2.png"
-                        alt="graph-2"
-                        class="graph-image"
-                      />
+                    <div style="margin: 24px 0px">
+                      <div
+                        id="calculator2"
+                        style="width: 420px; height: 420px"
+                      ></div>
                     </div>
                   </div>
                 </div>
