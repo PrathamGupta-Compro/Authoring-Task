@@ -137,10 +137,9 @@
           border: false,
           xAxisStep: 1,
           yAxisStep: 1,
-          showGrid: false, // remove grid
+          showGrid: false,
         });
 
-        // keep the lines
         calculator.setExpression({
           id: "line1",
           latex: "y=2x\\{0<=x \\}\\{y<=8\\}",
@@ -162,18 +161,17 @@
 
         calculator.setExpression({
           id: "labelP1_point",
-          latex: "(8,4)", // point on y=0.5x
+          latex: "(8,4)",
           label: "P",
           showLabel: true,
         });
         calculator.setExpression({
           id: "labelP2_point",
-          latex: "(4,2)", // point on y=0.5x
+          latex: "(4,2)",
           label: "Slope = 1/2",
           showLabel: true,
         });
 
-        // lock the viewport to first quadrant
         calculator.setMathBounds({
           left: -0.8,
           right: 10,
@@ -181,7 +179,6 @@
           top: 10,
         });
 
-        // freeze zoom + pan
         calculator.updateSettings({
           lockViewport: true,
           xAxisLabel: "X",
@@ -1969,10 +1966,10 @@
                         lines below show this.
                       </p>
                     </div>
-                    <div style="margin-top: 24px; margin-bottom: 24px;">
+                    <div style="margin-top: 24px; margin-bottom: 24px">
                       <div
                         id="calculator"
-                        style="width: 300px; height: 300px;"
+                        style="width: 300px; height: 300px"
                       ></div>
                     </div>
                   </div>
@@ -1985,6 +1982,7 @@
                         do the lines cross?
                       </p>
                     </div>
+
                     <div style="margin-top: 24px">
                       <img
                         src="./Linear Graphs - Files/graph-2.png"
