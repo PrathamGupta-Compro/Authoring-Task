@@ -75,13 +75,14 @@
       }
 
       // Function to handle the 'Begin' action
-      function beginStep(button) {
+      function beginStep() {
         const section = document.getElementById("step1");
         const textareas = section.querySelectorAll("textarea.response-area");
         const inputs = section.querySelectorAll("input.response-field");
 
         const stepCard = section.closest(".part-card");
         const stepIndex = parseInt(stepCard.id.replace("step", "")) - 1; // 0-indexed
+        const button = document.getElementById("begin-btn-1");
 
         // 1. Enable textareas
         textareas.forEach((t) => {
@@ -2054,7 +2055,7 @@
               </div>
               <p class="lesson-subsection-title"></p>
               <div id="beginQuestions" style="margin-left: 280px">
-                <div class="begin-modal-box" style="box-shadow: none;">
+                <div class="begin-modal-box" style="box-shadow: none">
                   <!-- Image -->
                   <div class="begin-modal-illustration">
                     <img
@@ -2388,7 +2389,13 @@
           >
             Request Help
           </button>
-          <button class="begin-button" onclick="showSnackbar()">Submit</button>
+          <button
+            id="begin-btn-1"
+            class="begin-button"
+            onclick="startQuestions()"
+          >
+            Begin
+          </button>
         </div>
       </section>
       <!-- Part 2 Card -->
