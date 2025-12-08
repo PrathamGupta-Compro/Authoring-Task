@@ -85,7 +85,6 @@
         const button = document.getElementById("begin-btn-1");
         const practiceTestButton = document.getElementById("beginPracticeTest");
 
-
         // 1. Enable textareas
         textareas.forEach((t) => {
           t.readOnly = false;
@@ -178,9 +177,9 @@
 
         calculator.setMathBounds({
           left: -0.8,
-          right: 10,
+          right: 8.3,
           bottom: -0.8,
-          top: 10,
+          top: 8.3,
         });
 
         calculator.updateSettings({
@@ -1810,24 +1809,19 @@
             class="step-status not-started"
             style="background-color: #e7e7e7; color: #343434"
           >
-            Objectives (0)
-          </li>
-          <li
-            class="step-status not-started"
-            style="background-color: #e7e7e7; color: #343434"
-          >
-            Essential Questions (0)
+            Objectives (1)
           </li>
         </ul>
         <div class="expandable-content" id="expandableContent">
-          <div style="display: flex; gap: 600px">
+          <div style="display: flex; gap: 120px">
             <div>
               <h3 class="section-heading">Objectives</h3>
-              <ul class="objectives-list"></ul>
-              <h3 class="section-heading" style="margin-top: 40px">
-                Essential Questions
-              </h3>
-              <ul class="questions-list"></ul>
+              <ul class="objectives-list">
+                <li style="white-space: nowrap">
+                  I can read graphs to determine their y-intercept and slope to
+                  create an approximate equation for a line.
+                </li>
+              </ul>
             </div>
             <div>
               <h3 class="section-heading">Competencies</h3>
@@ -2032,7 +2026,7 @@
                     <div style="margin: 24px 0px">
                       <div
                         id="calculator"
-                        style="width: 320px; height: 300px"
+                        style="width: 340px; height: 320px"
                       ></div>
                     </div>
                   </div>
@@ -2094,12 +2088,11 @@
                               margin-top: 16px;
                             "
                           >
-                            <strong>Directions: </strong>There are 3 activities
-                            Clicking Begin will Begin all three!<p>Lorem ipsum
-                            dolor sit amet, consectetur adipiscing elit, sed do
-                            eiusmod tempor incididunt ut labore et dolore magna
-                            aliqua. Ut enim ad minim veniam, quis nostrud
-                            exercitation ullamco laboris nisi ut</p>
+                            <strong>Directions: </strong>Lorem ipsum dolor sit
+                            amet, consectetur adipiscing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua.
+                            Ut enim ad minim veniam, quis nostrud exercitation
+                            ullamco laboris nisi ut
                           </p>
 
                           <!-- Begin Button -->
@@ -2107,7 +2100,7 @@
                             style="display: flex; justify-content: flex-start"
                           >
                             <button
-                            id="beginPracticeTest"
+                              id="beginPracticeTest"
                               style="
                                 padding: 12px 32px;
                                 background: #2c2c2c;
@@ -2411,11 +2404,7 @@
           >
             Request Help
           </button>
-          <button
-            id="begin-btn-1"
-            class="begin-button"
-            onclick="beginStep()"
-          >
+          <button id="begin-btn-1" class="begin-button" onclick="beginStep()">
             Begin
           </button>
         </div>
@@ -2508,47 +2497,58 @@
                         <p class="quote-text" style="margin: 16px 0px">
                           2. Emma's line can be represented by the equation:
                         </p>
-                        <p class="quote-text" style="margin-left: 18px">
-                          <math xmlns="http://www.w3.org/1998/Math/MathML"
-                            ><mi>s</mi><mo>&#xA0;</mo><mo>=</mo><mo>&#xA0;</mo
-                            ><mn>5</mn><mi>t</mi><mo>&#xA0;</mo></math
-                          >
-                        </p>
-                        <p class="quote-text" style="margin-left: 18px">
-                          <math xmlns="http://www.w3.org/1998/Math/MathML"
-                            ><mi>s</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
-                            ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
-                            ><mo>&#xA0;</mo><mi>d</mi><mi>i</mi><mi>s</mi
-                            ><mi>tan</mi><mi>c</mi><mi>e</mi><mo>,</mo
-                            ><mo>&#xA0;</mo><mi>i</mi><mi>n</mi><mo>&#xA0;</mo
-                            ><mi>y</mi><mi>a</mi><mi>r</mi><mi>d</mi><mi>s</mi
-                            ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
-                            ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
-                            ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>S</mi
-                            ><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mi>i</mi
-                            ><mi>n</mi><mi>g</mi><mo>&#xA0;</mo><mi>P</mi
-                            ><mi>l</mi><mi>a</mi><mi>c</mi><mi>e</mi
-                            ><mo>.</mo></math
-                          >
-                        </p>
-                        <p class="quote-text" style="margin-left: 18px">
-                          <math xmlns="http://www.w3.org/1998/Math/MathML"
-                            ><mi>t</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
-                            ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
-                            ><mo>&#xA0;</mo><mi>t</mi><mi>i</mi><mi>m</mi
-                            ><mi>e</mi><mo>,</mo><mo>&#xA0;</mo><mi>i</mi
-                            ><mi>n</mi><mo>&#xA0;</mo><mi>s</mi><mi>e</mi
-                            ><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi><mi>s</mi
-                            ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
-                            ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
-                            ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>s</mi
-                            ><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi
-                            ><mo>&#xA0;</mo><mi>o</mi><mi>f</mi><mo>&#xA0;</mo
-                            ><mi>t</mi><mi>h</mi><mi>e</mi><mo>&#xA0;</mo
-                            ><mi>r</mi><mi>a</mi><mi>c</mi><mi>e</mi
-                            ><mo>.</mo></math
-                          >
-                        </p>
+                        <div
+                          style="
+                            width: fit-content;
+                            outline: 1px solid #292d32;
+                            padding: 16px;
+                            margin-left: 18px;
+                            background-color: #f7f7f7;
+                          "
+                        >
+                          <p class="quote-text" style="margin-left: 16px">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML"
+                              ><mi>s</mi><mo>&#xA0;</mo><mo>=</mo><mo>&#xA0;</mo
+                              ><mn>5</mn><mi>t</mi><mo>&#xA0;</mo></math
+                            >
+                          </p>
+                          <p class="quote-text" style="margin-left: 16px">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML"
+                              ><mi>s</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
+                              ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
+                              ><mo>&#xA0;</mo><mi>d</mi><mi>i</mi><mi>s</mi
+                              ><mi>tan</mi><mi>c</mi><mi>e</mi><mo>,</mo
+                              ><mo>&#xA0;</mo><mi>i</mi><mi>n</mi><mo>&#xA0;</mo
+                              ><mi>y</mi><mi>a</mi><mi>r</mi><mi>d</mi><mi>s</mi
+                              ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
+                              ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
+                              ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>S</mi
+                              ><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mi>i</mi
+                              ><mi>n</mi><mi>g</mi><mo>&#xA0;</mo><mi>P</mi
+                              ><mi>l</mi><mi>a</mi><mi>c</mi><mi>e</mi
+                              ><mo>.</mo></math
+                            >
+                          </p>
+                          <p class="quote-text" style="margin-left: 16px">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML"
+                              ><mi>t</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
+                              ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
+                              ><mo>&#xA0;</mo><mi>t</mi><mi>i</mi><mi>m</mi
+                              ><mi>e</mi><mo>,</mo><mo>&#xA0;</mo><mi>i</mi
+                              ><mi>n</mi><mo>&#xA0;</mo><mi>s</mi><mi>e</mi
+                              ><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi><mi>s</mi
+                              ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
+                              ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
+                              ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>s</mi
+                              ><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi
+                              ><mo>&#xA0;</mo><mi>o</mi><mi>f</mi><mo>&#xA0;</mo
+                              ><mi>t</mi><mi>h</mi><mi>e</mi><mo>&#xA0;</mo
+                              ><mi>r</mi><mi>a</mi><mi>c</mi><mi>e</mi
+                              ><mo>.</mo></math
+                            >
+                          </p>
+                        </div>
+
                         <p
                           class="quote-text"
                           style="display: inline; margin-left: 18px"
@@ -2591,48 +2591,59 @@
                         4. The following equation can also be used to describe
                         Emma's race:
                       </p>
-                      <p class="quote-text" style="margin-left: 18px">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML"
-                          ><mi>f</mi><mo>&#xA0;</mo><mo>=</mo><mo>&#xA0;</mo
-                          ><mo>-</mo><mn>5</mn><mi>t</mi><mo>&#xA0;</mo
-                          ><mo>+</mo><mo>&#xA0;</mo><mn>70</mn></math
-                        >
-                      </p>
-                      <p class="quote-text" style="margin-left: 18px">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML"
-                          ><mi>f</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
-                          ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
-                          ><mo>&#xA0;</mo><mi>d</mi><mi>i</mi><mi>s</mi
-                          ><mi>tan</mi><mi>c</mi><mi>e</mi><mo>,</mo
-                          ><mo>&#xA0;</mo><mi>i</mi><mi>n</mi><mo>&#xA0;</mo
-                          ><mi>y</mi><mi>a</mi><mi>r</mi><mi>d</mi><mi>s</mi
-                          ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
-                          ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
-                          ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>F</mi
-                          ><mi>i</mi><mi>n</mi><mi>i</mi><mi>s</mi><mi>h</mi
-                          ><mi>i</mi><mi>n</mi><mi>g</mi><mo>&#xA0;</mo
-                          ><mi>L</mi><mi>i</mi><mi>n</mi><mi>e</mi
-                          ><mo>.</mo></math
-                        >
-                      </p>
-                      <p class="quote-text" style="margin-left: 18px">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML"
-                          ><mi>t</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
-                          ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
-                          ><mo>&#xA0;</mo><mi>t</mi><mi>i</mi><mi>m</mi
-                          ><mi>e</mi><mo>,</mo><mo>&#xA0;</mo><mi>i</mi
-                          ><mi>n</mi><mo>&#xA0;</mo><mi>s</mi><mi>e</mi
-                          ><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi><mi>s</mi
-                          ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
-                          ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
-                          ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>b</mi
-                          ><mi>e</mi><mi>g</mi><mi>i</mi><mi>n</mi><mi>n</mi
-                          ><mi>i</mi><mi>n</mi><mi>g</mi><mo>&#xA0;</mo
-                          ><mi>o</mi><mi>f</mi><mo>&#xA0;</mo><mi>t</mi
-                          ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>r</mi
-                          ><mi>a</mi><mi>c</mi><mi>e</mi><mo>.</mo></math
-                        >
-                      </p>
+                      <div
+                        style="
+                          width: fit-content;
+                          outline: 1px solid #292d32;
+                          padding: 16px;
+                          margin-left: 18px;
+                          background-color: #f7f7f7;
+                        "
+                      >
+                        <p class="quote-text" style="margin-left: 16px">
+                          <math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><mi>f</mi><mo>&#xA0;</mo><mo>=</mo><mo>&#xA0;</mo
+                            ><mo>-</mo><mn>5</mn><mi>t</mi><mo>&#xA0;</mo
+                            ><mo>+</mo><mo>&#xA0;</mo><mn>70</mn></math
+                          >
+                        </p>
+                        <p class="quote-text" style="margin-left: 16px">
+                          <math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><mi>f</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
+                            ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
+                            ><mo>&#xA0;</mo><mi>d</mi><mi>i</mi><mi>s</mi
+                            ><mi>tan</mi><mi>c</mi><mi>e</mi><mo>,</mo
+                            ><mo>&#xA0;</mo><mi>i</mi><mi>n</mi><mo>&#xA0;</mo
+                            ><mi>y</mi><mi>a</mi><mi>r</mi><mi>d</mi><mi>s</mi
+                            ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
+                            ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
+                            ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>F</mi
+                            ><mi>i</mi><mi>n</mi><mi>i</mi><mi>s</mi><mi>h</mi
+                            ><mi>i</mi><mi>n</mi><mi>g</mi><mo>&#xA0;</mo
+                            ><mi>L</mi><mi>i</mi><mi>n</mi><mi>e</mi
+                            ><mo>.</mo></math
+                          >
+                        </p>
+                        <p class="quote-text" style="margin-left: 16px">
+                          <math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><mi>t</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
+                            ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
+                            ><mo>&#xA0;</mo><mi>t</mi><mi>i</mi><mi>m</mi
+                            ><mi>e</mi><mo>,</mo><mo>&#xA0;</mo><mi>i</mi
+                            ><mi>n</mi><mo>&#xA0;</mo><mi>s</mi><mi>e</mi
+                            ><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi><mi>s</mi
+                            ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
+                            ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
+                            ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>b</mi
+                            ><mi>e</mi><mi>g</mi><mi>i</mi><mi>n</mi><mi>n</mi
+                            ><mi>i</mi><mi>n</mi><mi>g</mi><mo>&#xA0;</mo
+                            ><mi>o</mi><mi>f</mi><mo>&#xA0;</mo><mi>t</mi
+                            ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>r</mi
+                            ><mi>a</mi><mi>c</mi><mi>e</mi><mo>.</mo></math
+                          >
+                        </p>
+                      </div>
+
                       <div style="padding-left: 40px">
                         <p class="quote-text" style="margin-top: 16px">
                           a. Plot this line on the graph.
