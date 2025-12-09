@@ -266,11 +266,19 @@
           type: "text",
           text: "a. Plot this line on the graph.",
         });
+        calculator3.setExpression({
+          id: "lineA",
+          latex: "f=-5t+70",
+        });
 
         calculator3.setExpression({
           id: "note2",
           type: "text",
           text: "b. Add a line to the graph that represents Maggie's race.",
+        });
+        calculator3.setExpression({
+          id: "lineB",
+          latex: "f=-2.5t+40",
         });
 
         // Match the viewport of the first graph
@@ -1346,7 +1354,6 @@
         height: auto;
 
         object-fit: cover;
-        border: 3px solid #edf2f7;
       }
       .author-details h4 {
         font-size: 16px;
@@ -2553,7 +2560,7 @@
                         class="graph-image"
                       />
                     </div>
-                    <div style="padding-left: 16px">
+                    <div style="padding-left: 24px">
                       <span class="quote-text">
                         1. After five seconds, who is running the fastest?
                         Explain your answer.
@@ -2591,7 +2598,11 @@
                           class="response-area"
                           onclick="showSnackbar()"
                           placeholder="Click here to Begin and add your response."
-                          style="height: 64px; margin-top: 16px"
+                          style="
+                            height: 64px;
+                            margin-top: 16px;
+                            margin-bottom: 8px;
+                          "
                         ></textarea>
                       </div>
                       <span class="quote-text" style="margin-top: 24px">
@@ -2638,7 +2649,11 @@
                         <div style="margin: 24px 0px">
                           <div
                             id="calculator3"
-                            style="width: 1000px; height: 420px"
+                            style="
+                              width: 1000px;
+                              height: 420px;
+                              border: 2px solid #d5d7da;
+                            "
                           ></div>
                         </div>
 
