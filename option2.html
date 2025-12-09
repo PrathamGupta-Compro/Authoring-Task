@@ -1157,20 +1157,32 @@
       /* Author Quote Item */
       .quote-item {
         display: grid;
-        grid-template-columns: 1fr 16fr 16fr;
+        grid-template-columns: 2fr;
         margin-bottom: 48px;
         /* gap: 32px; */
         /* padding-bottom: 60px; */
       }
-      .quote-item:last-of-type {
-        border-bottom: none;
-      }
+
       /* Left column wrapper */
       .quote-column {
         display: flex;
         flex-direction: column;
         border: none;
         padding: 0px 24px;
+      }
+      .question-block-container {
+        background: #ffffff;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .lesson-subsection-title {
+        color: #343434;
+        border-top: 1px solid #aeaeae;
+        padding-top: 32px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
       }
       .author-info {
         margin-top: 24px;
@@ -1908,135 +1920,243 @@
               <blockquote class="section-quote-2">
                 "I sit with Shakespeare and he winces not." —W.E.B. DuBois
               </blockquote>
-              <div class="section-directions">
-                <p style="display: inline">Part A :</p>
-                <span>
-                  Read each quote carefully. State the main idea of each one in
-                  your own words using the response area provided.
-                </span>
-              </div>
-              <!-- W.E.B. DuBois -->
-              <!-- NEW STACKED LAYOUT FOR ALL 3 QUOTES -->
-
-              <div class="quote-block">
-                <!-- Quote 1 -->
-                <div class="quote-item-new">
-                  <div class="author-row">
-                    <img
-                      src="./Othello's Renaissance - Part I_files/image1.png"
-                      alt="W.E.B. DuBois"
-                      class="author-photo"
-                    />
-                    <div class="author-meta">
-                      <h4 class="author-name">W.E.B. DuBois</h4>
-                      <p class="author-work">The Souls of Black Folk</p>
-                    </div>
-                  </div>
-
-                  <div class="quote-text-box">
-                    <p>
-                      ...the Negro is a sort of seventh son, born with a veil,
-                      and gifted with second-sight in this American world,—a
-                      world which yields him no true self-consciousness, but
-                      only lets him see himself through the revelation of the
-                      other world. It is a peculiar sensation, this
-                      <strong>double-consciousness</strong>, this sense of
-                      always
-                      <strong
-                        >looking at one's self through the eyes of
-                        others…</strong
+              <div id="questions-list">
+                <div>
+                  <div style="padding: 0 48px; margin-top: 24px">
+                    <div class="quote-item question-block-container">
+                      <div
+                        id="beginQuestions"
+                        style="border-radius: 8px; background: #fff9f9"
                       >
-                    </p>
-                  </div>
+                        <div style="padding: 24px; padding-top: 32px">
+                          <!-- Title -->
+                          <h1
+                            style="
+                              font-size: 24px;
+                              font-weight: 700;
+                              color: #1e1e1e;
+                            "
+                          >
+                            Practice Test
+                          </h1>
 
-                  <textarea
-                    readonly
-                    class="response-area"
-                    onclick="textAreaClick(this)"
-                    placeholder="Click here to Begin and add your response."
-                  ></textarea>
-                </div>
+                          <!-- Activity Label -->
+                          <p
+                            style="
+                              font-size: 16px;
+                              font-weight: 400;
+                              color: #767676;
+                            "
+                          >
+                            Activity: Quiz
+                          </p>
 
-                <!-- Quote 2 -->
-                <div class="quote-item-new">
-                  <div class="author-row">
-                    <img
-                      src="./Othello's Renaissance - Part I_files/image2.png"
-                      alt="Ralph Ellison"
-                      class="author-photo"
-                    />
-                    <div class="author-meta">
-                      <h4 class="author-name">Ralph Ellison</h4>
-                      <p class="author-work">Invisible Man</p>
+                          <!-- Directions -->
+                          <p
+                            style="
+                              font-size: 16px;
+                              font-weight: 400;
+                              color: #1e1e1e;
+                              margin-top: 16px;
+                            "
+                          >
+                            <strong>Directions: </strong>The practice test has 3
+                            questions. Read each question carefully and answer
+                            them. After finishing, Submit the answers to your
+                            teacher. Lorem ipsum dolor sit amet, consectetur
+                            adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim
+                            veniam, quis nostrud exercitation ullamco laboris
+                            nisi ut.
+                          </p>
+                          <h2
+                            id="startText"
+                            style="
+                              font-size: 20px;
+                              font-weight: 600;
+                              color: #1e1e1e;
+                              margin-top: 16px;
+                            "
+                          >
+                            Ready to Start!
+                          </h2>
+
+                          <!-- Begin Button -->
+                          <div
+                            style="display: flex; justify-content: flex-start"
+                          >
+                            <button
+                              id="beginPracticeTest"
+                              class="begin-button"
+                              style="
+                                padding: 12px 32px;
+                                margin: 16px 0px;
+                                font-size: 15px;
+                              "
+                              onclick="beginStep()"
+                            >
+                              Begin
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <p class="lesson-subsection-title"></p>
+                      <div class="quote-column" style="padding: 0 24px">
+                        <div class="quote-text-box">
+                          <div
+                            class="section-directions"
+                            style="border-top: none"
+                          >
+                            <p style="display: inline">Part A :</p>
+                            <span>
+                              Read each quote carefully. State the main idea of
+                              each one in your own words using the response area
+                              provided.
+                            </span>
+                          </div>
+                          <!-- W.E.B. DuBois -->
+                          <!-- NEW STACKED LAYOUT FOR ALL 3 QUOTES -->
+
+                          <div class="quote-block">
+                            <!-- Quote 1 -->
+                            <div class="quote-item-new">
+                              <div class="author-row">
+                                <img
+                                  src="./Othello's Renaissance - Part I_files/image1.png"
+                                  alt="W.E.B. DuBois"
+                                  class="author-photo"
+                                />
+                                <div class="author-meta">
+                                  <h4 class="author-name">W.E.B. DuBois</h4>
+                                  <p class="author-work">
+                                    The Souls of Black Folk
+                                  </p>
+                                </div>
+                              </div>
+
+                              <div class="quote-text-box">
+                                <p>
+                                  ...the Negro is a sort of seventh son, born
+                                  with a veil, and gifted with second-sight in
+                                  this American world,—a world which yields him
+                                  no true self-consciousness, but only lets him
+                                  see himself through the revelation of the
+                                  other world. It is a peculiar sensation, this
+                                  <strong>double-consciousness</strong>, this
+                                  sense of always
+                                  <strong
+                                    >looking at one's self through the eyes of
+                                    others…</strong
+                                  >
+                                </p>
+                              </div>
+
+                              <textarea
+                                readonly
+                                class="response-area"
+                                onclick="textAreaClick(this)"
+                                placeholder="Click here to Begin and add your response."
+                              ></textarea>
+                            </div>
+
+                            <!-- Quote 2 -->
+                            <div class="quote-item-new">
+                              <div class="author-row">
+                                <img
+                                  src="./Othello's Renaissance - Part I_files/image2.png"
+                                  alt="Ralph Ellison"
+                                  class="author-photo"
+                                />
+                                <div class="author-meta">
+                                  <h4 class="author-name">Ralph Ellison</h4>
+                                  <p class="author-work">Invisible Man</p>
+                                </div>
+                              </div>
+
+                              <div class="quote-text-box">
+                                <p>
+                                  I am an invisible man…
+                                  <strong>I am invisible</strong>, understand,
+                                  simply because people refuse to see me… they
+                                  see only my surroundings, themselves or
+                                  figments of their imagination, anything except
+                                  me.
+                                </p>
+                              </div>
+
+                              <textarea
+                                readonly
+                                class="response-area"
+                                onclick="textAreaClick(this)"
+                                placeholder="Click here to Begin and add your response."
+                              ></textarea>
+                            </div>
+
+                            <!-- Quote 3 -->
+                            <div
+                              class="quote-item-new"
+                              style="margin-bottom: 24px"
+                            >
+                              <div class="author-row">
+                                <img
+                                  src="./Othello's Renaissance - Part I_files/image3.png"
+                                  alt="William Shakespeare"
+                                  class="author-photo"
+                                />
+                                <div class="author-meta">
+                                  <h4 class="author-name">
+                                    William Shakespeare
+                                  </h4>
+                                  <p class="author-work">Othello</p>
+                                </div>
+                              </div>
+
+                              <div class="quote-text-box">
+                                <p>
+                                  …<strong
+                                    >Speak of me as I am. Nothing extenuate, nor
+                                    set down aught in malice.</strong
+                                  >
+                                  Then must you speak of one that loved not
+                                  wisely but too well… Of one whose hand threw a
+                                  pearl away richer than all his tribe…
+                                </p>
+                              </div>
+
+                              <textarea
+                                readonly
+                                class="response-area"
+                                onclick="textAreaClick(this)"
+                                placeholder="Click here to Begin and add your response."
+                              ></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="quote-column" style="padding: 0 24px">
+                        <div class="quote-text-box">
+                          <div class="connections-section">
+                            <div class="section-directions">
+                              <p style="display: inline">Part B :</p>
+                              <span>
+                                Connect the main ideas stated by the authors
+                                above. How do their ideas compliment each other?
+                                Explain..
+                              </span>
+                            </div>
+                            <textarea
+                              readonly
+                              class="response-area"
+                              onclick="textAreaClick(this)"
+                              placeholder="Click here to Begin and add your response."
+                            ></textarea>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  <div class="quote-text-box">
-                    <p>
-                      I am an invisible man… <strong>I am invisible</strong>,
-                      understand, simply because people refuse to see me… they
-                      see only my surroundings, themselves or figments of their
-                      imagination, anything except me.
-                    </p>
-                  </div>
-
-                  <textarea
-                    readonly
-                    class="response-area"
-                    onclick="textAreaClick(this)"
-                    placeholder="Click here to Begin and add your response."
-                  ></textarea>
                 </div>
-
-                <!-- Quote 3 -->
-                <div class="quote-item-new" style="margin-bottom: 24px;">
-                  <div class="author-row">
-                    <img
-                      src="./Othello's Renaissance - Part I_files/image3.png"
-                      alt="William Shakespeare"
-                      class="author-photo"
-                    />
-                    <div class="author-meta">
-                      <h4 class="author-name">William Shakespeare</h4>
-                      <p class="author-work">Othello</p>
-                    </div>
-                  </div>
-
-                  <div class="quote-text-box">
-                    <p>
-                      …<strong
-                        >Speak of me as I am. Nothing extenuate, nor set down
-                        aught in malice.</strong
-                      >
-                      Then must you speak of one that loved not wisely but too
-                      well… Of one whose hand threw a pearl away richer than all
-                      his tribe…
-                    </p>
-                  </div>
-
-                  <textarea
-                    readonly
-                    class="response-area"
-                    onclick="textAreaClick(this)"
-                    placeholder="Click here to Begin and add your response."
-                  ></textarea>
-                </div>
-              </div>
-
-              <div class="connections-section">
-                <div class="section-directions">
-                  <p style="display: inline">Part B :</p>
-                  <span>
-                    Connect the main ideas stated by the authors above. How do
-                    their ideas compliment each other? Explain..
-                  </span>
-                </div>
-                <textarea
-                  readonly
-                  class="response-area"
-                  onclick="textAreaClick(this)"
-                  placeholder="Click here to Begin and add your response."
-                ></textarea>
               </div>
             </div>
           </section>
