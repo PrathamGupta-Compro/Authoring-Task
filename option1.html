@@ -1,146 +1,502 @@
 <!DOCTYPE html>
 <!-- saved from url=(0045)https://taskworkflow.netlify.app/option2.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Othello's Renaissance - Part I</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com/">
-    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-    <link href="./Othello&#39;s Renaissance - Part I_files/css2" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com/" />
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      href="./Othello&#39;s Renaissance - Part I_files/css2"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:ital,wght@0,400;1,400&display=swap"
+      rel="stylesheet"
+    />
     <script>
-      function startTask(button) {
-        // Find the closest parent section
-        const section = button.closest(".part-section");
-        // Update status to in-progress when starting a section
-        const sectionId =
-          section
-            .closest(".part-card")
-            .querySelector('[id^="statusMessage"]')
-            ?.id.replace("statusMessage", "") || "1";
-        updateStatusMessage(sectionId, "in-progress");
+      // Helper function to update the status and progress bar for a single step in all relevant places
+      function updateStepState(stepIndex, status, progressPercentage) {
+        const stepNumber = stepIndex + 1; // 1-indexed
+        const statusClass = status.toLowerCase().replace(" ", "-");
 
-        // Get the step number from the section
-        const stepNumberDiv = section.querySelector(
-          'div[style*="font-size: 15px; font-weight: 600; color: #1e293b;"]'
-        );
-        let stepNumber = null;
+        // === 1. Update Main Steps List Status (Left sidebar) ===
+        const leftStep =
+          document.querySelectorAll(".steps-list .step")[stepIndex];
+        if (leftStep) {
+          const leftStatus = leftStep.querySelector(".step-status");
+          leftStatus.textContent = status;
+          leftStatus.className = `step-status ${statusClass}`;
 
-        if (stepNumberDiv) {
-          // Try to extract step number from the text content
-          const stepText = stepNumberDiv.textContent.trim();
-          const match = stepText.match(/Step (\d+)/i);
-          if (match && match[1]) {
-            stepNumber = match[1];
+          // Also update the step number indicator for 'Completed'
+          const stepNumberElement = leftStep.querySelector(".step-number");
+          if (stepNumberElement) {
+            stepNumberElement.classList.toggle(
+              "completed",
+              status === "Completed"
+            );
           }
         }
 
-        // If we couldn't find step number, try to determine it from the section position
-        if (!stepNumber) {
-          const sections = document.querySelectorAll(".part-section");
-          for (let i = 0; i < sections.length; i++) {
-            if (sections[i] === section) {
-              stepNumber = i + 1;
-              break;
-            }
-          }
-        }
-
-        // Get the parent part-card to find all textareas within this step
-        const partCard = section.closest(".part-card");
-        if (partCard) {
-          // Enable all textareas in both part-section and connections-section
-          const allTextareas = partCard.querySelectorAll("textarea");
-          allTextareas.forEach((textarea) => {
-            // Skip help textareas if they have that class
-            if (!textarea.classList.contains("help-textarea")) {
-              textarea.disabled = false;
-              textarea.placeholder =
-                textarea.getAttribute("data-original-placeholder") || "";
-              textarea.style.cursor = "text";
-              textarea.style.backgroundColor = "white";
-              textarea.style.border = "1px solid #e2e8f0";
-              textarea.style.borderRadius = "6px";
-              textarea.style.padding = "12px";
-            }
-          });
-        }
-
-        // Update button states within this section
-        const beginBtn = section.querySelector(".begin-btn");
-        const statusBtn = section.querySelector(".status-btn");
-
-        if (beginBtn) beginBtn.style.display = "none";
-        if (statusBtn) {
-          statusBtn.textContent = "In Progress";
-          statusBtn.style.backgroundColor = "#eab308";
-          statusBtn.style.color = "#000";
-          statusBtn.style.borderColor = "#eab308";
-        }
-
-        // Show the submit button for this step
-        const cardContainer = section.closest('.part-card');
-        if (cardContainer) {
-          const submitButton = cardContainer.querySelector('.submit-button-container');
-          if (submitButton) {
-            submitButton.style.display = 'block';
-          }
-        }
-
-        // Update status indicator if it exists in this section
-        const statusIndicator = section.querySelector(".status-indicator");
-        if (statusIndicator) {
-          statusIndicator.textContent = "In Progress";
-          statusIndicator.style.color = "#000";
-          statusIndicator.style.fontWeight = "600";
-          statusIndicator.style.backgroundColor = "#eab308";
-          statusIndicator.style.padding = "2px 8px";
-          statusIndicator.style.borderRadius = "4px";
-          statusIndicator.style.display = "inline-block";
-        }
-
-        // Update the status in the header overview section
-        if (stepNumber) {
-          const headerStatus = document.getElementById(
-            `step${stepNumber}Status`
+        // === 2. Update Main Accordion Header Status ===
+        const stepCard = document.getElementById(`step${stepNumber}`);
+        if (stepCard) {
+          const headerBadge = stepCard.querySelector(
+            ".accordion-header .step-status"
           );
-          if (headerStatus) {
-            headerStatus.textContent = "In Progress";
-            headerStatus.style.color = "#000";
-            headerStatus.style.backgroundColor = "#eab308";
-            headerStatus.style.padding = "2px 12px";
-            headerStatus.style.borderRadius = "20px";
-            headerStatus.style.display = "inline-block";
+          if (headerBadge) {
+            headerBadge.textContent = status;
+            headerBadge.className = `step-status ${statusClass}`;
           }
+        }
+
+        // === 3. Update Progress Bar Fills (Main Header) ===
+        const mainProgressFills = document.querySelectorAll(
+          "#header .progress-container .progress-bar-fill"
+        );
+        if (mainProgressFills[stepIndex]) {
+          mainProgressFills[stepIndex].style.width = progressPercentage + "%";
+        }
+
+        // === 4. Update Progress Bar Fills (Scrolled Header) - SYNCHRONIZATION POINT ===
+        const scrolledProgressFills = document.querySelectorAll(
+          "#scrolledHeader .progress-container .progress-bar-fill"
+        );
+        if (scrolledProgressFills[stepIndex]) {
+          scrolledProgressFills[stepIndex].style.width =
+            progressPercentage + "%";
+        }
+
+        // Optional: Refresh the tooltip if it's visible for the current step
+        if (window.refreshTooltip) {
+          window.refreshTooltip(stepIndex);
         }
       }
 
+      // Function to handle the 'Begin' action
+      function beginStep(button) {
+        const section = button.closest(".help-section").previousElementSibling;
+        const textareas = section.querySelectorAll("textarea.response-area");
+
+        const stepCard = section.closest(".part-card");
+        const stepIndex = parseInt(stepCard.id.replace("step", "")) - 1; // 0-indexed
+
+        // 1. Enable textareas
+        textareas.forEach((t) => {
+          t.readOnly = false;
+          t.style.background = "#ffffff";
+          t.placeholder = "Please add your response here.";
+          t.style.cursor = "auto";
+        });
+
+        // 2. Update step status to 'In Progress' and fill the corresponding progress bar
+        updateStepState(stepIndex, "In Progress", 100);
+
+        // 3. Change 'Begin' → 'Submit'
+        button.textContent = "Submit";
+        button.classList.remove("begin-button");
+        button.classList.add("submit-button");
+
+        // 4. Change onclick to show snackbar
+        button.onclick = function () {
+          showSnackbar();
+        };
+      }
+
+      // Function to handle manually completing a step
+      function markStepCompleted(stepIndex) {
+        updateStepState(stepIndex, "Completed", 100);
+      }
+
+      // Exposed helper functions
+      window.markStepCompleted = markStepCompleted;
+      window.beginStep = beginStep;
+
+      // --- DOMContentLoaded Initialization ---
+      document.addEventListener("DOMContentLoaded", function () {
+        const header = document.getElementById("header");
+        const collapseToggle = document.getElementById("collapseToggle");
+        const expandableContent = document.getElementById("expandableContent");
+        const stepElements = document.querySelectorAll(".steps-list .step");
+
+        // Progress bars for Main Header (for click/tooltip)
+        const mainProgressBars = document.querySelectorAll(
+          "#header .progress-container .progress-bar"
+        );
+        // Progress bars for Scrolled Header (NEW)
+        const scrolledProgressBars = document.querySelectorAll(
+          "#scrolledHeader .progress-container .progress-bar"
+        );
+
+        const tooltip = document.getElementById("stepTooltip");
+        const stepLabel = document.getElementById("ttStep");
+        const descLabel = document.getElementById("ttDesc");
+
+        const steps = document.querySelectorAll(".steps-list .step");
+
+        const titles = [
+          "Quotable Connections",
+          "American Reception for Othello in the 19th and 20th Century",
+          "Primary Source Analysis",
+        ];
+
+        const scrolledHeader = document.getElementById("scrolledHeader");
+        const mainTitle = document.querySelector("#header .main-title");
+        const scrolledHeaderTitle = document.getElementById(
+          "scrolledHeaderTitle"
+        );
+
+        const sections = [
+          { id: "step1", barIndex: 0 },
+          { id: "step2", barIndex: 1 },
+          { id: "step3", barIndex: 2 },
+        ];
+
+        const toggleBarHighlight = (barIndex, activate) => {
+          const scrolledBar = scrolledProgressBars[barIndex];
+          scrolledBar.classList.toggle("highlighted", activate);
+        };
+
+        const clearBarHighlights = () => {
+          sections.forEach(({ barIndex }) =>
+            toggleBarHighlight(barIndex, false)
+          );
+        };
+
+        const updateProgressHighlights = () => {
+          const viewportMarker = window.scrollY + window.innerHeight / 2;
+
+          const openSections = sections
+            .map(({ id, barIndex }) => {
+              const sec = document.getElementById(id);
+              if (!sec) return null;
+
+              const card = sec.closest(".part-card");
+              const isCollapsed = card?.classList.contains("collapsed");
+              if (isCollapsed) return null;
+
+              const top = sec.offsetTop;
+              const bottom = top + sec.offsetHeight;
+
+              return {
+                element: sec,
+                barIndex,
+                top,
+                bottom,
+              };
+            })
+            .filter(Boolean);
+
+          if (!openSections.length) {
+            clearBarHighlights();
+            return;
+          }
+
+          const activeSection = (() => {
+            const directMatch = openSections.find(
+              ({ top, bottom }) =>
+                viewportMarker >= top && viewportMarker < bottom
+            );
+            if (directMatch) return directMatch;
+
+            const beforeSections = openSections.filter(
+              ({ top }) => viewportMarker >= top
+            );
+            if (beforeSections.length) {
+              return beforeSections.reduce((latest, current) =>
+                current.top > latest.top ? current : latest
+              );
+            }
+
+            return openSections.reduce((earliest, current) =>
+              current.top < earliest.top ? current : earliest
+            );
+          })();
+
+          clearBarHighlights();
+          if (activeSection) toggleBarHighlight(activeSection.barIndex, true);
+        };
+
+        updateProgressHighlights();
+        window.updateProgressHighlights = updateProgressHighlights;
+
+        // Synchronize static title on load
+        if (scrolledHeaderTitle && mainTitle) {
+          scrolledHeaderTitle.textContent = mainTitle.textContent;
+        }
+
+        const onScroll = () => {
+          const scrollY = window.scrollY;
+
+          const shouldShowScrolledHeader =
+            (!header.classList.contains("collapsed") &&
+              scrollY > header.offsetHeight) ||
+            (header.classList.contains("collapsed") && scrollY > 140);
+
+          if (shouldShowScrolledHeader) {
+            scrolledHeader.style.display = "flex";
+            scrolledHeader.style.justifyContent = "space-between";
+            header.style.visibility = "hidden";
+          } else {
+            scrolledHeader.style.display = "none";
+            header.style.visibility = "visible";
+          }
+
+          updateProgressHighlights();
+        };
+
+        scrolledHeader.addEventListener("click", () => {
+          // 1. Scroll page to the very top
+          window.scrollTo({ top: 0, behavior: "smooth" });
+
+          // 2. Expand main header
+          header.classList.remove("collapsed");
+          collapseToggle.classList.remove("collapsed");
+          expandableContent.classList.remove("hidden");
+
+          // 3. Hide scrolled header
+          scrolledHeader.style.display = "none";
+
+          // 4. Restore main header visibility
+          header.style.visibility = "visible";
+        });
+
+        window.addEventListener("scroll", onScroll);
+        window.addEventListener("resize", updateProgressHighlights);
+
+        header.addEventListener("click", () => {
+          if (scrolledHeader.style.display === "flex") return;
+
+          window.scrollTo({ top: 0, behavior: "smooth" });
+
+          const isCollapsed = header.classList.toggle("collapsed");
+          collapseToggle.classList.toggle("collapsed", isCollapsed);
+
+          if (expandableContent)
+            expandableContent.classList.toggle("hidden", isCollapsed);
+
+          // isHeaderCollapsed is implicitly managed by the 'collapsed' class
+        });
+
+        // Helper function for scrolling to a step and expanding its accordion
+        function scrollToStep(index) {
+          const targetId = `step${index + 1}`;
+          const targetSection = document.getElementById(targetId);
+          const content = targetSection.querySelector(".accordion-content");
+          const partCard = targetSection.closest(".part-card");
+          const arrow = targetSection.querySelector("svg") || targetSection;
+          const helpSection = targetSection.nextElementSibling;
+
+          if (!targetSection) return;
+
+          // smooth scroll - adjust for sticky header height
+          const yOffset = -120;
+          const y =
+            targetSection.getBoundingClientRect().top +
+            window.pageYOffset +
+            yOffset;
+
+          window.scrollTo({ top: y, behavior: "smooth" });
+
+          // Also ensure the accordion for the step is expanded
+          if (content.classList.contains("collapsed")) {
+            content.classList.remove("collapsed");
+            partCard.classList.remove("collapsed");
+            arrow.style.transform = "rotate(0deg)";
+            if (helpSection) {
+              helpSection.classList.remove("collapsed");
+            }
+          }
+          updateProgressHighlights();
+        }
+
+        // Attaches scroll-on-click logic to the steps list on the left
+        stepElements.forEach((step, index) => {
+          step.addEventListener("click", (event) => {
+            event.stopPropagation();
+            scrollToStep(index);
+          });
+        });
+
+        // Tooltip logic
+        function updateTooltip(i) {
+          const status = steps[i]
+            .querySelector(".step-status")
+            .textContent.trim();
+
+          // Check for progress status to set color
+          const statusText = status;
+          let statusStyle = "";
+          if (statusText === "In Progress") {
+            statusStyle = `style="background-color: #eab308"`;
+          } else if (statusText === "Completed") {
+            statusStyle = `style="background-color: #10b981"`;
+          } else {
+            statusStyle = `style="background-color: #fff"`;
+          }
+
+          stepLabel.innerHTML = `STEP ${
+            i + 1
+          } <span ${statusStyle}>${statusText}</span>`;
+          descLabel.textContent = titles[i];
+        }
+
+        // Helper function to set up both click (scroll) and hover (tooltip) events
+        function setupProgressBarEvents(bar, index) {
+          // 1. Scroll-on-click (FIXED: Uses 'index' passed into this function)
+          bar.addEventListener("click", (event) => {
+            event.stopPropagation();
+            scrollToStep(index);
+          });
+
+          // 2. Tooltip on hover (mouseenter)
+          bar.addEventListener("mouseenter", () => {
+            updateTooltip(index);
+
+            const r = bar.getBoundingClientRect();
+            tooltip.style.display = "block";
+            tooltip.style.top = r.bottom + window.scrollY + 14 + "px";
+            tooltip.style.left =
+              r.left + window.scrollX + r.width / 2 - 130 + "px";
+          });
+
+          // 3. Tooltip on hover (mouseleave)
+          bar.addEventListener("mouseleave", () => {
+            tooltip.style.display = "none";
+          });
+        }
+
+        // APPLY EVENTS TO MAIN HEADER BARS
+        mainProgressBars.forEach((bar, i) => {
+          setupProgressBarEvents(bar, i);
+        });
+
+        // APPLY EVENTS TO SCROLLED HEADER BARS
+        scrolledProgressBars.forEach((bar, i) => {
+          setupProgressBarEvents(bar, i);
+        });
+
+        // Lightweight hook to refresh after status change
+        window.refreshTooltip = updateTooltip;
+
+        // ... [Rest of the existing DOMContentLoaded code for tags/tooltips] ...
+        const headerTags = document.querySelectorAll(".header .tags li");
+        const tooltipBox = document.getElementById("stepTooltip");
+        const ttStep = document.getElementById("ttStep");
+        const ttDesc = document.getElementById("ttDesc");
+
+        // Safety check: ensure these elements exist before trying to get their content
+        const objectivesListElement =
+          document.querySelector(".objectives-list");
+        const objectivesList = objectivesListElement
+          ? objectivesListElement.innerText.trim()
+          : "";
+
+        const essentialQuestions = [
+          ...document.querySelectorAll(".questions-list li"),
+        ]
+          .map((li) => "• " + li.innerText.trim())
+          .join("\n");
+
+        const competenciesList = [
+          ...document.querySelectorAll("[class='objectives-list'] li"),
+        ]
+          .filter(
+            (li) =>
+              li.innerText.trim() === "Think Critically" ||
+              li.innerText.trim() === "Communicate"
+          )
+          .map((li) => "• " + li.innerText.trim())
+          .join("\n");
+
+        const tagTooltipContent = {
+          0: { title: "Competencies", text: competenciesList },
+          1: { title: "Objectives", text: objectivesList },
+          2: { title: "Essential Questions", text: essentialQuestions },
+        };
+
+        headerTags.forEach((tag, index) => {
+          tag.addEventListener("mouseenter", () => {
+            const { title, text } = tagTooltipContent[index];
+
+            ttStep.innerHTML = title;
+            ttDesc.innerText = text;
+
+            const r = tag.getBoundingClientRect();
+            if (title == "Competencies") {
+              tooltipBox.style.width = "180px";
+              tooltipBox.style.left =
+                r.left + window.scrollX + r.width / 2 - 90 + "px";
+            } else {
+              tooltipBox.style.width = "400px";
+              tooltipBox.style.left =
+                r.left + window.scrollX + r.width / 2 - 200 + "px";
+            }
+            tooltipBox.style.display = "block";
+            tooltipBox.style.top = r.bottom + window.scrollY + 12 + "px";
+          });
+
+          tag.addEventListener("mouseleave", () => {
+            tooltipBox.style.display = "none";
+            tooltipBox.style.width = "260px";
+          });
+        });
+
+        // Initializing status messages is still valid
+        updateStatusMessage(1, "not-started");
+        updateStatusMessage(2, "not-started");
+        updateStatusMessage(3, "not-started");
+      });
+      // --- End DOMContentLoaded Initialization ---
+
+      // The rest of the global functions
+
+      function toggleAccordion(button) {
+        const partCard = button.closest(".part-card");
+        const content = partCard.querySelector(".accordion-content");
+        const arrow = button.querySelector("svg") || button;
+        const helpSection = partCard.nextElementSibling;
+
+        if (content.classList.contains("collapsed")) {
+          content.classList.remove("collapsed");
+          partCard.classList.remove("collapsed");
+          arrow.style.transform = "rotate(0deg)";
+          if (helpSection) {
+            helpSection.classList.remove("collapsed");
+          }
+        } else {
+          content.classList.add("collapsed");
+          partCard.classList.add("collapsed");
+          arrow.style.transform = "rotate(180deg)";
+          if (helpSection) {
+            helpSection.classList.add("collapsed");
+          }
+        }
+
+        if (window.updateProgressHighlights) {
+          window.updateProgressHighlights();
+        }
+      }
+
+      // Function maintained for completeness, but not used for per-step logic
       function updateProgressBar() {
         const totalSteps = 3;
         let completedSteps = 0;
 
-        // Count completed steps
         for (let i = 1; i <= totalSteps; i++) {
-          const status = document.getElementById(`step${i}Status`);
-          if (status && status.textContent === "In Progress") {
+          const stepElement =
+            document.querySelectorAll(".steps-list .step")[i - 1];
+          const status = stepElement
+            ? stepElement.querySelector(".step-status").textContent.trim()
+            : "";
+          if (status === "Completed") {
             completedSteps++;
           }
         }
-
-        // Update progress bar
-        const progressPercent = (completedSteps / totalSteps) * 100;
-        const progressBar = document.querySelector(".progress-bar-fill");
-        const progressPercentText = document.querySelector(".progress-percent");
-
-        if (progressBar) {
-          progressBar.style.width = `${progressPercent}%`;
-        }
-        if (progressPercentText) {
-          progressPercentText.textContent = `${Math.round(progressPercent)}%`;
-        }
       }
 
-      // Initialize the page
-      // Status messages for different states
+      // Status messages and message update functions (no changes)
       const statusMessages = {
         "not-started": {
           text: "This activity has not been started yet. Click Begin to get started.",
@@ -162,7 +518,6 @@
         },
       };
 
-      // Function to update status message
       function updateStatusMessage(sectionId, status) {
         const messageElement = document.getElementById(
           `statusMessage${sectionId}`
@@ -175,46 +530,69 @@
         messageElement.className =
           "status-message" + (statusData.class ? ` ${statusData.class}` : "");
 
-          messageElement.innerHTML = `
-          <p class="status-text">${statusData.text}</p>
-          <p class="status-description">${statusData.description}</p>
-        `;
+        messageElement.innerHTML = `
+             <p class="status-text">${statusData.text}</p>
+             <p class="status-description">${statusData.description}</p>
+           `;
       }
 
-      // Initialize status messages
-      document.addEventListener("DOMContentLoaded", function () {
-        // Set initial status for all sections
-        updateStatusMessage(1, "not-started");
-        updateStatusMessage(2, "not-started");
-        updateStatusMessage(3, "not-started");
+      // Snackbar functions (no changes)
+      function showSnackbar() {
+        const bar = document.getElementById("snackbar");
 
-        // Set initial disabled state for all textareas except help textareas
-        document.querySelectorAll("textarea").forEach((textarea) => {
-          if (!textarea.classList.contains("help-textarea")) {
-            textarea.setAttribute(
-              "data-original-placeholder",
-              textarea.placeholder
-            );
-            textarea.placeholder =
-              'Click "Begin" to start adding your response';
-            textarea.disabled = true;
-            textarea.style.cursor = "not-allowed";
-            textarea.style.backgroundColor = "#f8fafc";
-            textarea.style.border = "1px dashed #cbd5e0";
-            textarea.style.borderRadius = "6px";
-            textarea.style.padding = "12px";
-          }
-        });
+        bar.classList.remove("show");
+        void bar.offsetWidth;
 
-        // Ensure help textarea is always enabled
-        const helpTextarea = document.querySelector(".help-textarea");
-        if (helpTextarea) {
-          helpTextarea.disabled = false;
-          helpTextarea.style.cursor = "text";
-          helpTextarea.style.backgroundColor = "white";
-          helpTextarea.style.borderStyle = "solid";
+        bar.classList.add("show");
+
+        bar.focus();
+
+        bar.autoCloseTimeout = setTimeout(() => {
+          bar.classList.remove("show");
+        }, 5000);
+      }
+
+      function closeSnackbar() {
+        const bar = document.getElementById("snackbar");
+        bar.classList.remove("show");
+        clearTimeout(bar.autoCloseTimeout);
+      }
+
+      // Modal functions (no changes)
+      let pendingBeginButton = null;
+
+      function openBeginModal(button) {
+        pendingBeginButton = button;
+        document.getElementById("beginModal").style.display = "flex";
+      }
+
+      function closeBeginModal() {
+        document.getElementById("beginModal").style.display = "none";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const modal = document.getElementById("beginModal");
+        if (modal) {
+          modal.querySelector(".begin-modal-ok").onclick = () => {
+            if (pendingBeginButton) {
+              beginStep(pendingBeginButton);
+            }
+            closeBeginModal();
+          };
         }
       });
+
+      function textAreaClick(t) {
+        if (!t.readOnly) {
+          return;
+        }
+
+        const beginBtn = t
+          .closest(".part-card")
+          .nextElementSibling.querySelector(".begin-button");
+
+        if (beginBtn) openBeginModal(beginBtn);
+      }
     </script>
     <style>
       * {
@@ -222,27 +600,417 @@
         padding: 0;
         box-sizing: border-box;
       }
-
       body {
         font-family: "Inter", sans-serif;
-        background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+        background-color: #dae6f0;
         line-height: 1.6;
         color: #2d3748;
       }
-
-      .container {
-        max-width: 1000px;
-        margin: 0 auto;
-        margin-top: 24px;
-        margin-bottom: 24px;
+      .header {
+        border-bottom: 2px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        background-color: white;
+        width: 100%;
+        padding-top: 40px;
+        padding-right: 80px;
+        padding-left: 40px;
+        padding-bottom: 8px;
+        position: relative;
+        background-color: #ffffff;
+        z-index: 1000;
+      }
+      .header.collapsed {
+        padding-top: 24px;
+        padding-right: 80px;
+        padding-left: 40px;
+        padding-bottom: 8px;
+        position: sticky;
+        top: 0;
+      }
+      .header.scrolled {
+        display: flex;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #ffffff;
+        padding: 8px;
+        padding-right: 80px;
+        padding-left: 40px;
+        border-bottom: 2px solid #e2e8f0;
+      }
+      /* NEW SCROLLED HEADER COMPONENT */
+      .scrolled-header-component {
+        display: none;
+        position: sticky;
+        top: 0;
+        z-index: 1200;
+        background: #ffffff;
+        padding: 8px 120px 8px 40px;
+        border-bottom: 2px solid #e2e8f0;
+        align-items: center;
       }
 
+      /* Title shrink in scrolled header */
+      .scrolled-header-component .main-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0;
+        padding: 0;
+        line-height: 1.2;
+      }
+
+      /* Steps panel compact */
+      .scrolled-header-component .steps-panel {
+        margin: 0;
+        padding: 12px 20px;
+        background-color: #fff9f9;
+      }
+
+      .title-section {
+        width: 60%;
+      }
+      .unit-label {
+        font-size: 13px;
+        color: #718096;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+      }
+      .main-title {
+        font-size: 40px;
+        font-weight: 600;
+        color: #343434;
+        margin-bottom: 16px;
+        transition: 0.3s ease;
+        line-height: 30px;
+      }
+      .header.scrolled .main-title {
+        font-size: 24px;
+        transition: font-size 0.3s ease, margin 0.3s ease;
+        line-height: 1.2;
+        margin-top: 16px;
+        margin-bottom: 0;
+        transform: translateY(-2px);
+      }
+      .tags {
+        display: none;
+      }
+      .header.scrolled .tags {
+        visibility: hidden;
+      }
+      .header.collapsed .tags {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+        cursor: default;
+      }
+      .tag {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 146px;
+        height: 32px;
+        border: 1.5px solid #cbd5e0;
+        border-radius: 20px;
+        font-size: 14px;
+        color: #4a5568;
+        list-style: none;
+        background-color: #e7e7e7;
+      }
+      .expandable-content {
+        max-height: 1000px;
+        opacity: 1;
+        overflow: hidden;
+        transition: max-height 0.3s ease, opacity 0.3s ease,
+          margin-top 0.3s ease;
+      }
+      .expandable-content.hidden {
+        max-height: 0;
+        opacity: 0;
+        margin-top: 0;
+      }
+      .section-heading {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a202c;
+        margin: 20px 0 12px 0;
+      }
+      .objectives-list,
+      .questions-list {
+        margin-left: 28px;
+        color: #4a5568;
+        font-size: 14px;
+        line-height: 1.8;
+        margin-bottom: 20px;
+      }
+      .steps-panel {
+        width: 28%;
+        min-width: 300px;
+        background: white;
+        padding: 24px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        background-color: #fff9f9;
+        margin-top: 10px;
+        margin-right: 48px;
+      }
+      .header.collapsed .steps-panel {
+        padding: 16px 24px;
+        transition: none;
+      }
+      .header.scrolled .steps-panel {
+        margin-top: 0px; /* previously 16px or more */
+        padding: 12px 20px; /* smaller internal padding */
+        transition: margin 0.3s ease, padding 0.3s ease;
+      }
+      .collapse-toggle {
+        position: absolute;
+        right: 40px;
+        top: 50px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        color: #64748b;
+        font-size: 20px;
+        transition: transform 0.3s ease, top 0.3s ease;
+      }
+      .header.collapsed .collapse-toggle {
+        top: 36px;
+      }
+      .collapse-toggle:hover {
+        color: #1a202c;
+      }
+      .collapse-toggle.collapsed {
+        transform: rotate(180deg);
+      }
+      .header.scrolled .collapse-toggle {
+        position: relative;
+        display: none;
+      }
+      /* support existing accordion-arrow element used in markup */
+      .accordion-arrow.collapsed {
+        transform: rotate(180deg);
+      }
+      /* hide expandable content when header is collapsed */
+      .header.collapsed .expandable-content {
+        max-height: 0;
+        opacity: 0;
+        margin-top: 0;
+      }
+      .header.scrolled .unit-label,
+      .header.scrolled .tags,
+      .header.scrolled .expandable-content {
+        opacity: 0;
+        max-height: 0;
+      }
+      .progress-header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      .progress-label {
+        color: #343434;
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .header.scrolled .progress-label {
+        display: none;
+      }
+      .progress-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+        margin-top: 8px;
+      }
+      .progress-bar {
+        flex: 1;
+        height: 10px;
+        background: #e2e8f0;
+        border-radius: 10px;
+        overflow: hidden;
+        cursor: pointer;
+      }
+      .progress-bar-fill {
+        width: 33%;
+        height: 100%;
+        background: #eab308;
+        transition: width 0.3s ease;
+      }
+      .progress-bar:hover {
+        background-color: #c1c6cf;
+      }
+      .progress-bar-fill:hover {
+        background-color: #d3a313;
+      }
+
+      .progress-bar.highlighted {
+        outline: 1px solid #1a5ac2;
+        background-color: #EEF7FF;
+      }
+
+      .progress-percent {
+        font-size: 16px;
+        color: #64748b;
+        font-weight: 500;
+        min-width: 35px;
+        text-align: right;
+      }
+      .steps-list {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        max-height: 500px;
+        padding-left: 4px;
+        opacity: 1;
+        overflow: hidden;
+        transition: max-height 0.3s ease, opacity 0.3s ease;
+        cursor: pointer;
+      }
+      .header.collapsed .steps-list {
+        max-height: 0;
+        opacity: 0;
+      }
+      .connector-line {
+        position: absolute;
+        left: 19px;
+        top: 45px;
+        width: 2px;
+        background: #e2e8f0;
+        z-index: 1;
+        height: calc(100% - 72px);
+      }
+      .step {
+        display: flex;
+        align-items: flex-start;
+        gap: 32px;
+        position: relative;
+        padding: 12px 0;
+      }
+      .step:first-child {
+        padding-top: 0;
+      }
+      .step:last-child {
+        padding-bottom: 0;
+      }
+      .step-number {
+        position: relative;
+        z-index: 2;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #aaaaaa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+        flex-shrink: 0;
+        box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px #cbd5e0;
+      }
+      .step-number.completed {
+        background: #10b981;
+        color: white;
+      }
+      .step-content {
+        flex: 1;
+        padding-top: 4px;
+      }
+      .step-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 6px;
+      }
+      .step-status {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 2px 12px;
+        border-radius: 9999px;
+        border: 1px solid #a8a8a8;
+      }
+      .step-status.not-started {
+        color: #5e5e5e;
+        background-color: #fff;
+      }
+      .step-status.in-progress {
+        color: #343434;
+        background-color: #eab308;
+        border-color: #bfdbfe;
+      }
+      .step-status.completed {
+        color: #10b981;
+        background-color: #d1fae5;
+        border-color: #a7f3d0;
+      }
+      .submit-container {
+        text-align: center;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid #e2e8f0;
+        max-height: 120px;
+        opacity: 1;
+        overflow: hidden;
+        transition: max-height 0.3s ease, opacity 0.3s ease,
+          margin-top 0.3s ease, padding-top 0.3s ease;
+      }
+      .header.collapsed .submit-container {
+        max-height: 0;
+        opacity: 0;
+        margin-top: 0;
+        padding-top: 0;
+      }
+      .submit-lesson {
+        padding: 16px 44px;
+        /* border: none; */
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 600;
+        background-color: #e7e7e7;
+        color: #5e5e5e;
+        border-width: 1px;
+      }
+      .submit-button:hover {
+        background-color: #1a3563;
+      }
+      .begin-button:hover {
+        background-color: #1a3563;
+      }
+      .submit-button:disabled {
+        background-color: #cbd5e0;
+        cursor: not-allowed;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border: none;
+      }
+      td {
+        border: 1px solid #ccc;
+        padding: 24px;
+      }
+      .container {
+        max-width: 1366px;
+        margin: 0 auto;
+        margin-top: 48px;
+        margin-bottom: 24px;
+      }
       /* Task Header - Outside the card */
       .task-header {
         text-align: center;
         margin-bottom: 30px;
       }
-
       .part-badge {
         display: inline-block;
         background: #667eea;
@@ -254,206 +1022,292 @@
         letter-spacing: 0.5px;
         margin-bottom: 16px;
       }
-
       .task-title {
         font-size: 42px;
         font-weight: 700;
         color: #1a202c;
         margin-bottom: 8px;
       }
-
       .part-title {
         font-size: 22px;
         font-style: italic;
         color: #718096;
       }
-
       /* Single Part Card */
       .part-card {
         background: white;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
-        padding: 40px 50px;
+        padding-bottom: 40px;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        transition: padding 0.3s ease, border-radius 0.3s ease;
       }
-
+      .part-card.collapsed {
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        padding: 0;
+      }
+      .accordion-header {
+        background-color: #eef7ff;
+        user-select: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 48px 8px 48px;
+        border-radius: 16px;
+      }
+      .accordion-arrow {
+        transition: transform 0.3s ease;
+        display: flex;
+        align-items: center;
+      }
+      .accordion-arrow:hover {
+        border-radius: 8px;
+        background: #cbdeed;
+      }
+      .accordion-content {
+        max-height: 10000px;
+        overflow: hidden;
+        transition: max-height 0.5s ease, opacity 0.3s ease;
+        opacity: 1;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 32px;
+      }
+      .accordion-content.collapsed {
+        max-height: 0;
+        opacity: 0;
+        padding: 0;
+      }
+      .step-count {
+        color: #343434;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .help-box {
+        display: flex;
+        padding: 16px;
+        justify-content: space-between;
+        padding-right: 50px;
+      }
+      .help-section.collapsed {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.5s ease, opacity 0.3s ease;
+      }
+      .help-section:not(.collapsed) {
+        max-height: 10000px;
+        overflow: visible;
+        opacity: 1;
+        transition: max-height 0.5s ease, opacity 0.3s ease;
+      }
       .part-section:last-child {
         margin-bottom: 0;
       }
-
       .section-header {
         margin-bottom: 30px;
       }
-
       .section-quote {
         color: #1a202c;
         font-size: 24px;
-        margin-bottom: 16px;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+      .section-quote-small {
+        color: #a2b2be;
+        font-size: 16px;
+        margin-bottom: 20px;
         font-weight: 600;
       }
-
+      .section-quote-2 {
+        background: #f3f7ff; /* soft blue background */
+        border-left: 5px solid #1a5ac2; /* bold blue accent line */
+        color: #1a5ac2;
+        font-size: 20px;
+        font-weight: 600;
+        padding: 16px 24px;
+        margin: 24px 0;
+        border-radius: 6px;
+        line-height: 1.6;
+        font-style: italic;
+      }
+      /* .part-card:not(.collapsed) .section-quote {
+         padding-bottom: 24px;
+         margin-bottom: 20px;
+         border-bottom: 3px solid #e2e8f0;
+         } */
+      .section-letter {
+        font-size: 20px;
+        color: #4a5568;
+        margin: 0px 0 16px 0;
+      }
       .section-directions {
-        padding: 20px 0px;
         margin-bottom: 40px;
+        border-top: 1px solid #aeaeae;
+        padding-top: 28px;
       }
-
       .section-directions p {
-        font-size: 15px;
-        color: #2d3748;
+        color: #343434;
+        margin-bottom: 6px;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 100%;
       }
-
+      .section-directions span {
+        color: #343434;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+      }
       /* Author Quote Item */
       .quote-item {
-        padding-bottom: 40px;
+        display: grid;
+        grid-template-columns: 1fr 16fr 16fr;
+        margin-bottom: 48px;
+        /* gap: 32px; */
+        /* padding-bottom: 60px; */
       }
-
       .quote-item:last-of-type {
         border-bottom: none;
       }
-
+      /* Left column wrapper */
+      .quote-column {
+        display: flex;
+        flex-direction: column;
+        border: none;
+        padding: 0px 24px;
+      }
       .author-info {
+        margin-top: 24px;
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: 8px;
       }
-
       .author-portrait {
-        width: 80px;
-        height: 80px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
         object-fit: cover;
         border: 3px solid #edf2f7;
       }
-
-      .author-details h3 {
-        font-size: 20px;
+      .author-details h4 {
+        font-size: 16px;
         font-weight: 700;
         color: #1a202c;
         margin-bottom: 4px;
       }
-
       .author-details .work-title {
-        font-size: 15px;
+        font-size: 14px;
         font-style: italic;
         color: #718096;
       }
-
       .quote-box {
         background: white;
-        padding: 24px;
-        padding-top: 12px;
         border-radius: 12px;
         color: #2d3748;
       }
-
       .quote-text {
         font-family: "Merriweather", serif;
-        font-size: 16px;
-        line-height: 1.8;
+        font-size: 14px;
+        line-height: 1.6;
       }
-
+      /* Right column wrapper */
+      .response-column {
+        display: flex;
+        align-items: stretch;
+        border: none;
+        padding: 0px 24px;
+      }
       .response-label {
         font-weight: 600;
         font-size: 14px;
         color: #4a5568;
         margin-bottom: 8px;
         display: block;
-        padding-left: 24px;
       }
-
       .response-area {
-        width: 90%;
-        min-height: 140px;
+        width: 100%;
+        height: 100%;
         padding: 16px;
-        border: 2px solid #e2e8f0;
-        border-radius: 8px;
-        font-size: 15px;
+        font-size: 14px;
         font-family: "Inter", sans-serif;
         line-height: 1.6;
         resize: vertical;
         transition: border-color 0.3s;
-        margin-left: 24px;
-        margin-right: 24px;
+        margin: 0;
+        border-radius: 8px;
+        border: 1px solid #a6a6a6;
+        background: #f0f0f0;
+        cursor: pointer;
       }
-
       .response-area:focus {
         outline: none;
         border-color: #667eea;
-        background: #fafbfc;
       }
-
-      .response-area:disabled {
-        background-color: #f8fafc;
-        border: 2px dashed #cbd5e1;
-        color: #94a3b8;
-        cursor: not-allowed;
+      .response-area::placeholder {
+        color: #343434;
+        padding-top: 5px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 100%;
       }
-
-      .response-area:disabled::placeholder {
-        color: #94a3b8;
-        font-style: italic;
-      }
-
       .word-count {
         text-align: right;
         font-size: 13px;
         color: #718096;
         margin-top: 6px;
       }
-
       /* Connections Section */
       .connections-section {
-        padding-top: 40px;
-        border-top: 3px solid #e2e8f0;
+        padding-top: 8px;
       }
-
       .connections-section h2 {
         font-size: 24px;
         font-weight: 700;
         color: #1a202c;
         margin-bottom: 16px;
       }
-
       .connections-section .prompt {
         font-size: 16px;
         color: #4a5568;
         line-height: 1.7;
         margin-bottom: 20px;
       }
-
       .connections-section .response-area {
         min-height: 140px;
       }
-
-      .section-directions {
-        color: #4b5563;
-        line-height: 1.6;
-        margin-bottom: 20px;
-      }
-
       .status-message {
         background-color: #f8f9fa;
         border-radius: 8px;
       }
-
       .status-message.in-progress {
         border-left-color: #3b82f6;
       }
-
       .status-message.completed {
         border-left-color: #10b981;
       }
-
       .status-text {
         font-weight: 600;
         margin-bottom: 8px;
         color: #1f2937;
       }
-
       .status-description {
         color: #4b5563;
         font-size: 0.9em;
         line-height: 1.5;
+      }
+      .status-btn {
+        font-size: 12px;
+        padding: 4px 12px;
+        background: #eab308;
+        color: #4b5563;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        cursor: default;
+        transition: all 0.2s;
+        pointer-events: none;
+        max-width: fit-content;
       }
       /* Completion Notice */
       .completion-notice {
@@ -464,40 +1318,319 @@
         text-align: center;
         color: white;
       }
-
       .completion-notice .icon {
         font-size: 40px;
         margin-bottom: 12px;
       }
-
       .completion-notice h3 {
         font-size: 24px;
         font-weight: 700;
         margin-bottom: 8px;
       }
-
       .completion-notice p {
         font-size: 16px;
         opacity: 0.95;
       }
+      .submit-button-container {
+        display: flex;
+        justify-content: end;
+        padding-right: 50px;
+        gap: 24px;
+        border-bottom: 3px solid #e2e8f0;
+        padding-bottom: 40px;
+      }
+      .begin-button {
+        padding: 10px 24px;
+        background-color: #2c2c2c;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        border: 1px solid #2c2c2c;
+      }
+      .submit-button {
+        padding: 10px 24px;
+        background-color: #2c2c2c;
+        color: white;
+        border: 1px solid #2c2c2c;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .request-button {
+        padding: 10px 24px;
+        background-color: #f7f7f7;
+        color: #1e1e1e;
+        border: 1px solid #767676;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background 0.2s, color 0.2s;
+      }
+      .help-text {
+        margin-right: 16px;
+        padding-left: 16px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #4a5568;
+        line-height: 1.2;
+        font-family: "Inter", sans-serif;
+      }
+      #snackbar {
+        visibility: hidden;
+        min-width: 280px;
+        max-width: 340px;
+        background-color: #333;
+        color: #fff;
+        border-radius: 6px;
+        padding: 14px 16px;
+        position: fixed;
+        z-index: 1000;
+        right: 20px; /* <<< FIX: Always on right */
+        bottom: 20px;
+        font-size: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        opacity: 0;
+      }
+      #snackbar.show {
+        visibility: visible;
+        animation: fadein 0.4s forwards, fadeout 0.4s 4.6s forwards;
+      }
+      #snackbar.show:focus {
+        outline: 2px solid #fff;
+      }
+      .snackbar-close {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s ease, color 0.2s ease;
+        outline: none;
+      }
+      .snackbar-close-icon {
+        width: 20px;
+        height: 20px;
+        color: #ffffff;
+        transition: color 0.2s ease;
+      }
+      /* Hover */
+      .snackbar-close:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+      /* Focus (keyboard accessibility) */
+      .snackbar-close:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+      }
+      /* Active state */
+      .snackbar-close:active {
+        background: rgba(255, 255, 255, 0.25);
+      }
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.35);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+      }
 
+      .begin-modal-box {
+        width: 640px;
+        background: #ffffff;
+        border-radius: 12px;
+        font-family: "Inter", sans-serif;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.18);
+      }
+
+      .begin-modal-header {
+        background: #e8f2ff;
+        padding: 18px 24px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #1a1a1a;
+        border-bottom: 1px solid #d7e3f3;
+      }
+
+      .begin-modal-illustration {
+        display: flex;
+        justify-content: center;
+        padding: 24px 0 8px 0;
+      }
+
+      .begin-modal-illustration img {
+        width: 140px;
+        height: auto;
+      }
+
+      .begin-modal-step-title {
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a1a;
+        text-align: center;
+        padding: 0 32px;
+        margin: 12px 0;
+        line-height: 1.45;
+      }
+
+      .begin-modal-desc {
+        font-size: 15px;
+        text-align: center;
+        color: #4a4a4a;
+        padding: 0 40px 32px 40px;
+        line-height: 1.6;
+      }
+
+      .begin-modal-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 24px 24px 24px;
+        border-top: 1px solid #e8edf5;
+      }
+
+      .begin-modal-checkbox {
+        display: flex;
+        align-items: center;
+        font-size: 15px;
+        font-weight: 500;
+        color: #333;
+        gap: 8px;
+      }
+
+      .begin-modal-ok {
+        padding: 10px 32px;
+        background: #2c2c2c;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .begin-modal-ok:hover {
+        background: #1a1a1a;
+      }
+
+      .tooltip-box-global {
+        position: absolute;
+        width: 260px;
+        background: #edf6ff;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 18px 20px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+        display: none;
+        z-index: 5000;
+        font-family: "Inter", sans-serif;
+        pointer-events: none;
+      }
+
+      .tooltip-arrow-global {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+      }
+
+      .tooltip-arrow-global::before,
+      .tooltip-arrow-global::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 12px solid transparent;
+        border-right: 12px solid transparent;
+      }
+
+      .tooltip-arrow-global::before {
+        border-bottom: 12px solid #cbd5e1;
+      }
+
+      .tooltip-arrow-global::after {
+        top: 1px;
+        border-left-width: 11px;
+        border-right-width: 11px;
+        border-bottom: 11px solid #edf6ff;
+      }
+
+      .tooltip-step-text {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+      }
+
+      .tooltip-step-text span {
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        padding: 3px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-left: 10px;
+      }
+
+      .tooltip-desc-text {
+        font-size: 14px;
+        color: #374151;
+        margin-top: 4px;
+        line-height: 1.4;
+      }
+
+      @keyframes fadein {
+        from {
+          bottom: 0;
+          opacity: 0;
+        }
+        to {
+          bottom: 20px;
+          opacity: 1;
+        }
+      }
+      @keyframes fadeout {
+        from {
+          bottom: 20px;
+          opacity: 1;
+        }
+        to {
+          bottom: 0;
+          opacity: 0;
+        }
+      }
       @media (max-width: 768px) {
         body {
           padding: 20px 12px;
         }
-
         .task-title {
           font-size: 32px;
         }
-
         .part-title {
           font-size: 18px;
         }
-
         .part-card {
           padding: 30px 24px;
         }
-
         .author-info {
           flex-direction: column;
           text-align: center;
@@ -506,1041 +1639,890 @@
     </style>
   </head>
   <body>
-    <header style="
-        border-bottom: 2px solid #e2e8f0;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        background-color: white;
-        width: 100%;
-        padding: 40px 80px;
-      ">
-      <!--TITLE-->
-      <section style="width: 50%">
-        <p style="
-            font-size: 13px;
-            color: #718096;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-          ">
-          UNIT: HARLEM RENAISSANCE &amp; SHAKESPEAREAN TRAGEDY
-        </p>
-        <h1 style="
-            font-size: 36px;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 12px;
-          ">
-          Othello's Renaissance
-        </h1>
-        <ul style="display: flex; gap: 12px; margin-bottom: 20px">
-          <li style="
-              padding: 6px 16px;
-              border: 1.5px solid #cbd5e0;
-              border-radius: 20px;
-              font-size: 14px;
-              color: #4a5568;
-              list-style: none;
-            ">
-            Analyze
+    <header class="header" id="header">
+      <section class="title-section">
+        <p class="unit-label">Survey Course > ELA</p>
+        <h1 class="main-title">Othello's Renaissance</h1>
+        <ul class="tags">
+          <li
+            class="step-status not-started"
+            style="background-color: #e7e7e7; color: #343434"
+          >
+            Competencies (2)
           </li>
-          <li style="
-              padding: 6px 16px;
-              border: 1.5px solid #cbd5e0;
-              border-radius: 20px;
-              font-size: 14px;
-              color: #4a5568;
-              list-style: none;
-            ">
-            Connect
+          <li
+            class="step-status not-started"
+            style="background-color: #e7e7e7; color: #343434"
+          >
+            Objectives (1)
           </li>
-          <li style="
-              padding: 6px 16px;
-              border: 1.5px solid #cbd5e0;
-              border-radius: 20px;
-              font-size: 14px;
-              color: #4a5568;
-              list-style: none;
-            ">
-            Interpret
+          <li
+            class="step-status not-started"
+            style="background-color: #e7e7e7; color: #343434"
+          >
+            Essential Questions (8)
           </li>
         </ul>
-        <div style="margin-top: 24px">
-          <h3 style="
-              font-size: 16px;
-              font-weight: 600;
-              color: #1a202c;
-              margin: 20px 0 12px 0;
-            ">
-            Objectives
-          </h3>
-          <ul style="
-              margin-left: 20px;
-              color: #4a5568;
-              font-size: 14px;
-              line-height: 1.8;
-              margin-bottom: 20px;
-            ">
-            <li>
-              In this task you will use your prior knowledge of the Harlem
-              Renaissance and Shakespearean tragedy, and your analysis of
-              primary and secondary sources, to make connections between Othello
-              and the writings of W.E.B. DuBois and Ralph Ellison. You will draw
-              insights that will allow you to answer the essential questions for
-              this unit.
-            </li>
-          </ul>
-
-          <h3 style="
-              font-size: 16px;
-              font-weight: 600;
-              color: #1a202c;
-              margin: 20px 0 12px 0;
-            ">
-            Essential Questions
-          </h3>
-          <ul style="
-              margin-left: 20px;
-              color: #4a5568;
-              font-size: 14px;
-              line-height: 1.8;
-              margin-bottom: 20px;
-            ">
-            <li>
-              What are the sources of political and cultural differences in the
-              modern United States?
-            </li>
-            <li>
-              How did the United States respond to new ideas about society?
-            </li>
-            <li>
-              How can I draw connections between different subjects to deepen my
-              understanding?
-            </li>
-            <li>What enduring issues can be seen reflected in literature?</li>
-            <li>
-              How much does the author's intent matter when interpreting
-              literature for a modern audience?
-            </li>
-            <li>
-              Why is Othello relevant when discussing the Harlem Renaissance
-              era?
-            </li>
-            <li>
-              What thematic parallels can be drawn between Othello and Invisible
-              Man by Ralph Ellison?
-            </li>
-            <li>
-              How do historical reactions to performances of Othello in America
-              show Du Bois' idea of Double Consciousness?
-            </li>
-          </ul>
+        <div class="expandable-content" id="expandableContent">
+          <div style="display: flex; gap: 40px">
+            <div>
+              <h3 class="section-heading">Objectives</h3>
+              <ul class="objectives-list">
+                <li>
+                  In this task you will use your prior knowledge of the Harlem
+                  Renaissance and Shakespearean tragedy, and your analysis of
+                  primary and secondary sources, to make connections between
+                  Othello and the writings of W.E.B. DuBois and Ralph Ellison.
+                  You will draw insights that will allow you to answer the
+                  essential questions for this unit.
+                </li>
+              </ul>
+              <h3 class="section-heading">Essential Questions</h3>
+              <ul class="questions-list">
+                <li>
+                  What are the sources of political and cultural differences in
+                  the modern United States?
+                </li>
+                <li>
+                  How did the United States respond to new ideas about society?
+                </li>
+                <li>
+                  How can I draw connections between different subjects to
+                  deepen my understanding?
+                </li>
+                <li>
+                  What enduring issues can be seen reflected in literature?
+                </li>
+                <li>
+                  How much does the author's intent matter when interpreting
+                  literature for a modern audience?
+                </li>
+                <li>
+                  Why is Othello relevant when discussing the Harlem Renaissance
+                  era?
+                </li>
+                <li>
+                  What thematic parallels can be drawn between Othello and
+                  Invisible Man by Ralph Ellison?
+                </li>
+                <li>
+                  How do historical reactions to performances of Othello in
+                  America show Du Bois' idea of Double Consciousness?
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="section-heading">Competencies</h3>
+              <ul class="objectives-list">
+                <li style="white-space: nowrap">Think Critically</li>
+                <li style="white-space: nowrap">Communicate</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
-
-      <!--PROGRESS AND STEPS-->
-      <section style="
-          width: 40%;
-          min-width: 300px;
-          background: white;
-          padding: 24px;
-          border-radius: 8px;
-          border: 1px solid #e2e8f0;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        ">
-        <div style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-          ">
-          <p style="
-              font-size: 12px;
-              font-weight: 600;
-              color: #64748b;
-              text-transform: uppercase;
-              letter-spacing: 0.5px;
-            ">
-            Steps (3)
-          </p>
-          <div style="display: flex; align-items: center; gap: 8px; width: 80%">
-            <div style="
-                width: 80%;
-                height: 6px;
-                background: #e2e8f0;
-                border-radius: 3px;
-                overflow: hidden;
-              ">
-              <div class="progress-bar-fill" style="
-                  width: 0%;
-                  height: 100%;
-                  background: #3b82f6;
-                  transition: width 0.3s ease;
-                "></div>
+      <section class="steps-panel">
+        <div class="progress-header">
+          <p class="progress-label">Steps (3)</p>
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div
+                class="progress-bar-fill"
+                id="progressFill"
+                style="width: 0%"
+              ></div>
             </div>
-            <span class="progress-percent" style="font-size: 12px; color: #64748b; font-weight: 500">0%</span>
+            <div class="progress-bar">
+              <div class="progress-bar-fill" style="width: 0%"></div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-bar-fill" style="width: 0%"></div>
+            </div>
           </div>
         </div>
-
-        <div style="display: flex; flex-direction: column; position: relative">
-          <!-- Vertical connector line (connects only between steps) -->
-          <div style="
-              position: absolute;
-              left: 15px;
-              top: 20px;
-              bottom: 48px;
-              width: 2px;
-              background: #e2e8f0;
-              z-index: 1;
-              height: 80%;
-            "></div>
-
-          <!-- Step 1 -->
-          <div style="
-              display: flex;
-              align-items: flex-start;
-              gap: 16px;
-              position: relative;
-            ">
-            <div style="position: relative; z-index: 2">
-              <div style="
-                  width: 32px;
-                  height: 32px;
-                  border-radius: 50%;
-                  background: #e2e8f0;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 14px;
-                  font-weight: 600;
-                  color: #94a3b8;
-                ">
-                1
-              </div>
-            </div>
-            <div style="flex: 1">
-              <h2 style="
-                  font-size: 15px;
-                  font-weight: 600;
-                  color: #1e293b;
-                  margin-bottom: 4px;
-                ">
-                Quotable Connections - "I sit with Shakespeare and he winces
-                not." —W.E.B. DuBois
-              </h2>
-              <div id="step1Status" style="
-                  display: inline-block;
-                  font-size: 13px;
-                  font-weight: 600;
-                  color: #94a3b8;
-                  background-color: #f1f5f9;
-                  padding: 2px 12px;
-                  border-radius: 9999px;
-                  border: 1px solid #e2e8f0;
-                ">
-                Not Started
-              </div>
+        <div class="steps-list" id="stepsList">
+          <div class="connector-line"></div>
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h2 class="step-title">Quotable Connections</h2>
+              <div class="step-status not-started">Not Started</div>
             </div>
           </div>
-
-          <!-- Step 2 -->
-          <div style="
-              display: flex;
-              align-items: flex-start;
-              gap: 16px;
-              position: relative;
-              padding: 24px 0;
-            ">
-            <div style="position: relative; z-index: 2">
-              <div style="
-                  width: 32px;
-                  height: 32px;
-                  border-radius: 50%;
-                  background: #e2e8f0;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 14px;
-                  font-weight: 600;
-                  color: #94a3b8;
-                ">
-                2
-              </div>
-            </div>
-            <div style="flex: 1">
-              <h2 style="
-                  font-size: 15px;
-                  font-weight: 600;
-                  color: 1e293b;
-                  margin-bottom: 4px;
-                ">
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h2 class="step-title">
                 American Reception for Othello in the 19th and 20th Century
               </h2>
-              <div id="step2Status" style="
-                  display: inline-block;
-                  font-size: 13px;
-                  font-weight: 600;
-                  color: #94a3b8;
-                  background-color: #f1f5f9;
-                  padding: 2px 12px;
-                  border-radius: 9999px;
-                  border: 1px solid #e2e8f0;
-                ">
-                Not Started
-              </div>
+              <div class="step-status not-started">Not Started</div>
             </div>
           </div>
-
-          <!-- Step 3 -->
-          <div style="
-              display: flex;
-              align-items: center;
-              gap: 16px;
-              position: relative;
-            ">
-            <div style="position: relative; z-index: 2">
-              <div style="
-                  width: 32px;
-                  height: 32px;
-                  border-radius: 50%;
-                  background: #e2e8f0;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 14px;
-                  font-weight: 600;
-                  color: #94a3b8;
-                ">
-                3
-              </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h2 class="step-title">Primary Source Analysis</h2>
+              <div class="step-status not-started">Not Started</div>
             </div>
-            <div style="flex: 1">
-              <h2 style="
-                  font-size: 15px;
-                  font-weight: 600;
-                  color: #1e293b;
-                  margin-bottom: 4px;
-                ">
-                Primary Source Analysis
-              </h2>
-              <div id="step3Status" style="
-                  display: inline-block;
-                  font-size: 13px;
-                  font-weight: 600;
-                  color: #94a3b8;
-                  background-color: #f1f5f9;
-                  padding: 2px 12px;
-                  border-radius: 9999px;
-                  border: 1px solid #e2e8f0;
-                ">
-                Not Started
-              </div>
-            </div>
-          </div>
-          <!-- Submit Button (initially hidden) -->
-          <div class="submit-button-container" style="display: none; text-align: center; margin: 32px 0;">
-            <button style="
-                padding: 16px 44px;
-                background-color: #3b82f6;
-                color: white;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 15px;
-                font-weight: 600;
-              ">
-              Submit
-            </button>
           </div>
         </div>
       </section>
+      <div
+        class="accordion-arrow collapse-toggle"
+        id="collapseToggle"
+        aria-label="Toggle header"
+        style="
+          cursor: pointer;
+          padding: 8px;
+          background-color: #fff9f9;
+          border: 1px solid #e2e8f0;
+          border-radius: 5px;
+        "
+        onmouseenter="style.backgroundColor = '#E2E8F0'"
+        onmouseleave="style.backgroundColor = '#fff9f9'"
+      >
+        <svg
+          width="24px"
+          height="24px"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+            stroke="#292D32"
+            stroke-width="2.4"
+            stroke-miterlimit="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+    </header>
+    <header id="scrolledHeader" class="scrolled-header-component">
+      <section class="title-section">
+        <h1 class="main-title">Othello's Renaissance</h1>
+      </section>
+      <section
+        class="steps-panel"
+        style="
+          margin-top: 0px;
+          padding: 12px 20px;
+          transition: margin 0.3s ease, padding 0.3s ease;
+        "
+      >
+        <div class="progress-header">
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div
+                class="progress-bar-fill"
+                id="progressFill"
+                style="width: 0%"
+              ></div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-bar-fill" style="width: 0%"></div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-bar-fill" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div
+        class="accordion-arrow collapse-toggle collapsed"
+        id="collapseToggle"
+        aria-label="Toggle header"
+        style="
+          cursor: pointer;
+          padding: 8px;
+          background-color: #fff9f9;
+          border: 1px solid #e2e8f0;
+          border-radius: 5px;
+          top: 8px;
+          left: auto;
+          right: 48px;
+        "
+        onmouseenter="style.backgroundColor = '#E2E8F0'"
+        onmouseleave="style.backgroundColor = '#fff9f9'"
+      >
+        <svg
+          width="24px"
+          height="24px"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+            stroke="#292D32"
+            stroke-width="2.4"
+            stroke-miterlimit="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
     </header>
     <main class="container">
       <!-- Part 1 Card -->
-      <section class="part-card">
+      <section class="part-card" id="step1">
         <!-- Quote Analysis Section -->
         <div class="part-section">
-          <header class="section-header">
-            <div style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 24px;
-              ">
-              <p style="font-size: 15px; color: #4a5568">Step 1 of 3</p>
-              <div>
-                <button class="status-btn" style="
-                    padding: 8px 16px;
-                    background: #f1f5f9;
-                    color: #4b5563;
-                    border: 1px solid #e2e8f0;
-                    border-radius: 20px;
-                    cursor: default;
-                    transition: all 0.2s;
-                  ">
-                  Not Started
-                </button>
+          <section class="section-header" style="margin-bottom: 0px">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <div style="flex: 1">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  "
+                >
+                  <div style="display: flex; gap: 16px; align-items: center">
+                    <p class="step-count">STEP 1 of 3</p>
+                    <button class="step-status not-started">Not Started</button>
+                  </div>
+                  <div
+                    class="accordion-arrow"
+                    style="cursor: pointer; padding: 8px"
+                  >
+                    <svg
+                      width="24px"
+                      height="24px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+                        stroke="#292D32"
+                        stroke-width="2.4"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <p class="section-quote-small">Quotable Connections</p>
               </div>
             </div>
-            <h2 class="section-quote">
-              Quotable Connections - "I sit with Shakespeare and he winces not."
-              —W.E.B. DuBois
-            </h2>
-
-            <div class="status-container" style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 16px;
-                margin: 24px 0;
-                background-color: #f8f9fa;
-                border-radius: 8px;
-                padding: 16px;
-              ">
-              <div class="status-message" id="statusMessage1" style="flex: 1">
-          <p class="status-text">This activity has not been started yet. Click Begin to get started.</p>
-          <p class="status-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-        </div>
-              <button class="begin-btn" onclick="startTask(this)" style="
-                  padding: 10px 24px;
-                  background: #3b82f6;
-                  color: white;
-                  border: none;
-                  border-radius: 6px;
-                  font-size: 15px;
-                  font-weight: 600;
-                  cursor: pointer;
-                  transition: all 0.2s;
-                  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-                  white-space: nowrap;
-                  height: fit-content;
-                ">
-                Begin
-              </button>
-            </div>
-
-            <p style="
-                font-size: 15px;
-                color: #4a5568;
-                margin: 0 0 8px 0;
-                font-weight: 500;
-              ">
-              Block 1
-            </p>
-            <p class="section-directions">
-              <strong>Directions:</strong> Read each quote carefully. State the
-              main idea of each one in your own words using the response area
-              provided.
-            </p>
-          </header>
-
-          <!-- W.E.B. DuBois -->
-          <div class="quote-item">
-            <div class="author-info">
-              <img src="./Othello&#39;s Renaissance - Part I_files/image1.png" alt="W.E.B. DuBois" class="author-portrait">
-              <div class="author-details">
-                <h3>W.E.B. DuBois</h3>
-                <div class="work-title">The Souls of Black Folk</div>
+            <div class="accordion-content">
+              <h2 class="section-quote">Quotable Connections</h2>
+              <blockquote class="section-quote-2">
+                "I sit with Shakespeare and he winces not." —W.E.B. DuBois
+              </blockquote>
+              <div class="section-directions">
+                <p style="display: inline">Part A :</p>
+                <span>
+                  Read each quote carefully. State the main idea of each one in
+                  your own words using the response area provided.
+                </span>
+              </div>
+              <!-- W.E.B. DuBois -->
+              <table>
+                <tr class="quote-item">
+                  <td class="quote-column" style="padding-left: 0px">1.</td>
+                  <td class="quote-column">
+                    <div class="quote-box">
+                      <p class="quote-text">
+                        ...the Negro is a sort of seventh son, born with a veil,
+                        and gifted with second-sight in this American world,—a
+                        world which yields him no true self-consciousness, but
+                        only lets him see himself through the revelation of the
+                        other world. It is a peculiar sensation, this
+                        <strong>double-consciousness</strong>, this sense of
+                        always
+                        <strong
+                          >looking at one's self through the eyes of others, of
+                          measuring one's soul by the tape of a world that looks
+                          on in amused contempt and pity.</strong
+                        >
+                      </p>
+                    </div>
+                    <div class="author-info">
+                      <img
+                        src="./Othello&#39;s Renaissance - Part I_files/image1.png"
+                        alt="W.E.B. DuBois"
+                        class="author-portrait"
+                      />
+                      <div class="author-details">
+                        <div class="work-title">The Souls of Black Folk</div>
+                        <h4>W.E.B. DuBois</h4>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="response-column">
+                    <textarea
+                      readonly
+                      class="response-area"
+                      onclick="textAreaClick(this)"
+                      placeholder="Click here to Begin and add your response."
+                    ></textarea>
+                  </td>
+                </tr>
+                <!-- Ralph Ellison -->
+                <tr class="quote-item">
+                  <td class="quote-column" style="padding-left: 0px">2.</td>
+                  <td class="quote-column">
+                    <div class="quote-box">
+                      <p class="quote-text">
+                        I am an invisible man. . .
+                        <strong>I am invisible</strong>, understand, simply
+                        because people refuse to see me. Like the bodiless heads
+                        you see sometimes in circus sideshows, it is as though I
+                        have been surrounded by mirrors of hard, distorting
+                        glass. When they approach me
+                        <strong
+                          >they see only my surroundings, themselves or figments
+                          of their imagination, indeed, everything and anything
+                          except me.</strong
+                        >
+                      </p>
+                    </div>
+                    <div class="author-info">
+                      <img
+                        src="./Othello&#39;s Renaissance - Part I_files/image2.png"
+                        alt="Ralph Ellison"
+                        class="author-portrait"
+                      />
+                      <div class="author-details">
+                        <div class="work-title">Invisible Man</div>
+                        <h4>Ralph Ellison</h4>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="response-column">
+                    <textarea
+                      readonly
+                      class="response-area"
+                      onclick="textAreaClick(this)"
+                      placeholder="Click here to Begin and add your response."
+                    ></textarea>
+                  </td>
+                </tr>
+                <!-- William Shakespeare -->
+                <tr class="quote-item">
+                  <td class="quote-column" style="padding-left: 0px">3.</td>
+                  <td class="quote-column">
+                    <div class="quote-box">
+                      <p class="quote-text">
+                        . . .I pray you, in your letters, / When you shall these
+                        unlucky deeds relate, /
+                        <strong
+                          >Speak of me as I am. Nothing extenuate, / Nor set
+                          down aught in malice.</strong
+                        >
+                        Then must you speak / Of one that loved not wisely, but
+                        too well. / Of one not easily jealous, but being
+                        wrought, / Perplexed in the extreme. Of one whose hand,
+                        / Like the base Indian, threw a pearl away / Richer than
+                        all his tribe. Of one whose subdued eyes, / Albeit
+                        unused to the melting mood, / Drop tears as fast as the
+                        Arabian trees / Their medicinal gum. . .
+                      </p>
+                    </div>
+                    <div class="author-info">
+                      <img
+                        src="./Othello&#39;s Renaissance - Part I_files/image3.png"
+                        alt="William Shakespeare"
+                        class="author-portrait"
+                      />
+                      <div class="author-details">
+                        <div class="work-title">Othello</div>
+                        <h4>William Shakespeare</h4>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="response-column">
+                    <textarea
+                      readonly
+                      class="response-area"
+                      onclick="textAreaClick(this)"
+                      placeholder="Click here to Begin and add your response."
+                    ></textarea>
+                  </td>
+                </tr>
+              </table>
+              <div class="connections-section">
+                <div class="section-directions">
+                  <p style="display: inline">Part B :</p>
+                  <span>
+                    Connect the main ideas stated by the authors above. How do
+                    their ideas compliment each other? Explain..
+                  </span>
+                </div>
+                <textarea
+                  readonly
+                  class="response-area"
+                  onclick="textAreaClick(this)"
+                  placeholder="Click here to Begin and add your response."
+                ></textarea>
               </div>
             </div>
-
-            <div class="quote-box">
-              <p class="quote-text">
-                ...the Negro is a sort of seventh son, born with a veil, and
-                gifted with second-sight in this American world,—a world which
-                yields him no true self-consciousness, but only lets him see
-                himself through the revelation of the other world. It is a
-                peculiar sensation, this <strong>double-consciousness</strong>,
-                this sense of always
-                <strong>looking at one's self through the eyes of others, of
-                  measuring one's soul by the tape of a world that looks on in
-                  amused contempt and pity.</strong>
-              </p>
-            </div>
-
-            <textarea class="response-area" data-index="0" placeholder="Click &quot;Begin&quot; to start adding your response" data-original-placeholder="Explain what DuBois is saying here..." disabled="" style="cursor: not-allowed; background-color: rgb(248, 250, 252); border: 1px dashed rgb(203, 213, 224); border-radius: 6px; padding: 12px;"></textarea>
-          </div>
-
-          <!-- Ralph Ellison -->
-          <div class="quote-item">
-            <div class="author-info">
-              <img src="./Othello&#39;s Renaissance - Part I_files/image2.png" alt="Ralph Ellison" class="author-portrait">
-              <div class="author-details">
-                <h3>Ralph Ellison</h3>
-                <div class="work-title">Invisible Man</div>
-              </div>
-            </div>
-
-            <div class="quote-box">
-              <p class="quote-text">
-                I am an invisible man. . . <strong>I am invisible</strong>,
-                understand, simply because people refuse to see me. Like the
-                bodiless heads you see sometimes in circus sideshows, it is as
-                though I have been surrounded by mirrors of hard, distorting
-                glass. When they approach me
-                <strong>they see only my surroundings, themselves or figments of
-                  their imagination, indeed, everything and anything except
-                  me.</strong>
-              </p>
-            </div>
-
-            <textarea class="response-area" data-index="1" placeholder="Click &quot;Begin&quot; to start adding your response" data-original-placeholder="What does Ellison mean by being &#39;invisible&#39;?" disabled="" style="cursor: not-allowed; background-color: rgb(248, 250, 252); border: 1px dashed rgb(203, 213, 224); border-radius: 6px; padding: 12px;"></textarea>
-          </div>
-
-          <!-- William Shakespeare -->
-          <div class="quote-item">
-            <div class="author-info">
-              <img src="./Othello&#39;s Renaissance - Part I_files/image3.png" alt="William Shakespeare" class="author-portrait">
-              <div class="author-details">
-                <h3>William Shakespeare</h3>
-                <div class="work-title">Othello</div>
-              </div>
-            </div>
-
-            <div class="quote-box">
-              <p class="quote-text">
-                . . .I pray you, in your letters, / When you shall these unlucky
-                deeds relate, /
-                <strong>Speak of me as I am. Nothing extenuate, / Nor set down aught
-                  in malice.</strong>
-                Then must you speak / Of one that loved not wisely, but too
-                well. / Of one not easily jealous, but being wrought, /
-                Perplexed in the extreme. Of one whose hand, / Like the base
-                Indian, threw a pearl away / Richer than all his tribe. Of one
-                whose subdued eyes, / Albeit unused to the melting mood, / Drop
-                tears as fast as the Arabian trees / Their medicinal gum. . .
-              </p>
-            </div>
-
-            <textarea class="response-area" data-index="2" placeholder="Click &quot;Begin&quot; to start adding your response" data-original-placeholder="What is Othello asking for in this speech?" disabled="" style="cursor: not-allowed; background-color: rgb(248, 250, 252); border: 1px dashed rgb(203, 213, 224); border-radius: 6px; padding: 12px;"></textarea>
-          </div>
-        </div>
-
-        <!-- Connections Section -->
-        <div class="connections-section">
-          <p style="
-              font-size: 15px;
-              color: #4a5568;
-              margin: 0 0 8px 0;
-              font-weight: 500;
-            ">
-            Block 2
-          </p>
-          <div class="section-directions">
-            <p>
-              <strong>Directions:</strong> Connect the main ideas stated by the
-              authors above. How do their ideas compliment each other? Explain..
-            </p>
-          </div>
-          <textarea class="response-area" data-index="3" placeholder="Click &quot;Begin&quot; to start adding your response" data-original-placeholder="Write your connections here..." disabled="" style="cursor: not-allowed; background-color: rgb(248, 250, 252); border: 1px dashed rgb(203, 213, 224); border-radius: 6px; padding: 12px;"></textarea>
-          <!-- Submit Button (initially hidden) -->
-          <div class="submit-button-container" style="display: none; text-align: center; margin: 32px 0 0 0;">
-            <button style="
-                padding: 16px 44px;
-                background-color: #3b82f6;
-                color: white;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 15px;
-                font-weight: 600;
-              ">
-              Submit
-            </button>
-          </div>
+          </section>
         </div>
       </section>
       <!-- Help and Discussion Box -->
-      <section style="
-          background: #f8f9fa;
+      <section
+        class="help-section"
+        style="
+          background: #eef7ff;
           border-bottom-left-radius: 20px;
           border-bottom-right-radius: 20px;
           border-top: 1px solid #e2e8f0;
           overflow: hidden;
-        ">
-        <div style="
-            padding: 50px;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-          ">
-          <h3 style="
-              margin: 0 0 12px 0;
-              font-size: 20px;
-              font-weight: 600;
-              color: #1e293b;
-              line-height: 1.2;
-              font-family: &#39;Inter&#39;, sans-serif;
-            ">
-            Help &amp; Discussion
-          </h3>
-          <p style="
-              margin: 0 0 16px 0;
-              font-size: 14px;
-              color: #64748b;
-              line-height: 1.5;
-              font-family: &#39;Inter&#39;, sans-serif;
-            ">
-            This discussion is for Step 1 of 3 (Check Your Understanding). Use
-            the box below to ask your teacher for help or clarification. Your
-            teacher will see exactly where you are in the task and provide
-            targeted assistance.
-          </p>
-          <textarea style="margin: 0px; width: 100%; cursor: text; background-color: white; border-style: solid;" class="response-area help-textarea" placeholder="Ask your teacher for help or clarification"></textarea>
-          <button style="
-              width: 20%;
-              margin-top: 12px;
-              padding: 8px 16px;
-              background-color: #3b82f6;
-              color: white;
-              border: none;
-              border-radius: 6px;
-              cursor: pointer;
-              align-self: flex-end;
-            ">
+        "
+      >
+        <!-- Submit Button (initially hidden) -->
+        <div
+          class="submit-button-container"
+          style="text-align: center; margin: 32px 0 0 0"
+        >
+          <button
+            class="request-button"
+            onclick="showSnackbar()"
+            onmouseover="this.style.backgroundColor='#cbdeed';"
+            onmouseout="this.style.backgroundColor='#F7F7F7';"
+          >
             Request Help
+          </button>
+          <button class="begin-button" onclick="openBeginModal(this)">
+            Begin
           </button>
         </div>
       </section>
-
       <!-- Part 2 Card -->
-      <section class="part-card" style="margin-top: 32px">
+      <section class="part-card" id="step2" style="margin-top: 32px">
         <div class="part-section">
-          <header class="section-header">
-            <div style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 24px;
-              ">
-              <p style="font-size: 15px; color: #4a5568; margin: 0">
-                Step 2 of 3
-              </p>
-              <div>
-                <button class="status-btn" style="
-                    padding: 8px 16px;
-                    background: #f1f5f9;
-                    color: #4b5563;
-                    border: 1px solid #e2e8f0;
-                    border-radius: 20px;
-                    font-size: 14px;
-                    cursor: default;
-                    transition: all 0.2s;
-                  ">
-                  Not Started
-                </button>
+          <section class="section-header" style="margin-bottom: 0px">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <div style="flex: 1">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  "
+                >
+                  <div style="display: flex; gap: 16px; align-items: center">
+                    <p class="step-count">STEP 2 of 3</p>
+                    <button class="step-status not-started">Not Started</button>
+                  </div>
+                  <div
+                    class="accordion-arrow"
+                    style="cursor: pointer; padding: 8px"
+                  >
+                    <svg
+                      width="24px"
+                      height="24px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+                        stroke="#292D32"
+                        stroke-width="2.4"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <p class="section-quote-small">
+                  American Reception for Othello in the 19th and 20th Century
+                </p>
               </div>
             </div>
-            <h2 class="section-quote">
-              American Reception for Othello in the 19th and 20th Century
-            </h2>
-
-            <div class="status-container" style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 16px;
-                margin: 24px 0;
-                background-color: #f8f9fa;
-                border-radius: 8px;
-                padding: 16px;
-              ">
-              <div class="status-message" id="statusMessage2" style="flex: 1">
-          <p class="status-text">This activity has not been started yet. Click Begin to get started.</p>
-          <p class="status-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-        </div>
-              <button class="begin-btn" onclick="startTask(this)" style="
-                  padding: 10px 24px;
-                  background: #3b82f6;
-                  color: white;
-                  border: none;
-                  border-radius: 6px;
-                  font-size: 15px;
-                  font-weight: 600;
-                  cursor: pointer;
-                  transition: all 0.2s;
-                  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-                  white-space: nowrap;
-                  height: fit-content;
-                ">
-                Begin
-              </button>
+            <div class="accordion-content">
+              <h2 class="section-quote">
+                American Reception for Othello in the 19th and 20th Century
+              </h2>
+              <div class="section-directions">
+                <p>
+                  Use the timeline to track the evolution of Othello productions
+                  and how they connect to the time period they were in.
+                </p>
+              </div>
+              <!-- Timeline Image -->
+              <div style="margin: 32px 0; text-align: center">
+                <img
+                  src="./Othello&#39;s Renaissance - Part I_files/image4.png"
+                  alt="Timeline of Othello Productions in America"
+                  style="
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                  "
+                />
+              </div>
+              <!-- Historical Note -->
+              <div style="margin: 24px 0">
+                <p
+                  style="
+                    font-size: 15px;
+                    color: #475569;
+                    line-height: 1.6;
+                    margin: 0 0 8px 0;
+                  "
+                >
+                  <strong>Note:</strong> For the first 200 years of Othello
+                  productions, Othello was played by a white actor in dark make
+                  up. Lighter make up versions of Othello existed as a response
+                  to white audiences and critics wanting to distance Othello and
+                  Shakespeare from black identity.
+                </p>
+                <p
+                  style="
+                    font-size: 14px;
+                    color: #64748b;
+                    margin: 8px 0 0 0;
+                    font-style: normal;
+                  "
+                >
+                  Source: "Not Just Black and White: Othello in America" by
+                  Andrew Carlson, American Theatre
+                </p>
+              </div>
+              <!-- Question 1 -->
+              <div style="margin-top: 40px">
+                <label class="response-label"
+                  >Othello was often put on as a morality play, and white
+                  audience members and critics mimicked John Quincy Adams'
+                  sentiment–that it was a cautionary tale about miscegenation
+                  (interracial marriage). Based on your analysis of the play, is
+                  this idea supported by the text or existing analysis of the
+                  text? Explain.</label
+                >
+                <textarea
+                  readonly
+                  class="response-area"
+                  data-index="4"
+                  onclick="showSnackbar()"
+                  placeholder="Click here to Begin and add your response."
+                ></textarea>
+              </div>
+              <!-- Question 2 -->
+              <div style="margin-top: 32px">
+                <label class="response-label"
+                  >Records prior to the 19th century don't show any controversy
+                  around theatrical performances of Othello in America. What
+                  historical events coincide with the timeline above that might
+                  have made audiences more sensitive to viewing this play with a
+                  racial lens? Explain.</label
+                >
+                <textarea
+                  readonly
+                  class="response-area"
+                  data-index="5"
+                  onclick="showSnackbar()"
+                  placeholder="Click here to Begin and add your response."
+                  data-original-placeholder="Identify and explain relevant historical events..."
+                ></textarea>
+              </div>
+              <!-- Question 3 -->
+              <div style="margin-top: 32px">
+                <label class="response-label"
+                  >James Hewlett and William A. Brown started The African
+                  Troupe, as shown on the previous page, but it was raided by
+                  police at the prompting of the Park Theatre. The actors were
+                  beaten and forced to swear before a judge that they would
+                  never perform Shakespeare in public again. Why would this
+                  performance be seen as threatening or unlawful at the
+                  time?</label
+                >
+                <textarea
+                  readonly
+                  class="response-area"
+                  data-index="6"
+                  onclick="showSnackbar()"
+                  placeholder="Click here to Begin and add your response."
+                  data-original-placeholder="Explain why this performance was considered threatening..."
+                ></textarea>
+              </div>
+              <!-- Question 4 -->
+              <div style="margin-top: 32px">
+                <label class="response-label"
+                  >What does the popularity of Paul Robeson's portrayal of
+                  Othello say about the audience and time period in which he
+                  performed?</label
+                >
+                <textarea
+                  readonly
+                  class="response-area"
+                  data-index="7"
+                  onclick="showSnackbar()"
+                  placeholder="Click here to Begin and add your response."
+                  data-original-placeholder="Analyze what Robeson&#39;s popularity reveals about the era..."
+                ></textarea>
+              </div>
             </div>
-
-            <p style="
-                font-size: 15px;
-                color: #4a5568;
-                margin: 0 0 8px 0;
-                font-weight: 500;
-              ">
-              Block 1
-            </p>
-            <div class="section-directions">
-              <p>
-                <strong>Directions:</strong> Use the timeline to track the
-                evolution of Othello productions and how they connect to the
-                time period they were in.
-              </p>
-            </div>
-          </header>
-
-          <!-- Timeline Image -->
-          <div style="margin: 32px 0; text-align: center">
-            <img src="./Othello&#39;s Renaissance - Part I_files/image4.png" alt="Timeline of Othello Productions in America" style="
-                max-width: 100%;
-                height: auto;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-              ">
-          </div>
-
-          <!-- Historical Note -->
-          <div style="margin: 24px 0; padding: 0 0 0 16px">
-            <p style="
-                font-size: 15px;
-                color: #475569;
-                line-height: 1.6;
-                margin: 0 0 8px 0;
-              ">
-              <strong>Note:</strong> For the first 200 years of Othello
-              productions, Othello was played by a white actor in dark make up.
-              Lighter make up versions of Othello existed as a response to white
-              audiences and critics wanting to distance Othello and Shakespeare
-              from black identity.
-            </p>
-            <p style="
-                font-size: 14px;
-                color: #64748b;
-                margin: 8px 0 0 0;
-                font-style: normal;
-              ">
-              Source: "Not Just Black and White: Othello in America" by Andrew
-              Carlson, American Theatre
-            </p>
-          </div>
-
-          <!-- Question 1 -->
-          <div style="margin-top: 40px">
-            <label class="response-label">Othello was often put on as a morality play, and white audience
-              members and critics mimicked John Quincy Adams' sentiment–that it
-              was a cautionary tale about miscegenation (interracial marriage).
-              Based on your analysis of the play, is this idea supported by the
-              text or existing analysis of the text? Explain.</label>
-            <textarea class="response-area" data-index="4" placeholder="Click &quot;Begin&quot; to start adding your response" data-original-placeholder="Analyze whether the play supports this interpretation..." disabled="" style="cursor: not-allowed; background-color: rgb(248, 250, 252); border: 1px dashed rgb(203, 213, 224); border-radius: 6px; padding: 12px;"></textarea>
-          </div>
-
-          <!-- Question 2 -->
-          <div style="margin-top: 32px">
-            <label class="response-label">Records prior to the 19th century don't show any controversy
-              around theatrical performances of Othello in America. What
-              historical events coincide with the timeline above that might have
-              made audiences more sensitive to viewing this play with a racial
-              lens? Explain.</label>
-            <textarea class="response-area" data-index="5" placeholder="Click &quot;Begin&quot; to start adding your response" data-original-placeholder="Identify and explain relevant historical events..." disabled="" style="cursor: not-allowed; background-color: rgb(248, 250, 252); border: 1px dashed rgb(203, 213, 224); border-radius: 6px; padding: 12px;"></textarea>
-          </div>
-
-          <!-- Question 3 -->
-          <div style="margin-top: 32px">
-            <label class="response-label">James Hewlett and William A. Brown started The African Troupe, as
-              shown on the previous page, but it was raided by police at the
-              prompting of the Park Theatre. The actors were beaten and forced
-              to swear before a judge that they would never perform Shakespeare
-              in public again. Why would this performance be seen as threatening
-              or unlawful at the time?</label>
-            <textarea class="response-area" data-index="6" placeholder="Click &quot;Begin&quot; to start adding your response" data-original-placeholder="Explain why this performance was considered threatening..." disabled="" style="cursor: not-allowed; background-color: rgb(248, 250, 252); border: 1px dashed rgb(203, 213, 224); border-radius: 6px; padding: 12px;"></textarea>
-          </div>
-
-          <!-- Question 4 -->
-          <div style="margin-top: 32px">
-            <label class="response-label">What does the popularity of Paul Robeson's portrayal of Othello
-              say about the audience and time period in which he
-              performed?</label>
-            <textarea class="response-area" data-index="7" placeholder="Click &quot;Begin&quot; to start adding your response" data-original-placeholder="Analyze what Robeson&#39;s popularity reveals about the era..." disabled="" style="cursor: not-allowed; background-color: rgb(248, 250, 252); border: 1px dashed rgb(203, 213, 224); border-radius: 6px; padding: 12px;"></textarea>
-          </div>
-          <!-- Submit Button (initially hidden) -->
-          <div class="submit-button-container" style="display: none; text-align: center; margin: 32px 0;">
-            <button style="
-                padding: 16px 44px;
-                background-color: #3b82f6;
-                color: white;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 15px;
-                font-weight: 600;
-              ">
-              Submit
-            </button>
-          </div>
+          </section>
         </div>
       </section>
       <!-- Help and Discussion Box for Part 2 -->
-      <section style="
-          background: #f8f9fa;
-          border-bottom-right-radius: 20px;
+      <section
+        class="help-section"
+        style="
+          background: #eef7ff;
           border-bottom-left-radius: 20px;
+          border-bottom-right-radius: 20px;
           border-top: 1px solid #e2e8f0;
           overflow: hidden;
-        ">
-        <div style="
-            padding: 50px;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-          ">
-          <h3 style="
-              margin: 0 0 12px 0;
-              font-size: 20px;
-              font-weight: 600;
-              color: #1e293b;
-              line-height: 1.2;
-              font-family: &#39;Inter&#39;, sans-serif;
-            ">
-            Help &amp; Discussion
-          </h3>
-          <p style="
-              margin: 0 0 16px 0;
-              font-size: 14px;
-              color: #64748b;
-              line-height: 1.5;
-              font-family: &#39;Inter&#39;, sans-serif;
-            ">
-            This discussion is for Step 2 of 3 (American Reception for Othello).
-            Use the box below to ask your teacher for help or clarification.
-            Your teacher will see exactly where you are in the task and provide
-            targeted assistance.
-          </p>
-          <textarea style="margin: 0px; width: 100%" class="response-area help-textarea" placeholder="Ask your teacher for help or clarification"></textarea>
-          <button style="
-              width: 20%;
-              margin-top: 12px;
-              padding: 8px 16px;
-              background-color: #3b82f6;
-              color: white;
-              border: none;
-              border-radius: 6px;
-              cursor: pointer;
-              align-self: flex-end;
-            ">
+        "
+      >
+        <!-- Submit Button (initially hidden) -->
+        <div
+          class="submit-button-container"
+          style="text-align: center; margin: 32px 0 0 0"
+        >
+          <button
+            class="request-button"
+            onclick="showSnackbar()"
+            onmouseover="this.style.backgroundColor='#cbdeed';"
+            onmouseout="this.style.backgroundColor='#F7F7F7';"
+          >
             Request Help
           </button>
+          <button class="begin-button" onclick="showSnackbar()">Begin</button>
         </div>
       </section>
-
       <!-- Part 3 Card -->
       <section class="part-card" style="margin-top: 32px" id="step3">
         <div class="part-section">
-          <header class="section-header" style="margin-bottom: 0px">
-            <div style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 24px;
-              ">
-              <p style="font-size: 15px; color: #4a5568; margin: 0">
-                Step 3 of 3
-              </p>
-              <div>
-                <button class="status-btn" style="
-                    padding: 8px 16px;
-                    background: #f1f5f9;
-                    color: #4b5563;
-                    border: 1px solid #e2e8f0;
-                    border-radius: 20px;
-                    font-size: 14px;
-                    cursor: default;
-                    transition: all 0.2s;
-                  ">
-                  Not Started
-                </button>
+          <section class="section-header" style="margin-bottom: 0px">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <div style="flex: 1">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  "
+                >
+                  <div style="display: flex; gap: 16px; align-items: center">
+                    <p class="step-count">STEP 3 of 3</p>
+                    <button class="step-status not-started">Not Started</button>
+                  </div>
+                  <div
+                    class="accordion-arrow"
+                    style="cursor: pointer; padding: 8px"
+                  >
+                    <svg
+                      width="24px"
+                      height="24px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
+                        stroke="#292D32"
+                        stroke-width="2.4"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <p class="section-quote-small">Primary Source Analysis</p>
               </div>
             </div>
-            <h2 class="section-quote">Primary Source Analysis</h2>
-
-            <div class="status-container" style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 16px;
-                margin: 24px 0;
-                background-color: #f8f9fa;
-                border-radius: 8px;
-                padding: 16px;
-              ">
-              <div class="status-message" id="statusMessage3" style="flex: 1">
-          <p class="status-text">This activity has not been started yet. Click Begin to get started.</p>
-          <p class="status-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-        </div>
-              <button class="begin-btn" onclick="startTask(this)" style="
-                  padding: 10px 24px;
-                  background: #3b82f6;
-                  color: white;
-                  border: none;
-                  border-radius: 6px;
-                  font-size: 15px;
-                  font-weight: 600;
-                  cursor: pointer;
-                  transition: all 0.2s;
-                  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-                  white-space: nowrap;
-                  height: fit-content;
-                ">
-                Begin
-              </button>
+            <div class="accordion-content">
+              <h2 class="section-quote">Primary Source Analysis</h2>
+              <div style="margin-bottom: 16px">
+                <p class="section-directions" style="margin-bottom: 20px">
+                  Examine the primary source below and answer the following
+                  questions.
+                </p>
+              </div>
+              <!-- Prior Knowledge Context -->
+              <div style="margin: 24px 0">
+                <h4
+                  style="
+                    font-size: 15px;
+                    font-weight: 600;
+                    color: #1e293b;
+                    margin: 0 0 8px 0;
+                  "
+                >
+                  Prior Knowledge
+                </h4>
+                <p
+                  style="
+                    font-size: 15px;
+                    color: #475569;
+                    line-height: 1.6;
+                    margin: 0;
+                  "
+                >
+                  In 1931, actor Paul Robeson was taking London by storm with
+                  his portrayal of Othello and his roles in popular musicals
+                  like Show Boat. He would later (1943) bring his Othello back
+                  to his stomping grounds in New York, on Broadway no less. This
+                  would be the first time a Black American actor would portray
+                  Othello in America since James Hewlett in 1821 and the first
+                  ever to play the character on Broadway. Below is a letter from
+                  W.E.B. DuBois to Robeson.
+                </p>
+              </div>
+              <!-- Primary Source Image -->
+              <div style="margin: 32px 0; text-align: center">
+                <img
+                  src="./Othello&#39;s Renaissance - Part I_files/image5.png"
+                  alt="Letter from W.E.B. DuBois to Paul Robeson"
+                  style="
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    border: 1px solid #e2e8f0;
+                  "
+                />
+              </div>
+              <!-- Question 1 -->
+              <div style="margin-top: 40px">
+                <label class="response-label"
+                  >What is DuBois' purpose in writing Robeson and what is his
+                  tone?</label
+                >
+                <textarea
+                  readonly
+                  class="response-area"
+                  data-index="8"
+                  onclick="showSnackbar()"
+                  placeholder="Click here to Begin and add your response."
+                  data-original-placeholder="Identify DuBois&#39; purpose and describe his tone in the letter..."
+                ></textarea>
+              </div>
+              <!-- Question 2 -->
+              <div style="margin-top: 32px">
+                <label class="response-label"
+                  >How do we know what DuBois feels about Robeson and his work?
+                  Explain.</label
+                >
+                <textarea
+                  readonly
+                  class="response-area"
+                  data-index="9"
+                  onclick="showSnackbar()"
+                  placeholder="Click here to Begin and add your response."
+                  data-original-placeholder="Explain what evidence reveals DuBois&#39; feelings..."
+                ></textarea>
+              </div>
+              <!-- Question 3 -->
+              <div style="margin-top: 32px">
+                <label class="response-label"
+                  >What makes Robeson's work during this time period significant
+                  to DuBois? Explain.</label
+                >
+                <textarea
+                  readonly
+                  class="response-area"
+                  data-index="10"
+                  onclick="showSnackbar()"
+                  placeholder="Click here to Begin and add your response."
+                  data-original-placeholder="Analyze the significance of Robeson&#39;s work to DuBois..."
+                ></textarea>
+              </div>
             </div>
-            <div style="margin-bottom: 16px">
-              <p style="
-                  margin: 0 0 16px 0;
-                  color: #334155;
-                  line-height: 1.6;
-                  font-size: 15px;
-                "></p>
-              <p style="
-                  font-size: 15px;
-                  color: #4a5568;
-                  margin: 0 0 8px 0;
-                  font-weight: 500;
-                ">
-                Block 1
-              </p>
-              <p class="section-directions">
-                <strong>Directions:</strong> Examine the primary source below
-                and answer the following questions.
-              </p>
-            </div>
-
-            <!-- Prior Knowledge Context -->
-            <div style="margin: 24px 0; padding: 0 0 0 16px">
-              <h4 style="
-                  font-size: 15px;
-                  font-weight: 600;
-                  color: #1e293b;
-                  margin: 0 0 8px 0;
-                ">
-                Prior Knowledge
-              </h4>
-              <p style="
-                  font-size: 15px;
-                  color: #475569;
-                  line-height: 1.6;
-                  margin: 0;
-                ">
-                In 1931, actor Paul Robeson was taking London by storm with his
-                portrayal of Othello and his roles in popular musicals like Show
-                Boat. He would later (1943) bring his Othello back to his
-                stomping grounds in New York, on Broadway no less. This would be
-                the first time a Black American actor would portray Othello in
-                America since James Hewlett in 1821 and the first ever to play
-                the character on Broadway. Below is a letter from W.E.B. DuBois
-                to Robeson.
-              </p>
-            </div>
-
-            <!-- Primary Source Image -->
-            <div style="margin: 32px 0; text-align: center">
-              <img src="./Othello&#39;s Renaissance - Part I_files/image5.png" alt="Letter from W.E.B. DuBois to Paul Robeson" style="
-                  max-width: 100%;
-                  height: auto;
-                  border-radius: 8px;
-                  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                  border: 1px solid #e2e8f0;
-                ">
-            </div>
-
-            <!-- Question 1 -->
-            <div style="margin-top: 40px">
-              <label class="response-label">What is DuBois' purpose in writing Robeson and what is his
-                tone?</label>
-              <textarea class="response-area" data-index="8" placeholder="Click &quot;Begin&quot; to start adding your response" data-original-placeholder="Identify DuBois&#39; purpose and describe his tone in the letter..." disabled="" style="cursor: not-allowed; background-color: rgb(248, 250, 252); border: 1px dashed rgb(203, 213, 224); border-radius: 6px; padding: 12px;"></textarea>
-            </div>
-
-            <!-- Question 2 -->
-            <div style="margin-top: 32px">
-              <label class="response-label">How do we know what DuBois feels about Robeson and his work?
-                Explain.</label>
-              <textarea class="response-area" data-index="9" placeholder="Click &quot;Begin&quot; to start adding your response" data-original-placeholder="Explain what evidence reveals DuBois&#39; feelings..." disabled="" style="cursor: not-allowed; background-color: rgb(248, 250, 252); border: 1px dashed rgb(203, 213, 224); border-radius: 6px; padding: 12px;"></textarea>
-            </div>
-
-            <!-- Question 3 -->
-            <div style="margin-top: 32px">
-              <label class="response-label">What makes Robeson's work during this time period significant
-                to DuBois? Explain.</label>
-              <textarea class="response-area" data-index="10" placeholder="Click &quot;Begin&quot; to start adding your response" data-original-placeholder="Analyze the significance of Robeson&#39;s work to DuBois..." disabled="" style="cursor: not-allowed; background-color: rgb(248, 250, 252); border: 1px dashed rgb(203, 213, 224); border-radius: 6px; padding: 12px;"></textarea>
-            </div>
-            <!-- Submit Button (initially hidden) -->
-            <div class="submit-button-container" style="display: none; text-align: center; margin: 32px 0;">
-              <button style="
-                  padding: 16px 44px;
-                  background-color: #3b82f6;
-                  color: white;
-                  border: none;
-                  border-radius: 6px;
-                  cursor: pointer;
-                  font-size: 15px;
-                  font-weight: 600;
-                ">
-                Submit
-              </button>
-            </div>
-          </header>
+          </section>
         </div>
       </section>
       <!-- Help and Discussion Box for Part 2 -->
-      <section style="
-          background: #f8f9fa;
-          border-radius: 0 0 20px 20px;
+      <section
+        class="help-section"
+        style="
+          background: #eef7ff;
+          border-bottom-left-radius: 20px;
+          border-bottom-right-radius: 20px;
           border-top: 1px solid #e2e8f0;
           overflow: hidden;
-        ">
-        <div style="
-            padding: 50px;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-          ">
-          <h3 style="
-              margin: 0 0 12px 0;
-              font-size: 20px;
-              font-weight: 600;
-              color: #1e293b;
-              line-height: 1.2;
-              font-family: &#39;Inter&#39;, sans-serif;
-            ">
-            Help &amp; Discussion
-          </h3>
-          <p style="
-              margin: 0 0 16px 0;
-              font-size: 14px;
-              color: #64748b;
-              line-height: 1.5;
-              font-family: &#39;Inter&#39;, sans-serif;
-            ">
-            This discussion is for Step 3 of 3 (Primary Source Analysis). Use
-            the box below to ask your teacher for help or clarification. Your
-            teacher will see exactly where you are in the task and provide
-            targeted assistance.
-          </p>
-          <textarea style="margin: 0px; width: 100%" class="response-area help-textarea" placeholder="Ask your teacher for help or clarification"></textarea>
-          <button style="
-              width: 20%;
-              margin-top: 12px;
-              padding: 8px 16px;
-              background-color: #3b82f6;
-              color: white;
-              border: none;
-              border-radius: 6px;
-              cursor: pointer;
-              align-self: flex-end;
-            ">
+        "
+      >
+        <!-- Submit Button (initially hidden) -->
+        <div
+          class="submit-button-container"
+          style="text-align: center; margin: 32px 0 0 0"
+        >
+          <button
+            class="request-button"
+            onclick="showSnackbar()"
+            onmouseover="this.style.backgroundColor='#cbdeed';"
+            onmouseout="this.style.backgroundColor='#F7F7F7';"
+          >
             Request Help
           </button>
+          <button class="begin-button" onclick="showSnackbar()">Begin</button>
         </div>
       </section>
+      <div id="snackbar" tabindex="0">
+        <span style="margin-left: 16px">Feature coming soon!</span>
+        <button
+          class="snackbar-close"
+          onclick="closeSnackbar()"
+          aria-label="Close notification"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="snackbar-close-icon"
+            aria-hidden="true"
+          >
+            <path
+              d="M18 6L6 18M6 6l12 12"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+      <div id="stepTooltip" class="tooltip-box-global">
+        <div class="tooltip-arrow-global"></div>
+        <p id="ttStep" class="tooltip-step-text"></p>
+        <p id="ttDesc" class="tooltip-desc-text"></p>
+      </div>
     </main>
-  
+    <div id="beginModal" class="modal-overlay" style="display: none">
+      <div class="begin-modal-box">
+        <!-- Header -->
+        <div class="begin-modal-header">Ready to Start!</div>
 
-</body></html>
+        <!-- Image -->
+        <div class="begin-modal-illustration">
+          <img
+            src="./Othello&#39;s Renaissance - Part I_files/begin.png"
+            alt=""
+          />
+        </div>
+
+        <!-- Main Title -->
+        <h2 class="begin-modal-step-title">
+          The response areas for <strong>Step #1: Quotable Connections</strong
+          ><br />
+          are now active.
+        </h2>
+
+        <!-- Description -->
+        <p class="begin-modal-desc">
+          Go ahead and type your answers. Everything saves automatically, so you
+          can take a break anytime and come back later.
+        </p>
+
+        <!-- Footer -->
+        <div class="begin-modal-footer">
+          <label class="begin-modal-checkbox">
+            <input type="checkbox" style="width: 16px; height: 16px" />
+            <span>Do not show again!</span>
+          </label>
+          <button class="begin-modal-ok">OK</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

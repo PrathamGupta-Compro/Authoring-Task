@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Othello's Renaissance - Part I</title>
+    <title>Linear Graphs</title>
     <link rel="preconnect" href="https://fonts.googleapis.com/" />
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
     <link
@@ -78,6 +78,7 @@
       function beginStep(button) {
         const section = button.closest(".help-section").previousElementSibling;
         const textareas = section.querySelectorAll("textarea.response-area");
+        const inputs = section.querySelectorAll("input.response-field");
 
         const stepCard = section.closest(".part-card");
         const stepIndex = parseInt(stepCard.id.replace("step", "")) - 1; // 0-indexed
@@ -88,6 +89,12 @@
           t.style.background = "#ffffff";
           t.placeholder = "Please add your response here.";
           t.style.cursor = "auto";
+        });
+        inputs.forEach((i) => {
+          i.readOnly = false;
+          i.style.background = "#ffffff";
+          i.placeholder = "Please add your response here.";
+          i.style.cursor = "auto";
         });
 
         // 2. Update step status to 'In Progress' and fill the corresponding progress bar
@@ -135,11 +142,7 @@
 
         const steps = document.querySelectorAll(".steps-list .step");
 
-        const titles = [
-          "Quotable Connections",
-          "American Reception for Othello in the 19th and 20th Century",
-          "Primary Source Analysis",
-        ];
+        const titles = ["Review of Linear Graphs", "The Race"];
 
         const scrolledHeader = document.getElementById("scrolledHeader");
         const mainTitle = document.querySelector("#header .main-title");
@@ -150,7 +153,6 @@
         const sections = [
           { id: "step1", barIndex: 0 },
           { id: "step2", barIndex: 1 },
-          { id: "step3", barIndex: 2 },
         ];
 
         const toggleBarHighlight = (barIndex, activate) => {
@@ -380,69 +382,6 @@
         // Lightweight hook to refresh after status change
         window.refreshTooltip = updateTooltip;
 
-        // ... [Rest of the existing DOMContentLoaded code for tags/tooltips] ...
-        const headerTags = document.querySelectorAll(".header .tags li");
-        const tooltipBox = document.getElementById("stepTooltip");
-        const ttStep = document.getElementById("ttStep");
-        const ttDesc = document.getElementById("ttDesc");
-
-        // Safety check: ensure these elements exist before trying to get their content
-        const objectivesListElement =
-          document.querySelector(".objectives-list");
-        const objectivesList = objectivesListElement
-          ? objectivesListElement.innerText.trim()
-          : "";
-
-        const essentialQuestions = [
-          ...document.querySelectorAll(".questions-list li"),
-        ]
-          .map((li) => "• " + li.innerText.trim())
-          .join("\n");
-
-        const competenciesList = [
-          ...document.querySelectorAll("[class='objectives-list'] li"),
-        ]
-          .filter(
-            (li) =>
-              li.innerText.trim() === "Think Critically" ||
-              li.innerText.trim() === "Communicate"
-          )
-          .map((li) => "• " + li.innerText.trim())
-          .join("\n");
-
-        const tagTooltipContent = {
-          0: { title: "Competencies", text: competenciesList },
-          1: { title: "Objectives", text: objectivesList },
-          2: { title: "Essential Questions", text: essentialQuestions },
-        };
-
-        headerTags.forEach((tag, index) => {
-          tag.addEventListener("mouseenter", () => {
-            const { title, text } = tagTooltipContent[index];
-
-            ttStep.innerHTML = title;
-            ttDesc.innerText = text;
-
-            const r = tag.getBoundingClientRect();
-            if (title == "Competencies") {
-              tooltipBox.style.width = "180px";
-              tooltipBox.style.left =
-                r.left + window.scrollX + r.width / 2 - 90 + "px";
-            } else {
-              tooltipBox.style.width = "400px";
-              tooltipBox.style.left =
-                r.left + window.scrollX + r.width / 2 - 200 + "px";
-            }
-            tooltipBox.style.display = "block";
-            tooltipBox.style.top = r.bottom + window.scrollY + 12 + "px";
-          });
-
-          tag.addEventListener("mouseleave", () => {
-            tooltipBox.style.display = "none";
-            tooltipBox.style.width = "260px";
-          });
-        });
-
         // Initializing status messages is still valid
         updateStatusMessage(1, "not-started");
         updateStatusMessage(2, "not-started");
@@ -616,7 +555,7 @@
         padding-top: 40px;
         padding-right: 80px;
         padding-left: 40px;
-        padding-bottom: 8px;
+        padding-bottom: 40px;
         position: relative;
         background-color: #ffffff;
         z-index: 1000;
@@ -854,7 +793,7 @@
 
       .progress-bar.highlighted {
         outline: 1px solid #1a5ac2;
-        background-color: #EEF7FF;
+        background-color: #eef7ff;
       }
 
       .progress-percent {
@@ -888,6 +827,61 @@
         z-index: 1;
         height: calc(100% - 72px);
       }
+
+      /* --- NEW STACKED QUOTE LAYOUT --- */
+
+      .quote-block {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .quote-item-new {
+        background: #ffffff;
+        padding: 20px 0;
+      }
+
+      .author-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .author-photo {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #edf2f7;
+      }
+
+      .author-meta {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .author-name {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1a202c;
+        margin: 0;
+      }
+
+      .author-work {
+        font-size: 14px;
+        font-style: italic;
+        color: #718096;
+        margin-top: 4px;
+      }
+
+      .quote-text-box {
+        padding: 0;
+        font-size: 15px;
+        line-height: 1.7;
+        margin-bottom: 16px;
+        color: #2d3748;
+      }
+
       .step {
         display: flex;
         align-items: flex-start;
@@ -1001,7 +995,7 @@
         padding: 24px;
       }
       .container {
-        max-width: 1366px;
+        max-width: 1280px;
         margin: 0 auto;
         margin-top: 48px;
         margin-bottom: 24px;
@@ -1143,7 +1137,7 @@
         margin: 0px 0 16px 0;
       }
       .section-directions {
-        margin-bottom: 40px;
+        margin-bottom: 32px;
         border-top: 1px solid #aeaeae;
         padding-top: 28px;
       }
@@ -1163,20 +1157,18 @@
       /* Author Quote Item */
       .quote-item {
         display: grid;
-        grid-template-columns: 1fr 16fr 16fr;
-        margin-bottom: 48px;
+        grid-template-columns: 2fr;
+        margin-bottom: 40px;
         /* gap: 32px; */
         /* padding-bottom: 60px; */
       }
-      .quote-item:last-of-type {
-        border-bottom: none;
-      }
+
       /* Left column wrapper */
       .quote-column {
         display: flex;
         flex-direction: column;
         border: none;
-        padding: 0px 24px;
+        padding: 0px 0px;
       }
       .author-info {
         margin-top: 24px;
@@ -1184,10 +1176,10 @@
         align-items: center;
         gap: 8px;
       }
-      .author-portrait {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
+      .graph-image {
+        width: auto;
+        height: auto;
+
         object-fit: cover;
         border: 3px solid #edf2f7;
       }
@@ -1203,13 +1195,18 @@
         color: #718096;
       }
       .quote-box {
-        background: white;
         border-radius: 12px;
         color: #2d3748;
       }
+      .question-block-container {
+        background: #f0f0f0;
+        border: 2px solid #6b9bd1;
+        padding: 24px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
       .quote-text {
-        font-family: "Merriweather", serif;
-        font-size: 14px;
+        font-size: 15px;
         line-height: 1.6;
       }
       /* Right column wrapper */
@@ -1238,7 +1235,7 @@
         margin: 0;
         border-radius: 8px;
         border: 1px solid #a6a6a6;
-        background: #f0f0f0;
+        background: #dedede;
         cursor: pointer;
       }
       .response-area:focus {
@@ -1246,6 +1243,34 @@
         border-color: #667eea;
       }
       .response-area::placeholder {
+        color: #343434;
+        padding-top: 5px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 100%;
+      }
+      .response-field {
+        width: 18%;
+        padding: 16px 8px;
+        font-size: 14px;
+        height: 14px;
+        border-left: none;
+        border-top: none;
+        border-right: none;
+        font-family: "Inter", sans-serif;
+        line-height: 1.6;
+        resize: vertical;
+        transition: border-color 0.3s;
+        margin: 16px 0;
+        border-radius: 4x;
+        background: #dedede;
+        cursor: pointer;
+      }
+      .response-field:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+      .response-field::placeholder {
         color: #343434;
         padding-top: 5px;
         font-size: 14px;
@@ -1636,86 +1661,59 @@
           text-align: center;
         }
       }
+
+      .lesson-subsection-title {
+        color: #343434;
+        margin-bottom: 8px;
+        border-top: 1px solid #aeaeae;
+        padding-top: 32px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+      }
     </style>
   </head>
   <body>
     <header class="header" id="header">
       <section class="title-section">
-        <p class="unit-label">Survey Course > ELA</p>
-        <h1 class="main-title">Othello's Renaissance</h1>
+        <p class="unit-label">Survey Course > Math</p>
+        <h1 class="main-title">Linear Graphs</h1>
         <ul class="tags">
           <li
             class="step-status not-started"
             style="background-color: #e7e7e7; color: #343434"
           >
-            Competencies (2)
+            Competencies (3)
           </li>
           <li
             class="step-status not-started"
             style="background-color: #e7e7e7; color: #343434"
           >
-            Objectives (1)
+            Objectives (0)
           </li>
           <li
             class="step-status not-started"
             style="background-color: #e7e7e7; color: #343434"
           >
-            Essential Questions (8)
+            Essential Questions (0)
           </li>
         </ul>
         <div class="expandable-content" id="expandableContent">
-          <div style="display: flex; gap: 40px">
+          <div style="display: flex; gap: 600px">
             <div>
               <h3 class="section-heading">Objectives</h3>
-              <ul class="objectives-list">
-                <li>
-                  In this task you will use your prior knowledge of the Harlem
-                  Renaissance and Shakespearean tragedy, and your analysis of
-                  primary and secondary sources, to make connections between
-                  Othello and the writings of W.E.B. DuBois and Ralph Ellison.
-                  You will draw insights that will allow you to answer the
-                  essential questions for this unit.
-                </li>
-              </ul>
-              <h3 class="section-heading">Essential Questions</h3>
-              <ul class="questions-list">
-                <li>
-                  What are the sources of political and cultural differences in
-                  the modern United States?
-                </li>
-                <li>
-                  How did the United States respond to new ideas about society?
-                </li>
-                <li>
-                  How can I draw connections between different subjects to
-                  deepen my understanding?
-                </li>
-                <li>
-                  What enduring issues can be seen reflected in literature?
-                </li>
-                <li>
-                  How much does the author's intent matter when interpreting
-                  literature for a modern audience?
-                </li>
-                <li>
-                  Why is Othello relevant when discussing the Harlem Renaissance
-                  era?
-                </li>
-                <li>
-                  What thematic parallels can be drawn between Othello and
-                  Invisible Man by Ralph Ellison?
-                </li>
-                <li>
-                  How do historical reactions to performances of Othello in
-                  America show Du Bois' idea of Double Consciousness?
-                </li>
-              </ul>
+              <ul class="objectives-list"></ul>
+              <h3 class="section-heading" style="margin-top: 40px">
+                Essential Questions
+              </h3>
+              <ul class="questions-list"></ul>
             </div>
             <div>
               <h3 class="section-heading">Competencies</h3>
               <ul class="objectives-list">
+                <li style="white-space: nowrap">Solve Problems</li>
+                <li style="white-space: nowrap">Design and Create</li>
                 <li style="white-space: nowrap">Think Critically</li>
-                <li style="white-space: nowrap">Communicate</li>
               </ul>
             </div>
           </div>
@@ -1723,7 +1721,7 @@
       </section>
       <section class="steps-panel">
         <div class="progress-header">
-          <p class="progress-label">Steps (3)</p>
+          <p class="progress-label">Steps (2)</p>
           <div class="progress-container">
             <div class="progress-bar">
               <div
@@ -1735,9 +1733,6 @@
             <div class="progress-bar">
               <div class="progress-bar-fill" style="width: 0%"></div>
             </div>
-            <div class="progress-bar">
-              <div class="progress-bar-fill" style="width: 0%"></div>
-            </div>
           </div>
         </div>
         <div class="steps-list" id="stepsList">
@@ -1745,23 +1740,14 @@
           <div class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <h2 class="step-title">Quotable Connections</h2>
+              <h2 class="step-title">Review of Linear Graphs</h2>
               <div class="step-status not-started">Not Started</div>
             </div>
           </div>
           <div class="step">
             <div class="step-number">2</div>
             <div class="step-content">
-              <h2 class="step-title">
-                American Reception for Othello in the 19th and 20th Century
-              </h2>
-              <div class="step-status not-started">Not Started</div>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-number">3</div>
-            <div class="step-content">
-              <h2 class="step-title">Primary Source Analysis</h2>
+              <h2 class="step-title">The Race</h2>
               <div class="step-status not-started">Not Started</div>
             </div>
           </div>
@@ -1801,7 +1787,7 @@
     </header>
     <header id="scrolledHeader" class="scrolled-header-component">
       <section class="title-section">
-        <h1 class="main-title">Othello's Renaissance</h1>
+        <h1 class="main-title">Linear Graphs</h1>
       </section>
       <section
         class="steps-panel"
@@ -1819,9 +1805,6 @@
                 id="progressFill"
                 style="width: 0%"
               ></div>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-bar-fill" style="width: 0%"></div>
             </div>
             <div class="progress-bar">
               <div class="progress-bar-fill" style="width: 0%"></div>
@@ -1866,6 +1849,7 @@
     </header>
     <main class="container">
       <!-- Part 1 Card -->
+      <!-- Part 1 Card -->
       <section class="part-card" id="step1">
         <!-- Quote Analysis Section -->
         <div class="part-section">
@@ -1880,7 +1864,7 @@
                   "
                 >
                   <div style="display: flex; gap: 16px; align-items: center">
-                    <p class="step-count">STEP 1 of 3</p>
+                    <p class="step-count">STEP 1 of 2</p>
                     <button class="step-status not-started">Not Started</button>
                   </div>
                   <div
@@ -1905,165 +1889,333 @@
                     </svg>
                   </div>
                 </div>
-                <p class="section-quote-small">Quotable Connections</p>
+                <p class="section-quote-small">Review of Linear Graphs</p>
               </div>
             </div>
             <div class="accordion-content">
-              <h2 class="section-quote">Quotable Connections</h2>
-              <blockquote class="section-quote-2">
-                "I sit with Shakespeare and he winces not." —W.E.B. DuBois
-              </blockquote>
+              <h2 class="section-quote">Review of Linear Graphs</h2>
+
               <div class="section-directions">
-                <p style="display: inline">Part A :</p>
-                <span>
-                  Read each quote carefully. State the main idea of each one in
-                  your own words using the response area provided.
-                </span>
+                <span>Read the info and then answer the questions.</span>
               </div>
-              <!-- W.E.B. DuBois -->
-              <table>
-                <tr class="quote-item">
-                  <td class="quote-column" style="padding-left: 0px">1.</td>
-                  <td class="quote-column">
-                    <div class="quote-box">
-                      <p class="quote-text">
-                        ...the Negro is a sort of seventh son, born with a veil,
-                        and gifted with second-sight in this American world,—a
-                        world which yields him no true self-consciousness, but
-                        only lets him see himself through the revelation of the
-                        other world. It is a peculiar sensation, this
-                        <strong>double-consciousness</strong>, this sense of
-                        always
-                        <strong
-                          >looking at one's self through the eyes of others, of
-                          measuring one's soul by the tape of a world that looks
-                          on in amused contempt and pity.</strong
-                        >
+
+              <div class="lesson-subsection">
+                <div>
+                  <div style="margin-bottom: 16px">
+                    <div class="quote-text-box" style="background: white">
+                      <p>
+                        The steeper the line, the higher the rate of change. The
+                        lines below show this.
                       </p>
                     </div>
-                    <div class="author-info">
+                    <div style="margin-top: 24px">
                       <img
-                        src="./Othello&#39;s Renaissance - Part I_files/image1.png"
-                        alt="W.E.B. DuBois"
-                        class="author-portrait"
+                        src="./Linear Graphs - Files/graph-1.png"
+                        alt="graph-1"
+                        class="graph-image"
                       />
-                      <div class="author-details">
-                        <div class="work-title">The Souls of Black Folk</div>
-                        <h4>W.E.B. DuBois</h4>
-                      </div>
                     </div>
-                  </td>
-                  <td class="response-column">
-                    <textarea
-                      readonly
-                      class="response-area"
-                      onclick="textAreaClick(this)"
-                      placeholder="Click here to Begin and add your response."
-                    ></textarea>
-                  </td>
-                </tr>
-                <!-- Ralph Ellison -->
-                <tr class="quote-item">
-                  <td class="quote-column" style="padding-left: 0px">2.</td>
-                  <td class="quote-column">
-                    <div class="quote-box">
-                      <p class="quote-text">
-                        I am an invisible man. . .
-                        <strong>I am invisible</strong>, understand, simply
-                        because people refuse to see me. Like the bodiless heads
-                        you see sometimes in circus sideshows, it is as though I
-                        have been surrounded by mirrors of hard, distorting
-                        glass. When they approach me
-                        <strong
-                          >they see only my surroundings, themselves or figments
-                          of their imagination, indeed, everything and anything
-                          except me.</strong
-                        >
+                  </div>
+
+                  <div style="margin-bottom: 32px">
+                    <div class="quote-text-box" style="background: white">
+                      <p>
+                        At the point where two lines cross, they will have the
+                        SAME x and y values. In the graph below, at what x-value
+                        do the lines cross?
                       </p>
                     </div>
-                    <div class="author-info">
+                    <div style="margin-top: 24px">
                       <img
-                        src="./Othello&#39;s Renaissance - Part I_files/image2.png"
-                        alt="Ralph Ellison"
-                        class="author-portrait"
+                        src="./Linear Graphs - Files/graph-2.png"
+                        alt="graph-2"
+                        class="graph-image"
                       />
-                      <div class="author-details">
-                        <div class="work-title">Invisible Man</div>
-                        <h4>Ralph Ellison</h4>
-                      </div>
                     </div>
-                  </td>
-                  <td class="response-column">
-                    <textarea
-                      readonly
-                      class="response-area"
-                      onclick="textAreaClick(this)"
-                      placeholder="Click here to Begin and add your response."
-                    ></textarea>
-                  </td>
-                </tr>
-                <!-- William Shakespeare -->
-                <tr class="quote-item">
-                  <td class="quote-column" style="padding-left: 0px">3.</td>
-                  <td class="quote-column">
-                    <div class="quote-box">
-                      <p class="quote-text">
-                        . . .I pray you, in your letters, / When you shall these
-                        unlucky deeds relate, /
-                        <strong
-                          >Speak of me as I am. Nothing extenuate, / Nor set
-                          down aught in malice.</strong
-                        >
-                        Then must you speak / Of one that loved not wisely, but
-                        too well. / Of one not easily jealous, but being
-                        wrought, / Perplexed in the extreme. Of one whose hand,
-                        / Like the base Indian, threw a pearl away / Richer than
-                        all his tribe. Of one whose subdued eyes, / Albeit
-                        unused to the melting mood, / Drop tears as fast as the
-                        Arabian trees / Their medicinal gum. . .
-                      </p>
-                    </div>
-                    <div class="author-info">
-                      <img
-                        src="./Othello&#39;s Renaissance - Part I_files/image3.png"
-                        alt="William Shakespeare"
-                        class="author-portrait"
-                      />
-                      <div class="author-details">
-                        <div class="work-title">Othello</div>
-                        <h4>William Shakespeare</h4>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="response-column">
-                    <textarea
-                      readonly
-                      class="response-area"
-                      onclick="textAreaClick(this)"
-                      placeholder="Click here to Begin and add your response."
-                    ></textarea>
-                  </td>
-                </tr>
-              </table>
-              <div class="connections-section">
-                <div class="section-directions">
-                  <p style="display: inline">Part B :</p>
-                  <span>
-                    Connect the main ideas stated by the authors above. How do
-                    their ideas compliment each other? Explain..
-                  </span>
+                  </div>
                 </div>
-                <textarea
-                  readonly
-                  class="response-area"
-                  onclick="textAreaClick(this)"
-                  placeholder="Click here to Begin and add your response."
-                ></textarea>
+              </div>
+
+              <div>
+                <p class="lesson-subsection-title"></p>
+
+                <span
+                  style="
+                    color: #343434;
+                    font-size: 16px;
+                    font-weight: 800;
+                    line-height: 24px;
+                    padding-left: 8px;
+                  "
+                  >Question #1
+                </span>
+
+                <div style="padding: 0px 48px; margin-top: 24px">
+                  <div class="quote-item question-block-container">
+                    <div class="quote-column">
+                      <div class="quote-text-box">
+                        <p>
+                          This is an example of a line with positive slope. The
+                          cost goes up at a steady rate as the weight increases:
+                        </p>
+                        <div style="margin-top: 24px">
+                          <img
+                            src="./Linear Graphs - Files/graph-3.png"
+                            alt="graph-3"
+                            class="graph-image"
+                          />
+                        </div>
+                        <div style="padding-left: 24px">
+                          <span class="quote-text" style="margin-top: 24px">
+                            1. What is the approximate y-intercept of this line?
+                          </span>
+                          <input
+                            readonly
+                            onclick="textAreaClick(this)"
+                            type="text"
+                            class="response-field"
+                            style="margin-left: 16px"
+                          />
+                          <div>
+                            <span class="quote-text">
+                              2. What is the approximate slope? (Remember
+                              <strong> m = rise / run)</strong>
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
+
+                          <div>
+                            <span class="quote-text">
+                              3. Write the equation of the line in y = mx + b
+                              format.
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p class="lesson-subsection-title"></p>
+
+              <span
+                style="
+                  color: #343434;
+                  font-size: 16px;
+                  font-weight: 800;
+                  line-height: 24px;
+                  padding-left: 8px;
+                "
+                >Question #2
+              </span>
+
+              <div style="padding: 0px 48px; margin-top: 24px">
+                <div class="quote-item question-block-container">
+                  <div class="quote-column">
+                    <div class="quote-text-box">
+                      <p>
+                        This is an example of a line with negative slope. The
+                        candle length gets smaller as time goes by.
+                      </p>
+                      <div style="margin-top: 24px">
+                        <img
+                          src="./Linear Graphs - Files/graph-4.png"
+                          alt="graph-4"
+                          class="graph-image"
+                        />
+                      </div>
+                      <div style="padding-left: 24px">
+                        <span class="quote-text" style="margin-top: 24px">
+                          1. What is the approximate y-intercept of this line?
+                        </span>
+                        <input
+                          readonly
+                          onclick="textAreaClick(this)"
+                          type="text"
+                          class="response-field"
+                          style="margin-left: 16px"
+                        />
+                        <div>
+                          <span class="quote-text">
+                            2. What is the approximate slope? (Remember
+                            <strong> m = rise / run)</strong>
+                          </span>
+                          <input
+                            readonly
+                            onclick="textAreaClick(this)"
+                            type="text"
+                            class="response-field"
+                            style="margin-left: 16px"
+                          />
+                        </div>
+
+                        <div>
+                          <span class="quote-text">
+                            3. Write the equation of the line in y = mx + b
+                            format.
+                          </span>
+                          <input
+                            readonly
+                            onclick="textAreaClick(this)"
+                            type="text"
+                            class="response-field"
+                            style="margin-left: 16px"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <p class="lesson-subsection-title"></p>
+
+                <span
+                  style="
+                    color: #343434;
+                    font-size: 16px;
+                    font-weight: 800;
+                    line-height: 24px;
+                    padding-left: 8px;
+                  "
+                  >Question #3
+                </span>
+
+                <div style="padding: 0px 48px; margin-top: 24px">
+                  <div class="quote-item question-block-container">
+                    <div class="quote-column">
+                      <div class="quote-text-box">
+                        <p>
+                          In the graph below we have a graph of two companies
+                          that rent copy machines to schools. The first company
+                          charges a $40 flat fee and then $120 for each month
+                          you rent the machine.
+                        </p>
+                        <div style="margin-top: 16px; margin-bottom: 8px">
+                          <img
+                            src="./Linear Graphs - Files/graph-5.png"
+                            alt="graph-5"
+                            class="graph-image"
+                          />
+                        </div>
+                        <div style="padding-left: 24px">
+                          <span class="quote-text">
+                            1. Next to this line on the graph, write “Company A”
+                          </span>
+
+                          <div>
+                            <span class="quote-text">
+                              2. The second company charges a flat fee of $160.
+                              What is its charge per month (the slope)?
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
+                          <p class="quote-text" style="margin-bottom: 16px">
+                            3. Next to this line on the graph, write “Company B
+                          </p>
+
+                          <div>
+                            <span class="quote-text">
+                              4. The rate per month is also the slope of the
+                              line. Which company charges more per month? (You
+                              can figure that out simply by seeing which line is
+                              steeper.)
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
+                          <p class="quote-text">
+                            5. Which plan is better for a one-month rental?
+                            Explain.
+                          </p>
+                          <textarea
+                            readonly
+                            class="response-area"
+                            onclick="textAreaClick(this)"
+                            placeholder="Click here to Begin and add your response."
+                            style="height: 64px; margin-top: 16px"
+                          ></textarea>
+                          <p
+                            class="quote-text"
+                            style="margin-top: 16px; margin-bottom: 16px"
+                          >
+                            6. Which plan is better for a 4 month rental?
+                            Explain.
+                          </p>
+                          <textarea
+                            readonly
+                            class="response-area"
+                            onclick="textAreaClick(this)"
+                            placeholder="Click here to Begin and add your response."
+                            style="height: 64px; margin-bottom: 8px"
+                          ></textarea>
+
+                          <div>
+                            <span class="quote-text">
+                              7. For approximately how many months will the
+                              companies charge the same amount for a copier
+                              rental? (In other words, find the x-value for
+                              where the lines cross.)
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
+
+                          <div>
+                            <span class="quote-text">
+                              8. How much is the cost when the companies will
+                              charge the same amount? (In other words, find the
+                              y-value where the lines cross.)
+                            </span>
+                            <input
+                              readonly
+                              onclick="textAreaClick(this)"
+                              type="text"
+                              class="response-field"
+                              style="margin-left: 16px"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
         </div>
       </section>
+
       <!-- Help and Discussion Box -->
       <section
         class="help-section"
@@ -2107,7 +2259,7 @@
                   "
                 >
                   <div style="display: flex; gap: 16px; align-items: center">
-                    <p class="step-count">STEP 2 of 3</p>
+                    <p class="step-count">STEP 2 of 2</p>
                     <button class="step-status not-started">Not Started</button>
                   </div>
                   <div
@@ -2132,133 +2284,214 @@
                     </svg>
                   </div>
                 </div>
-                <p class="section-quote-small">
-                  American Reception for Othello in the 19th and 20th Century
-                </p>
+                <p class="section-quote-small">The Race</p>
               </div>
             </div>
             <div class="accordion-content">
-              <h2 class="section-quote">
-                American Reception for Othello in the 19th and 20th Century
-              </h2>
-              <div class="section-directions">
-                <p>
-                  Use the timeline to track the evolution of Othello productions
-                  and how they connect to the time period they were in.
-                </p>
-              </div>
-              <!-- Timeline Image -->
-              <div style="margin: 32px 0; text-align: center">
-                <img
-                  src="./Othello&#39;s Renaissance - Part I_files/image4.png"
-                  alt="Timeline of Othello Productions in America"
-                  style="
-                    max-width: 100%;
-                    height: auto;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                  "
-                />
-              </div>
-              <!-- Historical Note -->
-              <div style="margin: 24px 0">
-                <p
-                  style="
-                    font-size: 15px;
-                    color: #475569;
-                    line-height: 1.6;
-                    margin: 0 0 8px 0;
-                  "
-                >
-                  <strong>Note:</strong> For the first 200 years of Othello
-                  productions, Othello was played by a white actor in dark make
-                  up. Lighter make up versions of Othello existed as a response
-                  to white audiences and critics wanting to distance Othello and
-                  Shakespeare from black identity.
-                </p>
-                <p
-                  style="
-                    font-size: 14px;
-                    color: #64748b;
-                    margin: 8px 0 0 0;
-                    font-style: normal;
-                  "
-                >
-                  Source: "Not Just Black and White: Othello in America" by
-                  Andrew Carlson, American Theatre
-                </p>
-              </div>
-              <!-- Question 1 -->
-              <div style="margin-top: 40px">
-                <label class="response-label"
-                  >Othello was often put on as a morality play, and white
-                  audience members and critics mimicked John Quincy Adams'
-                  sentiment–that it was a cautionary tale about miscegenation
-                  (interracial marriage). Based on your analysis of the play, is
-                  this idea supported by the text or existing analysis of the
-                  text? Explain.</label
-                >
-                <textarea
-                  readonly
-                  class="response-area"
-                  data-index="4"
-                  onclick="showSnackbar()"
-                  placeholder="Click here to Begin and add your response."
-                ></textarea>
-              </div>
-              <!-- Question 2 -->
-              <div style="margin-top: 32px">
-                <label class="response-label"
-                  >Records prior to the 19th century don't show any controversy
-                  around theatrical performances of Othello in America. What
-                  historical events coincide with the timeline above that might
-                  have made audiences more sensitive to viewing this play with a
-                  racial lens? Explain.</label
-                >
-                <textarea
-                  readonly
-                  class="response-area"
-                  data-index="5"
-                  onclick="showSnackbar()"
-                  placeholder="Click here to Begin and add your response."
-                  data-original-placeholder="Identify and explain relevant historical events..."
-                ></textarea>
-              </div>
-              <!-- Question 3 -->
-              <div style="margin-top: 32px">
-                <label class="response-label"
-                  >James Hewlett and William A. Brown started The African
-                  Troupe, as shown on the previous page, but it was raided by
-                  police at the prompting of the Park Theatre. The actors were
-                  beaten and forced to swear before a judge that they would
-                  never perform Shakespeare in public again. Why would this
-                  performance be seen as threatening or unlawful at the
-                  time?</label
-                >
-                <textarea
-                  readonly
-                  class="response-area"
-                  data-index="6"
-                  onclick="showSnackbar()"
-                  placeholder="Click here to Begin and add your response."
-                  data-original-placeholder="Explain why this performance was considered threatening..."
-                ></textarea>
-              </div>
-              <!-- Question 4 -->
-              <div style="margin-top: 32px">
-                <label class="response-label"
-                  >What does the popularity of Paul Robeson's portrayal of
-                  Othello say about the audience and time period in which he
-                  performed?</label
-                >
-                <textarea
-                  readonly
-                  class="response-area"
-                  data-index="7"
-                  onclick="showSnackbar()"
-                  placeholder="Click here to Begin and add your response."
-                  data-original-placeholder="Analyze what Robeson&#39;s popularity reveals about the era..."
-                ></textarea>
+              <h2 class="section-quote">The Race</h2>
+              <div>
+                <div class="quote-column">
+                  <div class="quote-text-box">
+                    <div class="section-directions">
+                      <span style="display: block">
+                        Maggie and Emma race each other along a straight running
+                        track.
+                      </span>
+                      <span style="display: block">
+                        Maggie starts some distance ahead of Emma.
+                      </span>
+                      <span> The graph describes the race. </span>
+                    </div>
+
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: center;
+                        margin-top: 16px;
+                        margin-bottom: 16px;
+                      "
+                    >
+                      <img
+                        src="./Linear Graphs - Files/graph-6.png"
+                        alt="graph-6"
+                        class="graph-image"
+                      />
+                    </div>
+                    <div style="padding-left: 16px">
+                      <span class="quote-text">
+                        1. After five seconds, who is running the fastest?
+                        Explain your answer.
+                      </span>
+                      <textarea
+                        readonly
+                        class="response-area"
+                        onclick="showSnackbar()"
+                        placeholder="Click here to Begin and add your response."
+                        style="height: 64px; margin-top: 16px"
+                      ></textarea>
+                      <div>
+                        <p class="quote-text" style="margin: 16px 0px">
+                          2. Emma's line can be represented by the equation:
+                        </p>
+                        <p class="quote-text" style="margin-left: 18px">
+                          <math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><mi>s</mi><mo>&#xA0;</mo><mo>=</mo><mo>&#xA0;</mo
+                            ><mn>5</mn><mi>t</mi><mo>&#xA0;</mo></math
+                          >
+                        </p>
+                        <p class="quote-text" style="margin-left: 18px">
+                          <math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><mi>s</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
+                            ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
+                            ><mo>&#xA0;</mo><mi>d</mi><mi>i</mi><mi>s</mi
+                            ><mi>tan</mi><mi>c</mi><mi>e</mi><mo>,</mo
+                            ><mo>&#xA0;</mo><mi>i</mi><mi>n</mi><mo>&#xA0;</mo
+                            ><mi>y</mi><mi>a</mi><mi>r</mi><mi>d</mi><mi>s</mi
+                            ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
+                            ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
+                            ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>S</mi
+                            ><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mi>i</mi
+                            ><mi>n</mi><mi>g</mi><mo>&#xA0;</mo><mi>P</mi
+                            ><mi>l</mi><mi>a</mi><mi>c</mi><mi>e</mi
+                            ><mo>.</mo></math
+                          >
+                        </p>
+                        <p class="quote-text" style="margin-left: 18px">
+                          <math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><mi>t</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
+                            ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
+                            ><mo>&#xA0;</mo><mi>t</mi><mi>i</mi><mi>m</mi
+                            ><mi>e</mi><mo>,</mo><mo>&#xA0;</mo><mi>i</mi
+                            ><mi>n</mi><mo>&#xA0;</mo><mi>s</mi><mi>e</mi
+                            ><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi><mi>s</mi
+                            ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
+                            ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
+                            ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>s</mi
+                            ><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi
+                            ><mo>&#xA0;</mo><mi>o</mi><mi>f</mi><mo>&#xA0;</mo
+                            ><mi>t</mi><mi>h</mi><mi>e</mi><mo>&#xA0;</mo
+                            ><mi>r</mi><mi>a</mi><mi>c</mi><mi>e</mi
+                            ><mo>.</mo></math
+                          >
+                        </p>
+                        <p
+                          class="quote-text"
+                          style="display: inline; margin-left: 18px"
+                        >
+                          What is the equation that represents Maggie's line?
+                        </p>
+                        <input
+                          readonly
+                          onclick="showSnackbar()"
+                          type="text"
+                          class="response-field"
+                          style="margin-left: 16px"
+                        />
+                      </div>
+                      <span class="quote-text" style="margin-top: 24px">
+                        3. Describe what happens in the race.
+                      </span>
+                      <textarea
+                        readonly
+                        class="response-area"
+                        onclick="showSnackbar()"
+                        placeholder="Click here to Begin and add your response."
+                        style="height: 64px; margin-top: 16px"
+                      ></textarea>
+                    </div>
+
+                    <p class="quote-text" style="margin-top: 16px">
+                      The diagram below shows the distance a runners is from the
+                      Starting Place and from the Finishing Line.
+                    </p>
+                    <div style="margin-top: 16px">
+                      <img
+                        src="./Linear Graphs - Files/graph-7.png"
+                        alt="graph-7"
+                        class="graph-image"
+                      />
+                    </div>
+                    <div style="padding-left: 24px">
+                      <p class="quote-text" style="margin: 16px 0px">
+                        4. The following equation can also be used to describe
+                        Emma's race:
+                      </p>
+                      <p class="quote-text" style="margin-left: 18px">
+                        <math xmlns="http://www.w3.org/1998/Math/MathML"
+                          ><mi>f</mi><mo>&#xA0;</mo><mo>=</mo><mo>&#xA0;</mo
+                          ><mo>-</mo><mn>5</mn><mi>t</mi><mo>&#xA0;</mo
+                          ><mo>+</mo><mo>&#xA0;</mo><mn>70</mn></math
+                        >
+                      </p>
+                      <p class="quote-text" style="margin-left: 18px">
+                        <math xmlns="http://www.w3.org/1998/Math/MathML"
+                          ><mi>f</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
+                          ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
+                          ><mo>&#xA0;</mo><mi>d</mi><mi>i</mi><mi>s</mi
+                          ><mi>tan</mi><mi>c</mi><mi>e</mi><mo>,</mo
+                          ><mo>&#xA0;</mo><mi>i</mi><mi>n</mi><mo>&#xA0;</mo
+                          ><mi>y</mi><mi>a</mi><mi>r</mi><mi>d</mi><mi>s</mi
+                          ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
+                          ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
+                          ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>F</mi
+                          ><mi>i</mi><mi>n</mi><mi>i</mi><mi>s</mi><mi>h</mi
+                          ><mi>i</mi><mi>n</mi><mi>g</mi><mo>&#xA0;</mo
+                          ><mi>L</mi><mi>i</mi><mi>n</mi><mi>e</mi
+                          ><mo>.</mo></math
+                        >
+                      </p>
+                      <p class="quote-text" style="margin-left: 18px">
+                        <math xmlns="http://www.w3.org/1998/Math/MathML"
+                          ><mi>t</mi><mo>&#xA0;</mo><mi>i</mi><mi>s</mi
+                          ><mo>&#xA0;</mo><mi>t</mi><mi>h</mi><mi>e</mi
+                          ><mo>&#xA0;</mo><mi>t</mi><mi>i</mi><mi>m</mi
+                          ><mi>e</mi><mo>,</mo><mo>&#xA0;</mo><mi>i</mi
+                          ><mi>n</mi><mo>&#xA0;</mo><mi>s</mi><mi>e</mi
+                          ><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi><mi>s</mi
+                          ><mo>,</mo><mo>&#xA0;</mo><mi>f</mi><mi>r</mi
+                          ><mi>o</mi><mi>m</mi><mo>&#xA0;</mo><mi>t</mi
+                          ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>b</mi
+                          ><mi>e</mi><mi>g</mi><mi>i</mi><mi>n</mi><mi>n</mi
+                          ><mi>i</mi><mi>n</mi><mi>g</mi><mo>&#xA0;</mo
+                          ><mi>o</mi><mi>f</mi><mo>&#xA0;</mo><mi>t</mi
+                          ><mi>h</mi><mi>e</mi><mo>&#xA0;</mo><mi>r</mi
+                          ><mi>a</mi><mi>c</mi><mi>e</mi><mo>.</mo></math
+                        >
+                      </p>
+                      <div style="padding-left: 40px">
+                        <p class="quote-text" style="margin-top: 16px">
+                          a. Plot this line on the graph.
+                        </p>
+
+                        <div style="margin-top: 24px">
+                          <img
+                            src="./Linear Graphs - Files/graph-8.png"
+                            alt="graph-8"
+                            class="graph-image"
+                          />
+                        </div>
+
+                        <p class="quote-text" style="margin-top: 16px">
+                          b. Add a line to the graph that represents Maggie's
+                          race.
+                        </p>
+
+                        <div>
+                          <span class="quote-text">
+                            c. What is the equation of this second line?
+                          </span>
+                          <input
+                            readonly
+                            onclick="showSnackbar()"
+                            type="text"
+                            class="response-field"
+                            style="margin-left: 16px"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -2291,176 +2524,7 @@
           <button class="begin-button" onclick="showSnackbar()">Begin</button>
         </div>
       </section>
-      <!-- Part 3 Card -->
-      <section class="part-card" style="margin-top: 32px" id="step3">
-        <div class="part-section">
-          <section class="section-header" style="margin-bottom: 0px">
-            <div class="accordion-header" onclick="toggleAccordion(this)">
-              <div style="flex: 1">
-                <div
-                  style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                  "
-                >
-                  <div style="display: flex; gap: 16px; align-items: center">
-                    <p class="step-count">STEP 3 of 3</p>
-                    <button class="step-status not-started">Not Started</button>
-                  </div>
-                  <div
-                    class="accordion-arrow"
-                    style="cursor: pointer; padding: 8px"
-                  >
-                    <svg
-                      width="24px"
-                      height="24px"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
-                        stroke="#292D32"
-                        stroke-width="2.4"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <p class="section-quote-small">Primary Source Analysis</p>
-              </div>
-            </div>
-            <div class="accordion-content">
-              <h2 class="section-quote">Primary Source Analysis</h2>
-              <div style="margin-bottom: 16px">
-                <p class="section-directions" style="margin-bottom: 20px">
-                  Examine the primary source below and answer the following
-                  questions.
-                </p>
-              </div>
-              <!-- Prior Knowledge Context -->
-              <div style="margin: 24px 0">
-                <h4
-                  style="
-                    font-size: 15px;
-                    font-weight: 600;
-                    color: #1e293b;
-                    margin: 0 0 8px 0;
-                  "
-                >
-                  Prior Knowledge
-                </h4>
-                <p
-                  style="
-                    font-size: 15px;
-                    color: #475569;
-                    line-height: 1.6;
-                    margin: 0;
-                  "
-                >
-                  In 1931, actor Paul Robeson was taking London by storm with
-                  his portrayal of Othello and his roles in popular musicals
-                  like Show Boat. He would later (1943) bring his Othello back
-                  to his stomping grounds in New York, on Broadway no less. This
-                  would be the first time a Black American actor would portray
-                  Othello in America since James Hewlett in 1821 and the first
-                  ever to play the character on Broadway. Below is a letter from
-                  W.E.B. DuBois to Robeson.
-                </p>
-              </div>
-              <!-- Primary Source Image -->
-              <div style="margin: 32px 0; text-align: center">
-                <img
-                  src="./Othello&#39;s Renaissance - Part I_files/image5.png"
-                  alt="Letter from W.E.B. DuBois to Paul Robeson"
-                  style="
-                    max-width: 100%;
-                    height: auto;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                    border: 1px solid #e2e8f0;
-                  "
-                />
-              </div>
-              <!-- Question 1 -->
-              <div style="margin-top: 40px">
-                <label class="response-label"
-                  >What is DuBois' purpose in writing Robeson and what is his
-                  tone?</label
-                >
-                <textarea
-                  readonly
-                  class="response-area"
-                  data-index="8"
-                  onclick="showSnackbar()"
-                  placeholder="Click here to Begin and add your response."
-                  data-original-placeholder="Identify DuBois&#39; purpose and describe his tone in the letter..."
-                ></textarea>
-              </div>
-              <!-- Question 2 -->
-              <div style="margin-top: 32px">
-                <label class="response-label"
-                  >How do we know what DuBois feels about Robeson and his work?
-                  Explain.</label
-                >
-                <textarea
-                  readonly
-                  class="response-area"
-                  data-index="9"
-                  onclick="showSnackbar()"
-                  placeholder="Click here to Begin and add your response."
-                  data-original-placeholder="Explain what evidence reveals DuBois&#39; feelings..."
-                ></textarea>
-              </div>
-              <!-- Question 3 -->
-              <div style="margin-top: 32px">
-                <label class="response-label"
-                  >What makes Robeson's work during this time period significant
-                  to DuBois? Explain.</label
-                >
-                <textarea
-                  readonly
-                  class="response-area"
-                  data-index="10"
-                  onclick="showSnackbar()"
-                  placeholder="Click here to Begin and add your response."
-                  data-original-placeholder="Analyze the significance of Robeson&#39;s work to DuBois..."
-                ></textarea>
-              </div>
-            </div>
-          </section>
-        </div>
-      </section>
-      <!-- Help and Discussion Box for Part 2 -->
-      <section
-        class="help-section"
-        style="
-          background: #eef7ff;
-          border-bottom-left-radius: 20px;
-          border-bottom-right-radius: 20px;
-          border-top: 1px solid #e2e8f0;
-          overflow: hidden;
-        "
-      >
-        <!-- Submit Button (initially hidden) -->
-        <div
-          class="submit-button-container"
-          style="text-align: center; margin: 32px 0 0 0"
-        >
-          <button
-            class="request-button"
-            onclick="showSnackbar()"
-            onmouseover="this.style.backgroundColor='#cbdeed';"
-            onmouseout="this.style.backgroundColor='#F7F7F7';"
-          >
-            Request Help
-          </button>
-          <button class="begin-button" onclick="showSnackbar()">Begin</button>
-        </div>
-      </section>
+
       <div id="snackbar" tabindex="0">
         <span style="margin-left: 16px">Feature coming soon!</span>
         <button
@@ -2503,8 +2567,8 @@
 
         <!-- Main Title -->
         <h2 class="begin-modal-step-title">
-          The response areas for <strong>Step #1: Quotable Connections</strong
-          ><br />
+          The response areas for
+          <strong>Step #1: Review of Linear Graphs</strong><br />
           are now active.
         </h2>
 
