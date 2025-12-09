@@ -252,6 +252,31 @@
           yAxisLabel: "Y",
         });
 
+        var elt3 = document.getElementById("calculator3");
+
+        var calculator3 = Desmos.GraphingCalculator(elt3, {
+          settingsMenu: false,
+          border: false,
+          xAxisStep: 2,
+          yAxisStep: 10
+        });
+
+        
+
+        // Match the viewport of the first graph
+        calculator3.setMathBounds({
+          left: -1.5,
+          right: 24,
+          bottom: -5.5,
+          top: 80,
+        });
+
+        calculator3.updateSettings({
+          lockViewport: true,
+          xAxisLabel: "X",
+          yAxisLabel: "Y",
+        });
+
         // Progress bars for Main Header (for click/tooltip)
         const mainProgressBars = document.querySelectorAll(
           "#header .progress-container .progress-bar"
@@ -1822,11 +1847,11 @@
           </li>
         </ul>
         <div class="expandable-content" id="expandableContent">
-          <div style="display: flex; gap: 120px">
+          <div style="display: flex; justify-content: space-between">
             <div>
               <h3 class="section-heading">Objectives</h3>
               <ul class="objectives-list">
-                <li style="white-space: nowrap">
+                <li>
                   I can read graphs to determine their y-intercept and slope to
                   create an approximate equation for a line.
                 </li>
@@ -1835,9 +1860,9 @@
             <div>
               <h3 class="section-heading">Competencies</h3>
               <ul class="objectives-list">
-                <li style="white-space: nowrap">Solve Problems</li>
-                <li style="white-space: nowrap">Design and Create</li>
-                <li style="white-space: nowrap">Think Critically</li>
+                <li>Solve Problems</li>
+                <li>Design and Create</li>
+                <li>Think Critically</li>
               </ul>
             </div>
           </div>
@@ -2602,11 +2627,10 @@
                         </p>
 
                         <div style="margin-top: 24px">
-                          <img
-                            src="./Linear Graphs - Files/graph-8.png"
-                            alt="graph-8"
-                            class="graph-image"
-                          />
+                          <div
+                            id="calculator3"
+                            style="width: 880px; height: 400px"
+                          ></div>
                         </div>
 
                         <p class="quote-text" style="margin-top: 16px">
