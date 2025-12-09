@@ -256,22 +256,19 @@
 
         var calculator3 = Desmos.GraphingCalculator(elt3, {
           settingsMenu: false,
-          zoomButtons: false,
-          expressionsCollapsed: true,
           border: false,
-          xAxisStep: 1,
-          yAxisStep: 2,
-          showGrid: false,
+          xAxisStep: 2,
+          yAxisStep: 10
         });
 
         
 
         // Match the viewport of the first graph
         calculator3.setMathBounds({
-          left: -0.5,
-          right: 9,
-          bottom: -1.5,
-          top: 24.2,
+          left: -1.5,
+          right: 24,
+          bottom: -5.5,
+          top: 80,
         });
 
         calculator3.updateSettings({
@@ -1850,11 +1847,11 @@
           </li>
         </ul>
         <div class="expandable-content" id="expandableContent">
-          <div style="display: flex; gap: 120px">
+          <div style="display: flex; justify-content: space-between">
             <div>
               <h3 class="section-heading">Objectives</h3>
               <ul class="objectives-list">
-                <li style="white-space: nowrap">
+                <li>
                   I can read graphs to determine their y-intercept and slope to
                   create an approximate equation for a line.
                 </li>
@@ -1863,9 +1860,9 @@
             <div>
               <h3 class="section-heading">Competencies</h3>
               <ul class="objectives-list">
-                <li style="white-space: nowrap">Solve Problems</li>
-                <li style="white-space: nowrap">Design and Create</li>
-                <li style="white-space: nowrap">Think Critically</li>
+                <li>Solve Problems</li>
+                <li>Design and Create</li>
+                <li>Think Critically</li>
               </ul>
             </div>
           </div>
@@ -2632,7 +2629,7 @@
                         <div style="margin-top: 24px">
                           <div
                             id="calculator3"
-                            style="width: 340px; height: 320px"
+                            style="width: 880px; height: 400px"
                           ></div>
                         </div>
 
