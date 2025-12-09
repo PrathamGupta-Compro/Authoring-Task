@@ -84,6 +84,7 @@
         const stepIndex = parseInt(stepCard.id.replace("step", "")) - 1; // 0-indexed
         const button = document.getElementById("begin-btn-1");
         const practiceTestButton = document.getElementById("beginPracticeTest");
+        const startText = document.getElementById("startText");
 
         // 1. Enable textareas
         textareas.forEach((t) => {
@@ -111,7 +112,15 @@
         button.onclick = function () {
           showSnackbar();
         };
-        practiceTestButton.style.display = "none";
+        practiceTestButton.textContent = "Submit";
+        practiceTestButton.classList.remove("begin-button");
+        practiceTestButton.classList.add("submit-button");
+
+        // 4. Change onclick to show snackbar
+        practiceTestButton.onclick = function () {
+          showSnackbar();
+        };
+        startText.style.display = "none";
       }
 
       // Function to handle manually completing a step
@@ -2116,12 +2125,26 @@
                               margin-top: 16px;
                             "
                           >
-                            <strong>Directions: </strong>Lorem ipsum dolor sit
-                            amet, consectetur adipiscing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua.
-                            Ut enim ad minim veniam, quis nostrud exercitation
-                            ullamco laboris nisi ut
+                            <strong>Directions: </strong>The practice test has 3
+                            questions. Read each question carefully and answer
+                            them. After finishing, Submit the answers to your
+                            teacher. Lorem ipsum dolor sit amet, consectetur
+                            adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim
+                            veniam, quis nostrud exercitation ullamco laboris
+                            nisi ut.
                           </p>
+                          <h2
+                            id="startText"
+                            style="
+                              font-size: 20px;
+                              font-weight: 600;
+                              color: #1e1e1e;
+                              margin-top: 16px;
+                            "
+                          >
+                            Ready to Start!
+                          </h2>
 
                           <!-- Begin Button -->
                           <div
@@ -2129,16 +2152,11 @@
                           >
                             <button
                               id="beginPracticeTest"
+                              class="begin-button"
                               style="
                                 padding: 12px 32px;
-                                background: #2c2c2c;
-                                color: #ffffff;
-                                border: none;
-                                border-radius: 6px;
-                                font-size: 15px;
-                                font-weight: 500;
-                                cursor: pointer;
                                 margin: 16px 0px;
+                                font-size: 15px;
                               "
                               onclick="beginStep()"
                             >
