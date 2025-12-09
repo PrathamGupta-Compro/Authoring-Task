@@ -264,49 +264,18 @@
         calculator3.setExpression({
           id: "note1",
           type: "text",
-          text: "Maggie and Emma race each other along a straight running track.",
+          text: "a. Plot this line on the graph.",
         });
 
         calculator3.setExpression({
           id: "note2",
           type: "text",
-          text: "Maggie starts some distance ahead of Emma.",
-        });
-
-        calculator3.setExpression({
-          id: "note3",
-          type: "text",
-          text: "The graph describes the race..",
-        });
-
-        calculator3.setExpression({
-          id: "lineA",
-          latex: "y=2.5x+30\\{0<=x \\}\\{y<=80\\}",
-          secret: true,
-        });
-        calculator3.setExpression({
-          id: "lineB",
-          latex: "y=5x+0\\{0<=x \\}\\{y<=80\\}",
-          secret: true,
-        });
-        calculator3.setExpression({
-          id: "labelB_point",
-          latex: "(6,30)",
-          label: "Emma",
-          showLabel: true,
-          secret: true,
-        });
-        calculator3.setExpression({
-          id: "labelA_point",
-          latex: "(10,55)",
-          label: "Maggie",
-          showLabel: true,
-          secret: true,
+          text: "b. Add a line to the graph that represents Maggie's race.",
         });
 
         // Match the viewport of the first graph
         calculator3.setMathBounds({
-          left: -1.9,
+          left: -1.5,
           right: 24,
           bottom: -5.5,
           top: 80,
@@ -2225,6 +2194,7 @@
                               src="./Linear Graphs - Files/graph-3.png"
                               alt="graph-3"
                               class="graph-image"
+                              style="width: 280px; height: 280px"
                             />
                           </div>
                           <div style="padding: 0px 24px">
@@ -2294,6 +2264,7 @@
                               src="./Linear Graphs - Files/graph-4.png"
                               alt="graph-4"
                               class="graph-image"
+                              style="width: 280px; height: 280px"
                             />
                           </div>
                           <div style="padding: 0px 24px">
@@ -2371,6 +2342,7 @@
                               src="./Linear Graphs - Files/graph-5.png"
                               alt="graph-5"
                               class="graph-image"
+                              style="width: 280px; height: 280px"
                             />
                           </div>
                           <div style="padding: 0px 24px">
@@ -2552,26 +2524,34 @@
               </div>
             </div>
             <div class="accordion-content">
-              <h2
-                class="section-quote"
-                style="padding-bottom: 16px; border-bottom: 1px solid #aeaeae"
-              >
-                The Race
-              </h2>
+              <h2 class="section-quote">The Race</h2>
               <div>
                 <div class="quote-column">
                   <div class="quote-text-box">
+                    <div class="section-directions">
+                      <span style="display: block">
+                        Maggie and Emma race each other along a straight running
+                        track.
+                      </span>
+                      <span style="display: block">
+                        Maggie starts some distance ahead of Emma.
+                      </span>
+                      <span> The graph describes the race. </span>
+                    </div>
+
                     <div
                       style="
                         display: flex;
                         justify-content: center;
-                        margin: 24px 0px;
+                        margin-top: 16px;
+                        margin-bottom: 16px;
                       "
                     >
-                      <div
-                        id="calculator3"
-                        style="width: 1000px; height: 400px"
-                      ></div>
+                      <img
+                        src="./Linear Graphs - Files/graph-6.png"
+                        alt="graph-6"
+                        class="graph-image"
+                      />
                     </div>
                     <div style="padding-left: 16px">
                       <span class="quote-text">
@@ -2655,14 +2635,12 @@
                       </p>
 
                       <div style="padding-left: 40px">
-                        <p class="quote-text" style="margin-top: 16px">
-                          a. Plot this line on the graph.
-                        </p>
-
-                        <p class="quote-text">
-                          b. Add a line to the graph that represents Maggie's
-                          race.
-                        </p>
+                        <div style="margin: 24px 0px">
+                          <div
+                            id="calculator3"
+                            style="width: 1000px; height: 420px"
+                          ></div>
+                        </div>
 
                         <div>
                           <span class="quote-text">
