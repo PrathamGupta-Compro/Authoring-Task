@@ -74,6 +74,43 @@
         }
       }
 
+      // Function to handle the 'Begin' action
+      function beginStep() {
+        const section = document.getElementById("step1");
+        const stepCard = section.closest(".part-card");
+        const stepIndex = parseInt(stepCard.id.replace("step", "")) - 1; // 0-indexed
+        const button = document.getElementById("begin-btn-1");
+        const practiceTestButton = document.getElementById("beginPracticeTest");
+        const practicePill = document.getElementById("practicePill");
+        const startText = document.getElementById("startText");
+
+        // 2. Update step status to 'In Progress' and fill the corresponding progress bar
+        updateStepState(stepIndex, "In Progress", 100);
+
+        // 3. Change 'Begin' → 'Submit'
+        button.textContent = "Mark as Completed";
+        button.classList.remove("begin-button");
+        button.classList.add("submit-button");
+
+        // 4. Change onclick to show snackbar
+        button.onclick = function () {
+          showSnackbar();
+        };
+        practiceTestButton.textContent = "Mark as Completed";
+        practiceTestButton.classList.remove("begin-button");
+        practiceTestButton.classList.add("submit-button");
+        if (practicePill) {
+          practicePill.textContent = "In Progress";
+          practicePill.classList.remove("not-started", "completed");
+          practicePill.classList.add("in-progress");
+        }
+
+        // 4. Change onclick to show snackbar
+        practiceTestButton.onclick = function () {
+          showSnackbar();
+        };
+        startText.style.display = "none";
+      }
       // --- DOMContentLoaded Initialization ---
       document.addEventListener("DOMContentLoaded", function () {
         const header = document.getElementById("header");
@@ -351,6 +388,11 @@
       // --- End DOMContentLoaded Initialization ---
 
       // The rest of the global functions
+      function activateH5P() {
+        const overlay = document.getElementById("h5p-overlay");
+        beginStep();
+        overlay.style.display = "none"; // allow interaction
+      }
 
       function toggleAccordion(button) {
         const partCard = button.closest(".part-card");
@@ -1852,7 +1894,7 @@
                 style="
                   padding: 16px 50px;
                   background-color: #fff9f9;
-                  margin: 0 -50px;
+                  margin: 32px -50px;
                   border-top: 2px solid #e2e8f0;
                   border-bottom: 2px solid #e2e8f0;
                 "
@@ -1889,9 +1931,9 @@
                 >
                   <strong>Directions: </strong>Using your understanding from the
                   presentation above, fill in the blanks in the passage below.
-                  After completing the quiz click "Check My Work" to review your
-                  responses. Choose the correct terms from the Word Bank
-                  provided below.
+                  Click "Begin" to start the quiz. After completing click "Check
+                  My Work" to review your responses. Choose the correct terms
+                  from the Word Bank provided below.
                 </p>
                 <p
                   style="
@@ -1927,7 +1969,7 @@
                       margin: 16px 0px;
                       font-size: 15px;
                     "
-                    onclick="showSnackbar()"
+                    onclick="activateH5P()"
                   >
                     Begin
                   </button>
@@ -1949,7 +1991,15 @@
                         >
                           Question #1
                         </p>
-                        <div style="padding: 8px 24px">
+                        <div
+                          id="h5p-wrapper"
+                          style="
+                            position: relative;
+                            width: 960px;
+                            height: 400px;
+                            padding: 8px 24px;
+                          "
+                        >
                           <iframe
                             src="https://comprotechnologies.h5p.com/content/1292767192302263207/embed"
                             aria-label="Fill in the Blanks"
@@ -1959,6 +2009,26 @@
                             allowfullscreen="allowfullscreen"
                             allow="autoplay *; geolocation *; microphone *; camera *; midi *; encrypted-media *"
                           ></iframe>
+
+                          <!-- Overlay to block interaction -->
+                          <div
+                            id="h5p-overlay"
+                            style="
+                              position: absolute;
+                              top: 0;
+                              left: 0;
+                              width: 100%;
+                              height: 100%;
+                              background: rgba(
+                                255,
+                                255,
+                                255,
+                                0
+                              ); /* fully transparent */
+                              cursor: not-allowed;
+                              z-index: 10;
+                            "
+                          ></div>
                         </div>
                       </div>
                     </div>
@@ -1993,12 +2063,8 @@
           >
             Request Help
           </button>
-          <button
-            id="step1BeginBtn"
-            class="begin-button"
-            onclick="showSnackbar()"
-          >
-            Mark as Completed
+          <button id="begin-btn-1" class="begin-button" onclick="activateH5P()">
+            Begin
           </button>
         </div>
       </section>
