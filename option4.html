@@ -87,6 +87,8 @@
         const beginPracticeTestBtn =
           document.getElementById("beginPracticeTest");
 
+        const practicePill = document.getElementById("practicePill");
+
         // 1. Enable textareas
         textareas.forEach((t) => {
           t.readOnly = false;
@@ -116,6 +118,12 @@
         beginPracticeTestBtn.onclick = function () {
           showSnackbar();
         };
+
+        if (practicePill) {
+          practicePill.textContent = "In Progress";
+          practicePill.classList.remove("not-started", "completed");
+          practicePill.classList.add("in-progress");
+        }
       }
 
       // Function to handle manually completing a step
@@ -1939,15 +1947,29 @@
                       >
                         <div style="padding: 24px; padding-top: 24px">
                           <!-- Title -->
-                          <h1
+                          <div
                             style="
-                              font-size: 24px;
-                              font-weight: 700;
-                              color: #1e1e1e;
+                              display: flex;
+                              align-items: center;
+                              justify-content: space-between;
                             "
                           >
-                            Practice Test
-                          </h1>
+                            <h1
+                              style="
+                                font-size: 24px;
+                                font-weight: 700;
+                                color: #1e1e1e;
+                              "
+                            >
+                              Practice Test
+                            </h1>
+                            <button
+                              id="practicePill"
+                              class="step-status not-started"
+                            >
+                              Not Started
+                            </button>
+                          </div>
 
                           <!-- Activity Label -->
                           <p

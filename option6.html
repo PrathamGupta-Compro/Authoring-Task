@@ -84,6 +84,7 @@
         const stepIndex = parseInt(stepCard.id.replace("step", "")) - 1; // 0-indexed
         const button = document.getElementById("begin-btn-1");
         const practiceTestButton = document.getElementById("beginPracticeTest");
+        const practicePill = document.getElementById("practicePill");
         const startText = document.getElementById("startText");
 
         // 1. Enable textareas
@@ -115,6 +116,11 @@
         practiceTestButton.textContent = "Submit";
         practiceTestButton.classList.remove("begin-button");
         practiceTestButton.classList.add("submit-button");
+        if (practicePill) {
+          practicePill.textContent = "In Progress";
+          practicePill.classList.remove("not-started", "completed");
+          practicePill.classList.add("in-progress");
+        }
 
         // 4. Change onclick to show snackbar
         practiceTestButton.onclick = function () {
@@ -1863,7 +1869,7 @@
           </li>
         </ul>
         <div class="expandable-content" id="expandableContent">
-          <div style="display: flex; gap:40px">
+          <div style="display: flex; gap: 40px">
             <div>
               <h3 class="section-heading">Objectives</h3>
               <ul class="objectives-list">
@@ -1877,7 +1883,7 @@
               <h3 class="section-heading">Competencies</h3>
               <ul class="objectives-list">
                 <li>Solve Problems</li>
-                <li style="white-space: nowrap;">Design and Create</li>
+                <li style="white-space: nowrap">Design and Create</li>
                 <li>Think Critically</li>
               </ul>
             </div>
@@ -2111,15 +2117,29 @@
                       >
                         <div style="padding: 24px; padding-top: 32px">
                           <!-- Title -->
-                          <h1
+                          <div
                             style="
-                              font-size: 24px;
-                              font-weight: 700;
-                              color: #1e1e1e;
+                              display: flex;
+                              align-items: center;
+                              justify-content: space-between;
                             "
                           >
-                            Practice Test
-                          </h1>
+                            <h1
+                              style="
+                                font-size: 24px;
+                                font-weight: 700;
+                                color: #1e1e1e;
+                              "
+                            >
+                              Practice Test
+                            </h1>
+                            <button
+                              id="practicePill"
+                              class="step-status not-started"
+                            >
+                              Not Started
+                            </button>
+                          </div>
 
                           <!-- Activity Label -->
                           <p
@@ -2281,7 +2301,7 @@
                             />
                           </div>
                           <div style="padding: 0px 24px">
-                            <p class="quote-text" >
+                            <p class="quote-text">
                               1. What is the approximate y-intercept of this
                               line?
                             </p>
@@ -2326,7 +2346,10 @@
                           </div>
                         </div>
                       </div>
-                      <div class="quote-column" style="padding: 0 24px; padding-bottom: 32px;">
+                      <div
+                        class="quote-column"
+                        style="padding: 0 24px; padding-bottom: 32px"
+                      >
                         <div class="quote-text-box">
                           <p
                             style="
