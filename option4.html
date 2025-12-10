@@ -75,12 +75,17 @@
       }
 
       // Function to handle the 'Begin' action
-      function beginStep(button) {
-        const section = button.closest(".help-section").previousElementSibling;
+      function beginStep() {
+        const section = document.getElementById("step1");
         const textareas = section.querySelectorAll("textarea.response-area");
 
         const stepCard = section.closest(".part-card");
         const stepIndex = parseInt(stepCard.id.replace("step", "")) - 1; // 0-indexed
+
+        const button = document.getElementById("step1BeginBtn");
+
+        const beginPracticeTestBtn =
+          document.getElementById("beginPracticeTest");
 
         // 1. Enable textareas
         textareas.forEach((t) => {
@@ -100,6 +105,15 @@
 
         // 4. Change onclick to show snackbar
         button.onclick = function () {
+          showSnackbar();
+        };
+
+        beginPracticeTestBtn.textContent = "Submit";
+        beginPracticeTestBtn.classList.remove("begin-button");
+        beginPracticeTestBtn.classList.add("submit-button");
+
+        // 4. Change onclick to show snackbar
+        beginPracticeTestBtn.onclick = function () {
           showSnackbar();
         };
       }
@@ -500,8 +514,7 @@
       // Modal functions (no changes)
       let pendingBeginButton = null;
 
-      function openBeginModal(button) {
-        pendingBeginButton = button;
+      function openBeginModal() {
         document.getElementById("beginModal").style.display = "flex";
       }
 
@@ -513,9 +526,7 @@
         const modal = document.getElementById("beginModal");
         if (modal) {
           modal.querySelector(".begin-modal-ok").onclick = () => {
-            if (pendingBeginButton) {
-              beginStep(pendingBeginButton);
-            }
+            beginStep();
             closeBeginModal();
           };
         }
@@ -530,7 +541,7 @@
           .closest(".part-card")
           .nextElementSibling.querySelector(".begin-button");
 
-        if (beginBtn) openBeginModal(beginBtn);
+        if (beginBtn) openBeginModal();
       }
     </script>
     <style>
@@ -1154,16 +1165,20 @@
         font-weight: 400;
         line-height: 24px;
       }
-      /* Author Quote Item */
-      .quote-item {
-        display: grid;
-        grid-template-columns: 1fr 16fr 16fr;
-        margin-bottom: 48px;
-        /* gap: 32px; */
-        /* padding-bottom: 60px; */
+      .quote-box {
+        border-radius: 12px;
+        color: #2d3748;
       }
-      .quote-item:last-of-type {
-        border-bottom: none;
+      /* Author Quote Item */
+      .question-block-container {
+        background: #ffffff;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .quote-text {
+        font-size: 15px;
+        line-height: 1.6;
       }
       /* Left column wrapper */
       .quote-column {
@@ -1914,23 +1929,99 @@
                   webkitallowfullscreen="true"
                 ></iframe>
               </div>
-              <div
-                style="
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  margin-top: 40px;
-                "
-              >
-                <iframe
-                  src="https://comprotechnologies.h5p.com/content/1292767192302263207/embed"
-                  aria-label="Fill in the Blanks"
-                  width="1088"
-                  height="400"
-                  frameborder="0"
-                  allowfullscreen="allowfullscreen"
-                  allow="autoplay *; geolocation *; microphone *; camera *; midi *; encrypted-media *"
-                ></iframe>
+              <div id="questions-list" style="margin-top: 40px">
+                <div>
+                  <div style="padding: 0 48px; margin-top: 24px">
+                    <div class="quote-item question-block-container">
+                      <div
+                        id="beginQuestions"
+                        style="border-radius: 8px; background: #fff9f9"
+                      >
+                        <div style="padding: 24px; padding-top: 24px">
+                          <!-- Title -->
+                          <h1
+                            style="
+                              font-size: 24px;
+                              font-weight: 700;
+                              color: #1e1e1e;
+                            "
+                          >
+                            Practice Test
+                          </h1>
+
+                          <!-- Activity Label -->
+                          <p
+                            style="
+                              font-size: 16px;
+                              font-weight: 400;
+                              color: #767676;
+                            "
+                          >
+                            Activity: Quiz
+                          </p>
+
+                          <!-- Directions -->
+                          <p
+                            style="
+                              font-size: 16px;
+                              font-weight: 400;
+                              color: #1e1e1e;
+                              margin-top: 16px;
+                            "
+                          >
+                            <strong>Directions: </strong>Go through the above
+                            slideshow and attempt the following quiz. After
+                            finishing, Submit the answers to your teacher. Lorem
+                            ipsum dolor sit amet, consectetur adipiscing elit,
+                            sed do eiusmod tempor incididunt ut labore et dolore
+                            magna aliqua. Ut enim ad minim veniam, quis nostrud
+                            exercitation ullamco laboris nisi ut.
+                          </p>
+                          <h2
+                            id="startText"
+                            style="
+                              font-size: 20px;
+                              font-weight: 600;
+                              color: #1e1e1e;
+                              margin-top: 16px;
+                            "
+                          >
+                            Ready to Start!
+                          </h2>
+
+                          <!-- Begin Button -->
+                          <div
+                            style="display: flex; justify-content: flex-start"
+                          >
+                            <button
+                              id="beginPracticeTest"
+                              class="begin-button"
+                              style="
+                                padding: 12px 32px;
+                                margin: 16px 0px;
+                                font-size: 15px;
+                              "
+                              onclick="beginStep()"
+                            >
+                              Begin
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="quote-column" style="margin-top: 16px">
+                        <iframe
+                          src="https://comprotechnologies.h5p.com/content/1292767192302263207/embed"
+                          aria-label="Fill in the Blanks"
+                          width="960"
+                          height="400"
+                          frameborder="0"
+                          allowfullscreen="allowfullscreen"
+                          allow="autoplay *; geolocation *; microphone *; camera *; midi *; encrypted-media *"
+                        ></iframe>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -1960,7 +2051,11 @@
           >
             Request Help
           </button>
-          <button class="begin-button" onclick="openBeginModal(this)">
+          <button
+            id="step1BeginBtn"
+            class="begin-button"
+            onclick="openBeginModal()"
+          >
             Begin
           </button>
         </div>
