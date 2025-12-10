@@ -74,67 +74,6 @@
         }
       }
 
-      // Function to handle the 'Begin' action
-      function beginStep() {
-        const section = document.getElementById("step1");
-        const textareas = section.querySelectorAll("textarea.response-area");
-
-        const stepCard = section.closest(".part-card");
-        const stepIndex = parseInt(stepCard.id.replace("step", "")) - 1; // 0-indexed
-
-        const button = document.getElementById("step1BeginBtn");
-
-        const beginPracticeTestBtn =
-          document.getElementById("beginPracticeTest");
-
-        const practicePill = document.getElementById("practicePill");
-
-        // 1. Enable textareas
-        textareas.forEach((t) => {
-          t.readOnly = false;
-          t.style.background = "#ffffff";
-          t.placeholder = "Please add your response here.";
-          t.style.cursor = "auto";
-        });
-
-        // 2. Update step status to 'In Progress' and fill the corresponding progress bar
-        updateStepState(stepIndex, "In Progress", 100);
-
-        // 3. Change 'Begin' → 'Submit'
-        button.textContent = "Submit";
-        button.classList.remove("begin-button");
-        button.classList.add("submit-button");
-
-        // 4. Change onclick to show snackbar
-        button.onclick = function () {
-          showSnackbar();
-        };
-
-        beginPracticeTestBtn.textContent = "Submit";
-        beginPracticeTestBtn.classList.remove("begin-button");
-        beginPracticeTestBtn.classList.add("submit-button");
-
-        // 4. Change onclick to show snackbar
-        beginPracticeTestBtn.onclick = function () {
-          showSnackbar();
-        };
-
-        if (practicePill) {
-          practicePill.textContent = "In Progress";
-          practicePill.classList.remove("not-started", "completed");
-          practicePill.classList.add("in-progress");
-        }
-      }
-
-      // Function to handle manually completing a step
-      function markStepCompleted(stepIndex) {
-        updateStepState(stepIndex, "Completed", 100);
-      }
-
-      // Exposed helper functions
-      window.markStepCompleted = markStepCompleted;
-      window.beginStep = beginStep;
-
       // --- DOMContentLoaded Initialization ---
       document.addEventListener("DOMContentLoaded", function () {
         const header = document.getElementById("header");
@@ -519,37 +458,10 @@
         clearTimeout(bar.autoCloseTimeout);
       }
 
-      // Modal functions (no changes)
-      let pendingBeginButton = null;
-
-      function openBeginModal() {
-        document.getElementById("beginModal").style.display = "flex";
-      }
-
-      function closeBeginModal() {
-        document.getElementById("beginModal").style.display = "none";
-      }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const modal = document.getElementById("beginModal");
-        if (modal) {
-          modal.querySelector(".begin-modal-ok").onclick = () => {
-            beginStep();
-            closeBeginModal();
-          };
-        }
-      });
-
       function textAreaClick(t) {
         if (!t.readOnly) {
           return;
         }
-
-        const beginBtn = t
-          .closest(".part-card")
-          .nextElementSibling.querySelector(".begin-button");
-
-        if (beginBtn) openBeginModal();
       }
     </script>
     <style>
@@ -1937,109 +1849,71 @@
                   webkitallowfullscreen="true"
                 ></iframe>
               </div>
+              <div style="padding-top: 32px">
+                <!-- Title -->
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                  "
+                >
+                  <h1 style="font-size: 24px; font-weight: 700; color: #1e1e1e">
+                    Practice Test
+                  </h1>
+                  <button id="practicePill" class="step-status not-started">
+                    Not Started
+                  </button>
+                </div>
+
+                <!-- Activity Label -->
+                <p style="font-size: 16px; font-weight: 400; color: #767676">
+                  Activity: Quiz
+                </p>
+
+                <!-- Directions -->
+                <p
+                  style="
+                    font-size: 16px;
+                    font-weight: 400;
+                    color: #1e1e1e;
+                    margin-top: 16px;
+                  "
+                >
+                  <strong>Directions: </strong>Go through the above slideshow
+                  and attempt the following quiz. After finishing, Submit the
+                  answers to your teacher. Lorem ipsum dolor sit amet,
+                  consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                  ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                  quis nostrud exercitation ullamco laboris nisi ut.
+                </p>
+              </div>
               <div id="questions-list" style="margin-top: 40px">
                 <div>
                   <div style="padding: 0 48px; margin-top: 24px">
                     <div class="quote-item question-block-container">
-                      <div
-                        id="beginQuestions"
-                        style="border-radius: 8px; background: #fff9f9"
-                      >
-                        <div style="padding: 24px; padding-top: 24px">
-                          <!-- Title -->
-                          <div
-                            style="
-                              display: flex;
-                              align-items: center;
-                              justify-content: space-between;
-                            "
-                          >
-                            <h1
-                              style="
-                                font-size: 24px;
-                                font-weight: 700;
-                                color: #1e1e1e;
-                              "
-                            >
-                              Practice Test
-                            </h1>
-                            <button
-                              id="practicePill"
-                              class="step-status not-started"
-                            >
-                              Not Started
-                            </button>
-                          </div>
-
-                          <!-- Activity Label -->
-                          <p
-                            style="
-                              font-size: 16px;
-                              font-weight: 400;
-                              color: #767676;
-                            "
-                          >
-                            Activity: Quiz
-                          </p>
-
-                          <!-- Directions -->
-                          <p
-                            style="
-                              font-size: 16px;
-                              font-weight: 400;
-                              color: #1e1e1e;
-                              margin-top: 16px;
-                            "
-                          >
-                            <strong>Directions: </strong>Go through the above
-                            slideshow and attempt the following quiz. After
-                            finishing, Submit the answers to your teacher. Lorem
-                            ipsum dolor sit amet, consectetur adipiscing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore
-                            magna aliqua. Ut enim ad minim veniam, quis nostrud
-                            exercitation ullamco laboris nisi ut.
-                          </p>
-                          <h2
-                            id="startText"
-                            style="
-                              font-size: 20px;
-                              font-weight: 600;
-                              color: #1e1e1e;
-                              margin-top: 16px;
-                            "
-                          >
-                            Ready to Start!
-                          </h2>
-
-                          <!-- Begin Button -->
-                          <div
-                            style="display: flex; justify-content: flex-start"
-                          >
-                            <button
-                              id="beginPracticeTest"
-                              class="begin-button"
-                              style="
-                                padding: 12px 32px;
-                                margin: 16px 0px;
-                                font-size: 15px;
-                              "
-                              onclick="beginStep()"
-                            >
-                              Begin
-                            </button>
-                          </div>
-                        </div>
-                      </div>
                       <div class="quote-column" style="margin-top: 16px">
-                        <iframe
-                          src="https://comprotechnologies.h5p.com/content/1292767192302263207/embed"
-                          aria-label="Fill in the Blanks"
-                          width="960"
-                          height="400"
-                          frameborder="0"
-                          allowfullscreen="allowfullscreen"
-                          allow="autoplay *; geolocation *; microphone *; camera *; midi *; encrypted-media *"
-                        ></iframe>
+                        <p
+                          style="
+                            color: #343434;
+                            font-size: 16px;
+                            font-weight: 800;
+                            line-height: 24px;
+                          "
+                        >
+                          Question #1
+                        </p>
+                        <div style="padding: 8px 24px">
+                          <iframe
+                            src="https://comprotechnologies.h5p.com/content/1292767192302263207/embed"
+                            aria-label="Fill in the Blanks"
+                            width="960"
+                            height="480"
+                            frameborder="0"
+                            allowfullscreen="allowfullscreen"
+                            allow="autoplay *; geolocation *; microphone *; camera *; midi *; encrypted-media *"
+                          ></iframe>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -2076,9 +1950,9 @@
           <button
             id="step1BeginBtn"
             class="begin-button"
-            onclick="openBeginModal()"
+            onclick="showSnackbar()"
           >
-            Begin
+            Mark as Completed
           </button>
         </div>
       </section>
