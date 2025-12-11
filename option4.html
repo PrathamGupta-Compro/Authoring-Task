@@ -1635,10 +1635,10 @@
           </li>
         </ul>
         <div class="expandable-content" id="expandableContent">
-          <div style="display: flex; justify-content: space-between;">
+          <div style="display: flex; justify-content: space-between">
             <div>
               <h3 class="section-heading">Objectives</h3>
-              <ul class="objectives-list" style="width: 90%;">
+              <ul class="objectives-list" style="width: 90%">
                 <li>
                   I can name the different components of the circulatory system
                   and identify their locations
@@ -1931,9 +1931,10 @@
                 >
                   <strong>Directions: </strong>Using your understanding from the
                   presentation above, fill in the blanks in the passage below.
-                  Click "Begin" to start the quiz. After completing click "Check
-                  My Work" to review your responses. Choose the correct terms
-                  from the Word Bank provided below.
+                  After completing click "Check My Work" to review your
+                  responses. Choose the correct terms from the Word Bank
+                  provided below. Lorem ipsum dolor sit amet consectetur
+                  adipisicing elit. Quisquam, quod.
                 </p>
                 <p
                   style="
@@ -1947,33 +1948,6 @@
                   Capillaries, Lungs, Arteries, Deoxygenated, Atriums,
                   Ventricles, Involuntary, Veins, Carbon Dioxide, Oxygenated
                 </p>
-                <h2
-                  id="startText"
-                  style="
-                    font-size: 20px;
-                    font-weight: 600;
-                    color: #1e1e1e;
-                    margin-top: 16px;
-                  "
-                >
-                  Ready to Start!
-                </h2>
-
-                <!-- Begin Button -->
-                <div style="display: flex; justify-content: flex-start">
-                  <button
-                    id="beginPracticeTest"
-                    class="begin-button"
-                    style="
-                      padding: 12px 32px;
-                      margin: 16px 0px;
-                      font-size: 15px;
-                    "
-                    onclick="activateH5P()"
-                  >
-                    Begin
-                  </button>
-                </div>
               </div>
               <div id="questions-list" style="margin-top: 32px">
                 <div>
@@ -1991,44 +1965,16 @@
                         >
                           Question #1
                         </p>
-                        <div
-                          id="h5p-wrapper"
-                          style="
-                            position: relative;
-                            width: 960px;
-                            height: 550px;
-                            padding: 8px 24px;
-                          "
-                        >
+                        <div style="padding: 8px 24px">
                           <iframe
                             src="https://comprotechnologies.h5p.com/content/1292767192302263207/embed"
                             aria-label="Fill in the Blanks"
                             width="960"
-                            height="550"
+                            height="540"
                             frameborder="0"
                             allowfullscreen="allowfullscreen"
                             allow="autoplay *; geolocation *; microphone *; camera *; midi *; encrypted-media *"
                           ></iframe>
-
-                          <!-- Overlay to block interaction -->
-                          <div
-                            id="h5p-overlay"
-                            style="
-                              position: absolute;
-                              top: 0;
-                              left: 0;
-                              width: 100%;
-                              height: 100%;
-                              background: rgba(
-                                255,
-                                255,
-                                255,
-                                0
-                              ); /* fully transparent */
-                              cursor: not-allowed;
-                              z-index: 10;
-                            "
-                          ></div>
                         </div>
                       </div>
                     </div>
@@ -2063,8 +2009,12 @@
           >
             Request Help
           </button>
-          <button id="begin-btn-1" class="begin-button" onclick="activateH5P()">
-            Begin
+          <button
+            id="begin-btn-1"
+            class="begin-button"
+            onclick="showSnackbar()"
+          >
+            Mark as Completed
           </button>
         </div>
       </section>
