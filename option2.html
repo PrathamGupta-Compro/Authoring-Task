@@ -530,6 +530,44 @@
 
         if (beginBtn) openBeginModal(beginBtn);
       }
+
+       // ESC key to close tooltip
+       document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.activeElement.blur();
+            }
+        });
+
+        // Prevent tooltip from going off-screen
+        document.querySelectorAll('.term').forEach(term => {
+            term.addEventListener('mouseenter', adjustPosition);
+            term.addEventListener('focus', adjustPosition);
+            
+            function adjustPosition() {
+                const def = term.querySelector('.definition');
+                const rect = def.getBoundingClientRect();
+                
+                if (rect.left < 10) {
+                    def.style.left = '0';
+                    def.style.transform = 'translateX(0)';
+                }
+                
+                if (rect.right > window.innerWidth - 10) {
+                    def.style.left = 'auto';
+                    def.style.right = '0';
+                    def.style.transform = 'translateX(0)';
+                }
+            }
+        });
+
+
+
+
+
+
+
+
+
     </script>
     <style>
       * {
@@ -1596,6 +1634,87 @@
         line-height: 1.4;
       }
 
+
+
+      /* Dictionary term - matching the screenshot */
+      .term {
+            position: relative;
+            color: #2563eb;
+            border-bottom: 2px dotted #2563eb;
+            cursor: help;
+            font-weight: 500;
+        }
+
+        .term:focus {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+            border-radius: 2px;
+        }
+
+        /* Tooltip - light theme to match UI */
+        .definition {
+            position: absolute;
+            bottom: calc(100% + 12px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: #1f2937;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            min-width: 250px;
+            max-width: 320px;
+            display: none;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        /* Arrow pointing down - white to match tooltip */
+        .definition::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: white;
+        }
+
+        /* Border for arrow */
+        .definition::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 9px solid transparent;
+            border-top-color: #e5e7eb;
+            margin-top: 1px;
+        }
+
+        .term:hover .definition,
+        .term:focus .definition {
+            display: block;
+        }
+
+        .def-word {
+            font-weight: 600;
+            color: #2563eb;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+
+        .def-text {
+            color: #4b5563;
+            font-weight: 400;
+        }
+
+
+        
+
       @keyframes fadein {
         from {
           bottom: 0;
@@ -1943,7 +2062,17 @@
                       world which yields him no true self-consciousness, but
                       only lets him see himself through the revelation of the
                       other world. It is a peculiar sensation, this
-                      <strong>double-consciousness</strong>, this sense of
+
+                      <span class="term" tabindex="0" aria-describedby="def-double">
+
+                        <strong>double-consciousness</strong>
+
+                        <span class="definition" id="def-double" role="tooltip">
+                        <span class="def-word">Double-consciousness</span>
+                        <span class="def-text">The sense of always looking at one's self through the eyes of others, measuring one's soul by the tape of a world that looks on in amused contempt and pity.</span>
+                        </span>
+                      </span>
+                      , this sense of
                       always
                       <strong
                         >looking at one's self through the eyes of
