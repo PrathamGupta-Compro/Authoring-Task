@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!-- saved from url=(0045)https://taskworkflow.netlify.app/option2.html -->
 <html lang="en">
   <head>
@@ -119,7 +119,6 @@
         const titles = [
           "Overview",
           "Vocab Practice",
-          "Create a Model",
           "Demonstrate Understanding",
         ];
 
@@ -133,7 +132,6 @@
           { id: "step1", barIndex: 0 },
           { id: "step2", barIndex: 1 },
           { id: "step3", barIndex: 2 },
-          { id: "step4", barIndex: 3 },
         ];
 
         const toggleBarHighlight = (barIndex, activate) => {
@@ -584,7 +582,9 @@
       }
       .header.scrolled .main-title {
         font-size: 24px;
-        transition: font-size 0.3s ease, margin 0.3s ease;
+        transition:
+          font-size 0.3s ease,
+          margin 0.3s ease;
         line-height: 1.2;
         margin-top: 16px;
         margin-bottom: 0;
@@ -619,7 +619,9 @@
         max-height: 1000px;
         opacity: 1;
         overflow: hidden;
-        transition: max-height 0.3s ease, opacity 0.3s ease,
+        transition:
+          max-height 0.3s ease,
+          opacity 0.3s ease,
           margin-top 0.3s ease;
       }
       .expandable-content.hidden {
@@ -661,7 +663,9 @@
       .header.scrolled .steps-panel {
         margin-top: 0px; /* previously 16px or more */
         padding: 12px 20px; /* smaller internal padding */
-        transition: margin 0.3s ease, padding 0.3s ease;
+        transition:
+          margin 0.3s ease,
+          padding 0.3s ease;
       }
       .collapse-toggle {
         position: absolute;
@@ -673,7 +677,9 @@
         padding: 8px;
         color: #64748b;
         font-size: 20px;
-        transition: transform 0.3s ease, top 0.3s ease;
+        transition:
+          transform 0.3s ease,
+          top 0.3s ease;
       }
       .header.collapsed .collapse-toggle {
         top: 36px;
@@ -767,7 +773,9 @@
         padding-left: 4px;
         opacity: 1;
         overflow: hidden;
-        transition: max-height 0.3s ease, opacity 0.3s ease;
+        transition:
+          max-height 0.3s ease,
+          opacity 0.3s ease;
         cursor: pointer;
       }
       .header.collapsed .steps-list {
@@ -862,7 +870,9 @@
         font-weight: 600;
         color: white;
         flex-shrink: 0;
-        box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px #cbd5e0;
+        box-shadow:
+          0 0 0 2px #ffffff,
+          0 0 0 3px #cbd5e0;
       }
       .step-number.completed {
         background: #70a117;
@@ -907,8 +917,11 @@
         max-height: 120px;
         opacity: 1;
         overflow: hidden;
-        transition: max-height 0.3s ease, opacity 0.3s ease,
-          margin-top 0.3s ease, padding-top 0.3s ease;
+        transition:
+          max-height 0.3s ease,
+          opacity 0.3s ease,
+          margin-top 0.3s ease,
+          padding-top 0.3s ease;
       }
       .header.collapsed .submit-container {
         max-height: 0;
@@ -986,7 +999,9 @@
         border-top-right-radius: 20px;
         padding-bottom: 40px;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-        transition: padding 0.3s ease, border-radius 0.3s ease;
+        transition:
+          padding 0.3s ease,
+          border-radius 0.3s ease;
       }
       .part-card.collapsed {
         border-bottom-left-radius: 20px;
@@ -1017,7 +1032,9 @@
       .accordion-content {
         max-height: 10000px;
         overflow: hidden;
-        transition: max-height 0.5s ease, opacity 0.3s ease;
+        transition:
+          max-height 0.5s ease,
+          opacity 0.3s ease;
         opacity: 1;
         padding-left: 50px;
         padding-right: 50px;
@@ -1043,13 +1060,17 @@
         max-height: 0;
         overflow: hidden;
         opacity: 0;
-        transition: max-height 0.5s ease, opacity 0.3s ease;
+        transition:
+          max-height 0.5s ease,
+          opacity 0.3s ease;
       }
       .help-section:not(.collapsed) {
         max-height: 10000px;
         overflow: visible;
         opacity: 1;
-        transition: max-height 0.5s ease, opacity 0.3s ease;
+        transition:
+          max-height 0.5s ease,
+          opacity 0.3s ease;
       }
       .part-section:last-child {
         margin-bottom: 0;
@@ -1319,7 +1340,9 @@
         cursor: pointer;
         font-size: 14px;
         font-weight: 500;
-        transition: background 0.2s, color 0.2s;
+        transition:
+          background 0.2s,
+          color 0.2s;
       }
       .help-text {
         margin-right: 16px;
@@ -1350,7 +1373,9 @@
       }
       #snackbar.show {
         visibility: visible;
-        animation: fadein 0.4s forwards, fadeout 0.4s 4.6s forwards;
+        animation:
+          fadein 0.4s forwards,
+          fadeout 0.4s 4.6s forwards;
       }
       #snackbar.show:focus {
         outline: 2px solid #fff;
@@ -1364,7 +1389,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background 0.2s ease, color 0.2s ease;
+        transition:
+          background 0.2s ease,
+          color 0.2s ease;
         outline: none;
       }
       .snackbar-close-icon {
@@ -1655,7 +1682,7 @@
       </section>
       <section class="steps-panel">
         <div class="progress-header">
-          <p class="progress-label">Steps (4)</p>
+          <p class="progress-label">Steps (3)</p>
           <div class="progress-container">
             <div class="progress-bar">
               <div
@@ -1663,9 +1690,6 @@
                 id="progressFill"
                 style="width: 0%"
               ></div>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-bar-fill" style="width: 0%"></div>
             </div>
             <div class="progress-bar">
               <div class="progress-bar-fill" style="width: 0%"></div>
@@ -1693,13 +1717,6 @@
           </div>
           <div class="step">
             <div class="step-number">3</div>
-            <div class="step-content">
-              <h2 class="step-title">Create a Model</h2>
-              <div class="step-status not-started">Not Started</div>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-number">4</div>
             <div class="step-content">
               <h2 class="step-title">Demonstrate Understanding</h2>
               <div class="step-status not-started">Not Started</div>
@@ -1748,7 +1765,9 @@
         style="
           margin-top: 0px;
           padding: 12px 20px;
-          transition: margin 0.3s ease, padding 0.3s ease;
+          transition:
+            margin 0.3s ease,
+            padding 0.3s ease;
         "
       >
         <div class="progress-header">
@@ -1759,9 +1778,6 @@
                 id="progressFill"
                 style="width: 0%"
               ></div>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-bar-fill" style="width: 0%"></div>
             </div>
             <div class="progress-bar">
               <div class="progress-bar-fill" style="width: 0%"></div>
@@ -1823,7 +1839,7 @@
                   "
                 >
                   <div style="display: flex; gap: 16px; align-items: center">
-                    <p class="step-count">STEP 1 of 4</p>
+                    <p class="step-count">STEP 1 of 3</p>
                     <button class="step-status not-started">Not Started</button>
                   </div>
                   <div
@@ -1852,102 +1868,78 @@
               </div>
             </div>
             <div class="accordion-content">
-              <div
-                style="
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  margin: 24px 0px;
-                "
+              <h2
+                class="section-quote"
+                style="border-bottom: none; margin-bottom: 16px"
               >
-                <iframe
-                  src="https://docs.google.com/presentation/d/e/2PACX-1vR1i5UFNHqFjS51FWoxkc_gWAVdUh7gHwM4fuz5dIWFpPxeJ6qXENyOGiGQVhVrCA/pubembed?start=false&loop=false&delayms=3000"
-                  frameborder="0"
-                  width="752"
-                  height="600"
-                  allowfullscreen="true"
-                  mozallowfullscreen="true"
-                  webkitallowfullscreen="true"
-                ></iframe>
-              </div>
-              <div
-                style="
-                  padding: 16px 50px;
-                  background-color: #fff9f9;
-                  margin: 32px -50px;
-                  border-top: 2px solid #e2e8f0;
-                  border-bottom: 2px solid #e2e8f0;
-                "
-              >
-                <!-- Title -->
-                <div
-                  style="
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                  "
-                >
-                  <h1 style="font-size: 24px; font-weight: 700; color: #1e1e1e">
-                    Practice Test
-                  </h1>
+                Overview
+              </h2>
+              <div class="section-directions">
+                <p style="margin-bottom: 16px">
+                  As blood flows through the circulatory system, it moves
+                  through three types of blood vessels:
+                </p>
+                <ol style="margin-left: 20px; margin-bottom: 16px">
+                  <li>Arteries</li>
+                  <li>Capillaries</li>
+                  <li>Veins</li>
+                </ol>
+                <div style="margin: 32px 0; text-align: center">
+                  <img
+                    src="./Circulatory System - Files/blood vessels.png"
+                    alt="Blood Vessels Diagram"
+                    style="
+                      max-width: 100%;
+                      height: auto;
+                      border-radius: 8px;
+                      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    "
+                  />
                 </div>
 
-                <!-- Activity Label -->
-                <p style="font-size: 16px; font-weight: 400; color: #767676">
-                  Activity: Quiz
+                <p style="margin: 24px 0px; line-height: 125%">
+                  Blood vessels are the body's circulatory tubes, forming a
+                  network to transport blood, oxygen, and nutrients, and remove
+                  waste, consisting mainly of three types:
                 </p>
+                <ol style="margin-left: 20px; margin-bottom: 16px">
+                  <li>Arteries (away from heart)</li>
+                  <li>Veins (to heart)</li>
+                  <li>tiny connecting Capillaries (exchange sites)</li>
+                </ol>
 
-                <!-- Directions -->
-                <p
+                <span
                   style="
+                    color: #919191;
                     font-size: 16px;
-                    font-weight: 400;
-                    color: #1e1e1e;
-                    margin-top: 16px;
+                    font-weight: 800;
+                    line-height: 24px;
+                    padding-top: 16px;
                   "
                 >
-                  <strong>Directions: </strong>Using your understanding from the
-                  presentation above, fill in the blanks in the passage below.
-                  After completing the activity, click “Check My Work” to review
-                  your responses. You can choose the correct terms from the Word
-                  Bank below:
-                </p>
-                <blockquote class="section-quote-2">
-                  Circulatory, Oxygen, Blood, Capillaries, Lungs, Arteries,
-                  Deoxygenated, Atriums, Ventricles, Involuntary, Veins, Carbon
-                  Dioxide, Oxygenated
-                </blockquote>
-              </div>
-              <div id="questions-list" style="margin-top: 32px">
-                <div>
-                  <div style="padding: 0 48px; margin-top: 24px">
-                    <div class="quote-item question-block-container">
-                      <div class="quote-column" style="margin-top: 16px">
-                        <p
-                          style="
-                            color: #919191;
-                            font-size: 16px;
-                            font-weight: 800;
-                            line-height: 24px;
-                            padding-top: 16px;
-                          "
-                        >
-                          Question #1
-                        </p>
-                        <div style="padding: 8px 24px">
-                          <iframe
-                            src="https://comprotechnologies.h5p.com/content/1292767192302263207/embed"
-                            aria-label="Fill in the Blanks"
-                            width="960"
-                            height="540"
-                            frameborder="0"
-                            allowfullscreen="allowfullscreen"
-                            allow="autoplay *; geolocation *; microphone *; camera *; midi *; encrypted-media *"
-                          ></iframe>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  Question :
+                </span>
+                <span>
+                  Match The Following (with curved lines) - Arteries,
+                  Capillaries, Veins, with their definitions -
+                </span>
+                <div class="response-area" style="margin-top: 24px">
+                  <span>Quiz placeholder</span>
+                </div>
+
+                <div
+                  style="margin: 32px 0; text-align: center; cursor: pointer"
+                >
+                  <img
+                    src="./Circulatory System - Files/thumbnail.png"
+                    alt="Blood Vessels Diagram"
+                    style="
+                      max-width: 100%;
+                      height: auto;
+                      border-radius: 8px;
+                      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    "
+                  />
                 </div>
               </div>
             </div>
@@ -1973,8 +1965,8 @@
           <button
             class="request-button"
             onclick="showSnackbar()"
-            onmouseover="this.style.backgroundColor='#cbdeed';"
-            onmouseout="this.style.backgroundColor='#F7F7F7';"
+            onmouseover="this.style.backgroundColor = '#cbdeed'"
+            onmouseout="this.style.backgroundColor = '#F7F7F7'"
           >
             Request Help
           </button>
@@ -1997,7 +1989,7 @@
                   "
                 >
                   <div style="display: flex; gap: 16px; align-items: center">
-                    <p class="step-count">STEP 2 of 4</p>
+                    <p class="step-count">STEP 2 of 3</p>
                     <button class="step-status not-started">Not Started</button>
                   </div>
                   <div
@@ -2028,10 +2020,42 @@
             <div class="accordion-content">
               <h2
                 class="section-quote"
-                style="border-bottom: none; margin-bottom: 0px"
+                style="border-bottom: none; margin-bottom: 24px"
               >
                 Vocab Practice
               </h2>
+              <div class="section-directions">
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 24px 0px;
+                  "
+                >
+                  <iframe
+                    src="https://docs.google.com/presentation/d/e/2PACX-1vR1i5UFNHqFjS51FWoxkc_gWAVdUh7gHwM4fuz5dIWFpPxeJ6qXENyOGiGQVhVrCA/pubembed?start=false&loop=false&delayms=3000"
+                    frameborder="0"
+                    width="752"
+                    height="600"
+                    allowfullscreen="true"
+                    mozallowfullscreen="true"
+                    webkitallowfullscreen="true"
+                  ></iframe>
+                </div>
+
+                <div class="response-area" style="margin-top: 32px">
+                  <span>Fill in the Blank placeholder</span>
+                </div>
+
+                <div class="response-area" style="margin-top: 24px">
+                  <span>Diagram Labelling</span>
+                </div>
+
+                <div class="response-area" style="margin-top: 24px">
+                  <span>Flashcards</span>
+                </div>
+              </div>
             </div>
           </section>
         </div>
@@ -2055,14 +2079,15 @@
           <button
             class="request-button"
             onclick="showSnackbar()"
-            onmouseover="this.style.backgroundColor='#cbdeed';"
-            onmouseout="this.style.backgroundColor='#F7F7F7';"
+            onmouseover="this.style.backgroundColor = '#cbdeed'"
+            onmouseout="this.style.backgroundColor = '#F7F7F7'"
           >
             Request Help
           </button>
           <button class="begin-button" onclick="showSnackbar()">Begin</button>
         </div>
       </section>
+
       <!-- Part 3 Card -->
       <section class="part-card" style="margin-top: 32px" id="step3">
         <div class="part-section">
@@ -2077,88 +2102,7 @@
                   "
                 >
                   <div style="display: flex; gap: 16px; align-items: center">
-                    <p class="step-count">STEP 3 of 4</p>
-                    <button class="step-status not-started">Not Started</button>
-                  </div>
-                  <div
-                    class="accordion-arrow"
-                    style="cursor: pointer; padding: 8px"
-                  >
-                    <svg
-                      width="24px"
-                      height="24px"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M19.9201 15.0501L13.4001 8.53014C12.6301 7.76014 11.3701 7.76014 10.6001 8.53014L4.08008 15.0501"
-                        stroke="#292D32"
-                        stroke-width="2.4"
-                        stroke-miterlimit="10"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <p class="section-quote-small">Create a Model</p>
-              </div>
-            </div>
-            <div class="accordion-content">
-              <h2
-                class="section-quote"
-                style="border: none; margin-bottom: 0px"
-              >
-                Create a Model
-              </h2>
-            </div>
-          </section>
-        </div>
-      </section>
-      <!-- Help and Discussion Box for Part 2 -->
-      <section
-        class="help-section"
-        style="
-          background: #eef7ff;
-          border-bottom-left-radius: 20px;
-          border-bottom-right-radius: 20px;
-          border-top: 1px solid #e2e8f0;
-          overflow: hidden;
-        "
-      >
-        <!-- Submit Button (initially hidden) -->
-        <div
-          class="submit-button-container"
-          style="text-align: center; margin: 32px 0 0 0"
-        >
-          <button
-            class="request-button"
-            onclick="showSnackbar()"
-            onmouseover="this.style.backgroundColor='#cbdeed';"
-            onmouseout="this.style.backgroundColor='#F7F7F7';"
-          >
-            Request Help
-          </button>
-          <button class="begin-button" onclick="showSnackbar()">Begin</button>
-        </div>
-      </section>
-
-      <!-- Part 4 Card -->
-      <section class="part-card" style="margin-top: 32px" id="step4">
-        <div class="part-section">
-          <section class="section-header" style="margin-bottom: 0px">
-            <div class="accordion-header" onclick="toggleAccordion(this)">
-              <div style="flex: 1">
-                <div
-                  style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                  "
-                >
-                  <div style="display: flex; gap: 16px; align-items: center">
-                    <p class="step-count">STEP 4 of 4</p>
+                    <p class="step-count">STEP 3 of 3</p>
                     <button class="step-status not-started">Not Started</button>
                   </div>
                   <div
@@ -2189,10 +2133,73 @@
             <div class="accordion-content">
               <h2
                 class="section-quote"
-                style="border: none; margin-bottom: 0px"
+                style="border: none; margin-bottom: 24px"
               >
                 Demonstrate Understanding
               </h2>
+              <div class="section-directions">
+                <span
+                  style="
+                    color: #919191;
+                    font-size: 16px;
+                    font-weight: 800;
+                    line-height: 24px;
+                    padding-top: 16px;
+                  "
+                >
+                  Question :
+                </span>
+                <span> What is the role of the circulatory system? </span>
+                <div class="response-area" style="margin: 24px 0px">
+                  <span>Please enter your response here</span>
+                </div>
+
+                <span
+                  style="
+                    color: #919191;
+                    font-size: 16px;
+                    font-weight: 800;
+                    line-height: 24px;
+                    padding-top: 16px;
+                  "
+                >
+                  Question :
+                </span>
+                <span>
+                  How do the different components interact to make the
+                  circulatory system function?
+                </span>
+                <div
+                  class="response-area"
+                  style="margin: 24px 0px; height: 150px"
+                >
+                  <span
+                    >Please enter your response here via voice recording</span
+                  >
+                </div>
+
+                <span
+                  style="
+                    color: #919191;
+                    font-size: 16px;
+                    font-weight: 800;
+                    line-height: 24px;
+                    padding-top: 16px;
+                  "
+                >
+                  Question :
+                </span>
+                <span>
+                  What are the different components of the circulatory system
+                  and where are they located? Draw and upload an image below.
+                </span>
+                <div
+                  class="response-area"
+                  style="margin-top: 24px; height: 150px"
+                >
+                  <span>Please upload your image here</span>
+                </div>
+              </div>
             </div>
           </section>
         </div>
@@ -2216,8 +2223,8 @@
           <button
             class="request-button"
             onclick="showSnackbar()"
-            onmouseover="this.style.backgroundColor='#cbdeed';"
-            onmouseout="this.style.backgroundColor='#F7F7F7';"
+            onmouseover="this.style.backgroundColor = '#cbdeed'"
+            onmouseout="this.style.backgroundColor = '#F7F7F7'"
           >
             Request Help
           </button>
